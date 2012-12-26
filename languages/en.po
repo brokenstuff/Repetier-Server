@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Repetier-Server\n"
+"POT-Creation-Date: 2012-12-23 16:29+0100\n"
+"PO-Revision-Date: 2012-12-23 16:30+0100\n"
+"Last-Translator: repetier <repetierdev@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: /Users/littwin/Documents/Projekte/Repetier-Server/"
+"Repetier-Server/www/\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: index.php:52 index.php:65 printer.php:52 printer.php:59
+msgid "Printer overview"
+msgstr "Printer overview"
+
+#: index.php:69 printer.php:63
+msgid "Printer"
+msgstr "Printer"
+
+#: index.php:70 printer.php:64
+msgid "Online"
+msgstr "Online"
+
+#: index.php:71 printer.php:65
+msgid "Job"
+msgstr "Job"
+
+#: index.php:96 printer.php:90
+msgid "Manage"
+msgstr "Manage"

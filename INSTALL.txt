@@ -1,0 +1,18 @@
+Linux / Raspberry Pi
+
+Installing required software:
+
+I assume a fresh Wheezy image on a raspberry pi. On other linux systems you might also
+need to install gcc, make and other development tools.
+
+sudo apt-get install cmake
+sudo apt-get install libboost-dev
+sudo apt-get install git
+
+Fetch the sources:
+
+
+MacOS:
+
+Install macports from http://www.macports.org/install.php
+Install boost library: sudo port install boost

@@ -1,0 +1,149 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Repetier-Server\n"
+"POT-Creation-Date: 2012-12-25 19:01+0100\n"
+"PO-Revision-Date: 2012-12-25 19:01+0100\n"
+"Last-Translator: repetier <repetierdev@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: /Users/littwin/Documents/Projekte/Repetier-Server/"
+"Repetier-Server/www/\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: index.php:52 printer.php:77
+msgid "Printer overview"
+msgstr "Druckerübersicht"
+
+#: index.php:62
+msgid "Printer"
+msgstr "Drucker"
+
+#: index.php:63
+msgid "Online"
+msgstr "Eingeschaltet"
+
+#: index.php:64 printer.php:97
+msgid "Job"
+msgstr "Auftrag"
+
+#: index.php:65 printer.php:100
+msgid "Action"
+msgstr "Aktion "
+
+#: index.php:90
+msgid "Manage"
+msgstr "Verwalten"
+
+#: printer.php:52
+msgid "Upload Job"
+msgstr "Auftrag hochladen"
+
+#: printer.php:57
+msgid "Job Name"
+msgstr "Auftragsbezeichnung"
+
+#: printer.php:59
+msgid "G-Code File"
+msgstr "G-Code Datei"
+
+#: printer.php:63
+msgid "Start job after upload if possible"
+msgstr "Starte Auftrag nach dem hochladen, wenn möglich."
+
+#: printer.php:67
+msgid "Uploading ..."
+msgstr "Lade Datei hoch ..."
+
+#: printer.php:67
+msgid "Start upload"
+msgstr "Starte Hochladen"
+
+#: printer.php:68
+msgid "Close"
+msgstr "Schließen"
+
+#: printer.php:79
+msgid "Offline"
+msgstr "Ausgeschaltet"
+
+#: printer.php:86
+msgid "Jobs"
+msgstr "Aufträge"
+
+#: printer.php:87
+msgid "Models"
+msgstr "Modelle"
+
+#: printer.php:88
+msgid "Control"
+msgstr "Steuerung"
+
+#: printer.php:93
+msgid "Upload job"
+msgstr "Auftrag hochladen"
+
+#: printer.php:98
+msgid "Size"
+msgstr "Größe"
+
+#: printer.php:99
+msgid "Status"
+msgstr "Status"
+
+#: printer.php:118
+msgid "Type your G-Code Command"
+msgstr "Geben Sie ihren G-Code Befehl ein"
+
+#: printer.php:119
+msgid "Send"
+msgstr "Senden"
+
+#: printer.php:124
+msgid "Position"
+msgstr "Position"
+
+#: printer.php:129
+msgid "Move head"
+msgstr "Bewege Kopf"
+
+#: printer.php:187
+msgid "Printer Log"
+msgstr "Druckerlog"
+
+#: printer.php:188
+msgid "Show commands send<br/>to the printer."
+msgstr "Zeige Befehle die zum<br/>Drucker gesendet werden."
+
+#: printer.php:188
+msgid "Commands"
+msgstr "Befehle"
+
+#: printer.php:189
+msgid "Show printer acknowledges and<br/>state change messages."
+msgstr "Zeiger Bestätigungen und<br/>Statusmeldungen an."
+
+#: printer.php:189
+msgid "ACK"
+msgstr "Bestätigungen"
+
+#: printer.php:190
+msgid ""
+"Stops the log update so you can read<br/> the log. After restart old logs "
+"are fetched<br/>from the server if still available."
+msgstr ""
+"Stoppe das Logfile update, so dass<br/>Sie den Text in Ruhe lesen<br/"
+">können. Nach dem erstarrt<br/> werden alte Meldungen vom<br/>Server "
+"nachgeladen."
+
+#: printer.php:190
+msgid "Pause log Update"
+msgstr "Pausiere Log Update"
+
+#: printer.php:268
+msgid "Off"
+msgstr "Aus"

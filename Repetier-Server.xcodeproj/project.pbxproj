@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FD57C187161B5608000C4A45 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD57C186161B5608000C4A45 /* main.cpp */; };
+		FD57C189161B5608000C4A45 /* Repetier_Server.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD57C188161B5608000C4A45 /* Repetier_Server.1 */; };
+		FDABA25716860D09005522A4 /* WebserverAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA25516860D09005522A4 /* WebserverAPI.cpp */; };
+		FDABA26816861F44005522A4 /* json_spirit_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA25D16861F44005522A4 /* json_spirit_reader.cpp */; };
+		FDABA26916861F44005522A4 /* json_spirit_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA26116861F44005522A4 /* json_spirit_value.cpp */; };
+		FDABA26A16861F44005522A4 /* json_spirit_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA26516861F44005522A4 /* json_spirit_writer.cpp */; };
+		FDABA26F1686FCC2005522A4 /* moFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA26D1686FCC2005522A4 /* moFileReader.cpp */; };
+		FDABA275168AE64F005522A4 /* Printjob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA273168AE64F005522A4 /* Printjob.cpp */; };
+		FDED504B1673ACB3001F0450 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50491673ACB3001F0450 /* mongoose.c */; };
+		FDED505D1673BAD8001F0450 /* grammar.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504D1673BAD8001F0450 /* grammar.c */; };
+		FDED505E1673BAD8001F0450 /* libconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504F1673BAD8001F0450 /* libconfig.c */; };
+		FDED505F1673BAD8001F0450 /* libconfigcpp.c++ in Sources */ = {isa = PBXBuildFile; fileRef = FDED50531673BAD8001F0450 /* libconfigcpp.c++ */; };
+		FDED50611673BAD8001F0450 /* scanctx.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50561673BAD8001F0450 /* scanctx.c */; };
+		FDED50621673BAD8001F0450 /* scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50581673BAD8001F0450 /* scanner.c */; };
+		FDED50631673BAD8001F0450 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED505A1673BAD8001F0450 /* strbuf.c */; };
+		FDED50671673BB26001F0450 /* printer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED50651673BB26001F0450 /* printer.cpp */; };
+		FDED50691673C304001F0450 /* libboost_program_options-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED50681673C304001F0450 /* libboost_program_options-mt.a */; };
+		FDED507116749027001F0450 /* libboost_filesystem-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED507016749027001F0450 /* libboost_filesystem-mt.a */; };
+		FDED5073167491A1001F0450 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED5072167491A1001F0450 /* libboost_system-mt.a */; };
+		FDED5076167494AC001F0450 /* global_config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED5074167494AC001F0450 /* global_config.cpp */; };
+		FDED50781674A921001F0450 /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED50771674A921001F0450 /* libboost_thread-mt.a */; };
+		FDED507B1674F4F6001F0450 /* PrinterSerial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED50791674F4F6001F0450 /* PrinterSerial.cpp */; };
+		FDED507E167A5400001F0450 /* GCode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED507C167A5400001F0450 /* GCode.cpp */; };
+		FDED5081167CF025001F0450 /* PrinterState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED507F167CF025001F0450 /* PrinterState.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FD57C180161B5608000C4A45 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				FD57C189161B5608000C4A45 /* Repetier_Server.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FD57C182161B5608000C4A45 /* Repetier-Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Repetier-Server"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD57C186161B5608000C4A45 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		FD57C188161B5608000C4A45 /* Repetier_Server.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Repetier_Server.1; sourceTree = "<group>"; };
+		FDABA25516860D09005522A4 /* WebserverAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebserverAPI.cpp; sourceTree = "<group>"; };
+		FDABA25616860D09005522A4 /* WebserverAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserverAPI.h; sourceTree = "<group>"; };
+		FDABA25A16861F44005522A4 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		FDABA25B16861F44005522A4 /* json_spirit_error_position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_error_position.h; sourceTree = "<group>"; };
+		FDABA25C16861F44005522A4 /* json_spirit_reader_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_reader_template.h; sourceTree = "<group>"; };
+		FDABA25D16861F44005522A4 /* json_spirit_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_spirit_reader.cpp; sourceTree = "<group>"; };
+		FDABA25E16861F44005522A4 /* json_spirit_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_reader.h; sourceTree = "<group>"; };
+		FDABA25F16861F44005522A4 /* json_spirit_stream_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_stream_reader.h; sourceTree = "<group>"; };
+		FDABA26016861F44005522A4 /* json_spirit_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_utils.h; sourceTree = "<group>"; };
+		FDABA26116861F44005522A4 /* json_spirit_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_spirit_value.cpp; sourceTree = "<group>"; };
+		FDABA26216861F44005522A4 /* json_spirit_value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_value.h; sourceTree = "<group>"; };
+		FDABA26316861F44005522A4 /* json_spirit_writer_options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_writer_options.h; sourceTree = "<group>"; };
+		FDABA26416861F44005522A4 /* json_spirit_writer_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_writer_template.h; sourceTree = "<group>"; };
+		FDABA26516861F44005522A4 /* json_spirit_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_spirit_writer.cpp; sourceTree = "<group>"; };
+		FDABA26616861F44005522A4 /* json_spirit_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit_writer.h; sourceTree = "<group>"; };
+		FDABA26716861F44005522A4 /* json_spirit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_spirit.h; sourceTree = "<group>"; };
+		FDABA26D1686FCC2005522A4 /* moFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moFileReader.cpp; sourceTree = "<group>"; };
+		FDABA2701686FCDD005522A4 /* moFileConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moFileConfig.h; sourceTree = "<group>"; };
+		FDABA2711686FCDD005522A4 /* moFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moFileReader.h; sourceTree = "<group>"; };
+		FDABA2721686FCF4005522A4 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
+		FDABA273168AE64F005522A4 /* Printjob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Printjob.cpp; sourceTree = "<group>"; };
+		FDABA274168AE64F005522A4 /* Printjob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Printjob.h; sourceTree = "<group>"; };
+		FDED50471673ACB3001F0450 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		FDED50481673ACB3001F0450 /* mongoose.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = mongoose.1; sourceTree = "<group>"; };
+		FDED50491673ACB3001F0450 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mongoose.c; sourceTree = "<group>"; };
+		FDED504A1673ACB3001F0450 /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mongoose.h; sourceTree = "<group>"; };
+		FDED504D1673BAD8001F0450 /* grammar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = grammar.c; sourceTree = "<group>"; };
+		FDED504E1673BAD8001F0450 /* grammar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grammar.h; sourceTree = "<group>"; };
+		FDED504F1673BAD8001F0450 /* libconfig.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libconfig.c; sourceTree = "<group>"; };
+		FDED50501673BAD8001F0450 /* libconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libconfig.h; sourceTree = "<group>"; };
+		FDED50511673BAD8001F0450 /* libconfig.h++ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "libconfig.h++"; sourceTree = "<group>"; };
+		FDED50521673BAD8001F0450 /* libconfig.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = libconfig.hh; sourceTree = "<group>"; };
+		FDED50531673BAD8001F0450 /* libconfigcpp.c++ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "libconfigcpp.c++"; sourceTree = "<group>"; };
+		FDED50551673BAD8001F0450 /* parsectx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parsectx.h; sourceTree = "<group>"; };
+		FDED50561673BAD8001F0450 /* scanctx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scanctx.c; sourceTree = "<group>"; };
+		FDED50571673BAD8001F0450 /* scanctx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scanctx.h; sourceTree = "<group>"; };
+		FDED50581673BAD8001F0450 /* scanner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scanner.c; sourceTree = "<group>"; };
+		FDED50591673BAD8001F0450 /* scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scanner.h; sourceTree = "<group>"; };
+		FDED505A1673BAD8001F0450 /* strbuf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strbuf.c; sourceTree = "<group>"; };
+		FDED505B1673BAD8001F0450 /* strbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strbuf.h; sourceTree = "<group>"; };
+		FDED505C1673BAD8001F0450 /* wincompat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wincompat.h; sourceTree = "<group>"; };
+		FDED50651673BB26001F0450 /* printer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = printer.cpp; sourceTree = "<group>"; };
+		FDED50661673BB26001F0450 /* printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = printer.h; sourceTree = "<group>"; };
+		FDED50681673C304001F0450 /* libboost_program_options-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_program_options-mt.a"; path = "../../../../../../opt/local/lib/libboost_program_options-mt.a"; sourceTree = "<group>"; };
+		FDED506A1673C769001F0450 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		FDED506C1673C78F001F0450 /* libboost_program_options-mt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_program_options-mt.dylib"; path = "../../../../../../opt/local/lib/libboost_program_options-mt.dylib"; sourceTree = "<group>"; };
+		FDED506E1673C7C3001F0450 /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
+		FDED507016749027001F0450 /* libboost_filesystem-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_filesystem-mt.a"; path = "../../../../../../opt/local/lib/libboost_filesystem-mt.a"; sourceTree = "<group>"; };
+		FDED5072167491A1001F0450 /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "../../../../../../opt/local/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
+		FDED5074167494AC001F0450 /* global_config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = global_config.cpp; sourceTree = "<group>"; };
+		FDED5075167494AC001F0450 /* global_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = global_config.h; sourceTree = "<group>"; };
+		FDED50771674A921001F0450 /* libboost_thread-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-mt.a"; path = "../../../../../../opt/local/lib/libboost_thread-mt.a"; sourceTree = "<group>"; };
+		FDED50791674F4F6001F0450 /* PrinterSerial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrinterSerial.cpp; sourceTree = "<group>"; };
+		FDED507A1674F4F6001F0450 /* PrinterSerial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrinterSerial.h; sourceTree = "<group>"; };
+		FDED507C167A5400001F0450 /* GCode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GCode.cpp; sourceTree = "<group>"; };
+		FDED507D167A5400001F0450 /* GCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCode.h; sourceTree = "<group>"; };
+		FDED507F167CF025001F0450 /* PrinterState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrinterState.cpp; sourceTree = "<group>"; };
+		FDED5080167CF025001F0450 /* PrinterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrinterState.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FD57C17F161B5608000C4A45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDED50781674A921001F0450 /* libboost_thread-mt.a in Frameworks */,
+				FDED5073167491A1001F0450 /* libboost_system-mt.a in Frameworks */,
+				FDED507116749027001F0450 /* libboost_filesystem-mt.a in Frameworks */,
+				FDED50691673C304001F0450 /* libboost_program_options-mt.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FD57C177161B5607000C4A45 = {
+			isa = PBXGroup;
+			children = (
+				FDED50771674A921001F0450 /* libboost_thread-mt.a */,
+				FDED5072167491A1001F0450 /* libboost_system-mt.a */,
+				FDED507016749027001F0450 /* libboost_filesystem-mt.a */,
+				FDED506E1673C7C3001F0450 /* libc++.1.dylib */,
+				FDED506C1673C78F001F0450 /* libboost_program_options-mt.dylib */,
+				FDED506A1673C769001F0450 /* libc++.dylib */,
+				FDED50681673C304001F0450 /* libboost_program_options-mt.a */,
+				FD57C185161B5608000C4A45 /* Repetier-Server */,
+				FD57C183161B5608000C4A45 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FD57C183161B5608000C4A45 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FD57C182161B5608000C4A45 /* Repetier-Server */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FD57C185161B5608000C4A45 /* Repetier-Server */ = {
+			isa = PBXGroup;
+			children = (
+				FDABA26B1686FC92005522A4 /* moFileReader */,
+				FDABA25916861EC2005522A4 /* json_spirit */,
+				FDED50641673BAEA001F0450 /* server */,
+				FDED504C1673B678001F0450 /* libconfig */,
+				FDED50451673AC66001F0450 /* mongoose */,
+				FD57C186161B5608000C4A45 /* main.cpp */,
+				FD57C188161B5608000C4A45 /* Repetier_Server.1 */,
+			);
+			path = "Repetier-Server";
+			sourceTree = "<group>";
+		};
+		FDABA25916861EC2005522A4 /* json_spirit */ = {
+			isa = PBXGroup;
+			children = (
+				FDABA25A16861F44005522A4 /* CMakeLists.txt */,
+				FDABA25B16861F44005522A4 /* json_spirit_error_position.h */,
+				FDABA25C16861F44005522A4 /* json_spirit_reader_template.h */,
+				FDABA25D16861F44005522A4 /* json_spirit_reader.cpp */,
+				FDABA25E16861F44005522A4 /* json_spirit_reader.h */,
+				FDABA25F16861F44005522A4 /* json_spirit_stream_reader.h */,
+				FDABA26016861F44005522A4 /* json_spirit_utils.h */,
+				FDABA26116861F44005522A4 /* json_spirit_value.cpp */,
+				FDABA26216861F44005522A4 /* json_spirit_value.h */,
+				FDABA26316861F44005522A4 /* json_spirit_writer_options.h */,
+				FDABA26416861F44005522A4 /* json_spirit_writer_template.h */,
+				FDABA26516861F44005522A4 /* json_spirit_writer.cpp */,
+				FDABA26616861F44005522A4 /* json_spirit_writer.h */,
+				FDABA26716861F44005522A4 /* json_spirit.h */,
+			);
+			path = json_spirit;
+			sourceTree = "<group>";
+		};
+		FDABA26B1686FC92005522A4 /* moFileReader */ = {
+			isa = PBXGroup;
+			children = (
+				FDABA2721686FCF4005522A4 /* license.txt */,
+				FDABA2701686FCDD005522A4 /* moFileConfig.h */,
+				FDABA2711686FCDD005522A4 /* moFileReader.h */,
+				FDABA26D1686FCC2005522A4 /* moFileReader.cpp */,
+			);
+			path = moFileReader;
+			sourceTree = "<group>";
+		};
+		FDED50451673AC66001F0450 /* mongoose */ = {
+			isa = PBXGroup;
+			children = (
+				FDED50471673ACB3001F0450 /* LICENSE */,
+				FDED50481673ACB3001F0450 /* mongoose.1 */,
+				FDED50491673ACB3001F0450 /* mongoose.c */,
+				FDED504A1673ACB3001F0450 /* mongoose.h */,
+			);
+			path = mongoose;
+			sourceTree = "<group>";
+		};
+		FDED504C1673B678001F0450 /* libconfig */ = {
+			isa = PBXGroup;
+			children = (
+				FDED504D1673BAD8001F0450 /* grammar.c */,
+				FDED504E1673BAD8001F0450 /* grammar.h */,
+				FDED504F1673BAD8001F0450 /* libconfig.c */,
+				FDED50501673BAD8001F0450 /* libconfig.h */,
+				FDED50511673BAD8001F0450 /* libconfig.h++ */,
+				FDED50521673BAD8001F0450 /* libconfig.hh */,
+				FDED50531673BAD8001F0450 /* libconfigcpp.c++ */,
+				FDED50551673BAD8001F0450 /* parsectx.h */,
+				FDED50561673BAD8001F0450 /* scanctx.c */,
+				FDED50571673BAD8001F0450 /* scanctx.h */,
+				FDED50581673BAD8001F0450 /* scanner.c */,
+				FDED50591673BAD8001F0450 /* scanner.h */,
+				FDED505A1673BAD8001F0450 /* strbuf.c */,
+				FDED505B1673BAD8001F0450 /* strbuf.h */,
+				FDED505C1673BAD8001F0450 /* wincompat.h */,
+			);
+			path = libconfig;
+			sourceTree = "<group>";
+		};
+		FDED50641673BAEA001F0450 /* server */ = {
+			isa = PBXGroup;
+			children = (
+				FDED50651673BB26001F0450 /* printer.cpp */,
+				FDED50661673BB26001F0450 /* printer.h */,
+				FDED5074167494AC001F0450 /* global_config.cpp */,
+				FDED5075167494AC001F0450 /* global_config.h */,
+				FDED50791674F4F6001F0450 /* PrinterSerial.cpp */,
+				FDED507A1674F4F6001F0450 /* PrinterSerial.h */,
+				FDED507C167A5400001F0450 /* GCode.cpp */,
+				FDED507D167A5400001F0450 /* GCode.h */,
+				FDED507F167CF025001F0450 /* PrinterState.cpp */,
+				FDED5080167CF025001F0450 /* PrinterState.h */,
+				FDABA25516860D09005522A4 /* WebserverAPI.cpp */,
+				FDABA25616860D09005522A4 /* WebserverAPI.h */,
+				FDABA273168AE64F005522A4 /* Printjob.cpp */,
+				FDABA274168AE64F005522A4 /* Printjob.h */,
+			);
+			path = server;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FD57C181161B5608000C4A45 /* Repetier-Server */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD57C18C161B5608000C4A45 /* Build configuration list for PBXNativeTarget "Repetier-Server" */;
+			buildPhases = (
+				FD57C17E161B5608000C4A45 /* Sources */,
+				FD57C17F161B5608000C4A45 /* Frameworks */,
+				FD57C180161B5608000C4A45 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Repetier-Server";
+			productName = "Repetier-Server";
+			productReference = FD57C182161B5608000C4A45 /* Repetier-Server */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FD57C179161B5607000C4A45 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = FD57C17C161B5607000C4A45 /* Build configuration list for PBXProject "Repetier-Server" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FD57C177161B5607000C4A45;
+			productRefGroup = FD57C183161B5608000C4A45 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FD57C181161B5608000C4A45 /* Repetier-Server */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FD57C17E161B5608000C4A45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD57C187161B5608000C4A45 /* main.cpp in Sources */,
+				FDED504B1673ACB3001F0450 /* mongoose.c in Sources */,
+				FDED505D1673BAD8001F0450 /* grammar.c in Sources */,
+				FDED505E1673BAD8001F0450 /* libconfig.c in Sources */,
+				FDED505F1673BAD8001F0450 /* libconfigcpp.c++ in Sources */,
+				FDED50611673BAD8001F0450 /* scanctx.c in Sources */,
+				FDED50621673BAD8001F0450 /* scanner.c in Sources */,
+				FDED50631673BAD8001F0450 /* strbuf.c in Sources */,
+				FDED50671673BB26001F0450 /* printer.cpp in Sources */,
+				FDED5076167494AC001F0450 /* global_config.cpp in Sources */,
+				FDED507B1674F4F6001F0450 /* PrinterSerial.cpp in Sources */,
+				FDED507E167A5400001F0450 /* GCode.cpp in Sources */,
+				FDED5081167CF025001F0450 /* PrinterState.cpp in Sources */,
+				FDABA25716860D09005522A4 /* WebserverAPI.cpp in Sources */,
+				FDABA26816861F44005522A4 /* json_spirit_reader.cpp in Sources */,
+				FDABA26916861F44005522A4 /* json_spirit_value.cpp in Sources */,
+				FDABA26A16861F44005522A4 /* json_spirit_writer.cpp in Sources */,
+				FDABA26F1686FCC2005522A4 /* moFileReader.cpp in Sources */,
+				FDABA275168AE64F005522A4 /* Printjob.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		FD57C18A161B5608000C4A45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FD57C18B161B5608000C4A45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		FD57C18D161B5608000C4A45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					HAVE_XLOCALE_H,
+				);
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FD57C18E161B5608000C4A45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				GCC_PREPROCESSOR_DEFINITIONS = HAVE_XLOCALE_H;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FD57C17C161B5607000C4A45 /* Build configuration list for PBXProject "Repetier-Server" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD57C18A161B5608000C4A45 /* Debug */,
+				FD57C18B161B5608000C4A45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FD57C18C161B5608000C4A45 /* Build configuration list for PBXNativeTarget "Repetier-Server" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD57C18D161B5608000C4A45 /* Debug */,
+				FD57C18E161B5608000C4A45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FD57C179161B5607000C4A45 /* Project object */;
+}
