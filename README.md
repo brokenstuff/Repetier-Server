@@ -1,6 +1,6 @@
-= Repetier-Server =
+# Repetier-Server
 
-== Objective ==
+## Objective
 
 The aim of this server is it, to offer a link between 3d printer and host software.
 It allows the concurrent connection from different sources over the internet/intranet to
@@ -18,20 +18,20 @@ without the host. You can disconnect the host, close it and reconnect later. Not
 interrupt the printer. You can even spool new jobs while the last one is running, also
 the server will ask you to clear the printer bed before starting the next job.
 
-== Status ==
+## Status
 
 It is at the very beginning. It is not fully functional now and only compiles on a mac.
 Makefiles for Linux and Windows will follow. It is only added to github for revision
 control, not to be used in public.
 
-== Licence ==
+## Licence
 
 My part of the work is distributed under the Apache V2 licence.
 The sources contain software from 3rd parties with different licences.
 
 TODO: Add list of 3rd party software
 
-== API ==
+## API 
 
 The server uses communication over a webserver. With some simple calls you can
 upload new jobs, send any command you want or manage the server.
@@ -46,7 +46,7 @@ with a JSON formatet response. The first level always has this format:
 {error:"<empty or error message>",data:<request dependend object>}
 The JSON string is UTF-8 encoded.
 
-=== List configured printer ===
+### List configured printer
 
 Command: /printer/list
 Return: Array of printer. Each entry object has the following  content:
@@ -59,7 +59,7 @@ allows it to send more then one job in a row. After completing a job, the state 
 to waitstart waiting for a user to tell that the new print can start.
 
 
-=== Sending printer commands ===
+### Sending printer commands
 
 Command: /printer/send/<slugname>?cmd=line
 Return: Nothing
@@ -67,7 +67,7 @@ Possible errors:
  "Printer offline"
  "Unknown printer"
 
-=== Get printer responses ===
+### Get printer responses
 
 If you want to monitor printer responses, you need every response. A difficult task
 with a polling system. To overcome this problem, the server stores the last x responses.
@@ -83,7 +83,7 @@ Filter is a binary value removing items where the bit value is set:
 Command: /printer/response/<slugname>?start=<after>&filter=<0|1|2>
 Return: {lastid:<lastid>,lines:[{id:<respid>,time:"<time>",text:"<text>",type:<0-8>}],state:{state vars here}}
 
-=== Handling jobs ===
+### Handling jobs
 
 Jobs can be very long. During storage handling the send data resides in ram, so
 on small computer like the Raspberry Pi it would be a problem to send large files.
@@ -94,6 +94,6 @@ be there and can be startet.
 
 Command: /printer/job/<slugname>?a=<start|pause|create|append|upload>
 
-=== Managing the server ===
+### Managing the server
 
 Coming soon ...
