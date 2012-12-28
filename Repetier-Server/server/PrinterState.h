@@ -97,5 +97,9 @@ public:
     uint32_t decreaseLastline();
     uint32_t getLastline() {boost::mutex::scoped_lock l(mutex);return lastline;}
     void fillJSONObject(json_spirit::Object &obj);
+    std::string getMoveXCmd(double dx,double f);
+    std::string getMoveYCmd(double dy,double f);
+    std::string getMoveZCmd(double dz,double f);
+    std::string getMoveECmd(double de,double f);
 };
 #endif /* defined(__Repetier_Server__PrinterState__) */

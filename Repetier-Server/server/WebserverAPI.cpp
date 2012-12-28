@@ -29,15 +29,17 @@
 #include <fcntl.h>
 #include <string.h>
 #include "PrinterState.h"
+#include "Printjob.h"
 
 using namespace std;
 using namespace json_spirit;
+using namespace boost;
 
 namespace repetier {
     static const char *HTTP_500 = "HTTP/1.0 500 Server Error\r\n\r\n";
     
     // Modified verion from mongoose examples
-    bool handleFileUpload(struct mg_connection *conn,const string& filename,string& name,long &size) {
+    bool handleFileUpload(struct mg_connection *conn,const string& filename,string& name,long &size,bool append) {
         name.clear();
         const char *cl_header;
         char post_data[16 * 1024], path[999], file_name[1024], mime_type[100],boundary[100],
@@ -96,12 +98,12 @@ namespace repetier {
             mg_printf(conn, "%s%s", HTTP_500, "Can't get file name");
         } else if (cl <= 0) {
             mg_printf(conn, "%s%s", HTTP_500, "Empty file");
-        } else if ((fd = open(path, O_CREAT | O_TRUNC |
-                              O_WRONLY | O_EXLOCK | O_CLOEXEC)) < 0) {
+        } else if ((fd = open(filename.c_str(), O_CREAT | (append ? O_APPEND : O_TRUNC) |
+                              O_RDWR | /*O_WRONLY |*/ O_EXLOCK | O_CLOEXEC)) < 0) {
             // We're opening the file with exclusive lock held. This guarantee us that
             // there is no other thread can save into the same file simultaneously.
             mg_printf(conn, "%s%s", HTTP_500, "Cannot open file");
-        } else if ((fp = fdopen(fd, "w")) == NULL) {
+        } else if ((fp = fdopen(fd,(append ? "a+" : "w"))) == NULL) {
             mg_printf(conn, "%s%s", HTTP_500, "Cannot reopen file stream");
             close(fd);
         } else {
@@ -191,12 +193,99 @@ namespace repetier {
             string a;
             bool ok = true;
             ok = MG_getVar(ri,"a",a);
-            if(a=="upload") {
+            if(a=="list") {
+                printer->getJobManager()->fillSJONObject("data",ret);
+            } else if(a=="upload") {
+#ifdef DEBUG
                 cout << "Upload job" << endl;
-                string name;
+#endif
+                string name,jobname;
                 long size;
-                handleFileUpload(conn,"/tmp/test.txt", name,size);
+                MG_getVar(ri,"name", jobname);
+                PrintjobPtr job = printer->getJobManager()->createNewPrintjob(jobname);
+                handleFileUpload(conn,job->getFilename(), name,size,false);
+                printer->getJobManager()->finishPrintjobCreation(job,name,size);
+                printer->getJobManager()->fillSJONObject("data",ret);
+#ifdef DEBUG
                 cout << "Name:" << name << " Size:" << size << endl;
+#endif
+            } else if(a=="remove") {
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr job = printer->getJobManager()->findById(id);
+                    if(job.get())
+                        printer->getJobManager()->RemovePrintjob(job);
+                }
+                printer->getJobManager()->fillSJONObject("data",ret);
+            } else if(a=="start") {
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr job = printer->getJobManager()->findById(id);
+                    if(job.get())
+                        printer->getJobManager()->startJob(id);
+                }
+                printer->getJobManager()->fillSJONObject("data",ret);
+            } else if(a=="kill") {
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr job = printer->getJobManager()->findById(id);
+                    if(job.get())
+                        printer->getJobManager()->killJob(id);
+                }
+                printer->getJobManager()->fillSJONObject("data",ret);                
+            }
+        } else if(cmdgroup=="model") {
+            string a;
+            bool ok = true;
+            ok = MG_getVar(ri,"a",a);
+            if(a=="list") {
+                printer->getModelManager()->fillSJONObject("data",ret);
+            } else if(a=="upload") {
+#ifdef DEBUG
+                cout << "Upload model" << endl;
+#endif
+                string name,jobname;
+                long size;
+                MG_getVar(ri,"name", jobname);
+                PrintjobPtr job = printer->getModelManager()->createNewPrintjob(jobname);
+                handleFileUpload(conn,job->getFilename(), name,size,false);
+                printer->getModelManager()->finishPrintjobCreation(job,name,size);
+                printer->getModelManager()->fillSJONObject("data",ret);
+#ifdef DEBUG
+                cout << "Name:" << name << " Size:" << size << endl;
+#endif
+            } else if(a=="remove") {
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr job = printer->getModelManager()->findById(id);
+                    if(job.get())
+                        printer->getModelManager()->RemovePrintjob(job);
+                }
+                printer->getModelManager()->fillSJONObject("data",ret);
+            } else if(a=="copy") {
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr model = printer->getModelManager()->findById(id);
+                    if(model.get()) {
+                        PrintjobPtr job = printer->getJobManager()->createNewPrintjob(model->getName());
+                        job->setLength(model->getLength());
+                        try {
+                            std::ifstream  src(model->getFilename().c_str());
+                            std::ofstream  dst(job->getFilename().c_str());
+                            dst << src.rdbuf();
+                        printer->getJobManager()->finishPrintjobCreation(job, model->getName(), model->getLength());
+                        } catch(const std::exception& ex)
+                    {
+                        cerr << "error: Unable to create job file " << job->getFilename() << ":" << ex.what() << endl;
+                    }
+                    }
+                }
+                printer->getJobManager()->fillSJONObject("data",ret);
             }
         } else if(printer->getOnlineStatus()==0) {
             error = "Printer offline";
@@ -232,11 +321,19 @@ namespace repetier {
             printer->state->fillJSONObject(state);
             lobj.push_back(Pair("state",state));
             ret.push_back(Pair("data",lobj));
+        } else if(cmdgroup=="move") {
+            string sx,sy,sz,se;
+            double x=0,y=0,z=0,e=0;
+            if(MG_getVar(ri,"x",sx)) x = atof(sx.c_str());
+            if(MG_getVar(ri,"y",sx)) y = atof(sy.c_str());
+            if(MG_getVar(ri,"z",sx)) z = atof(sz.c_str());
+            if(MG_getVar(ri,"e",sx)) e = atof(se.c_str());
+            printer->move(x, y, z, e);
         }
         ret.push_back(Pair("error",error));
     
         // Print result
-        mg_printf(conn,"%s",write(ret).c_str());
+        mg_printf(conn,"%s",write(ret,Output_options::raw_utf8).c_str());
     }
     bool MG_getVar(const mg_request_info *info,const char *name, std::string &output)
     {

@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378038996.240934"
+         timestampString = "378214818.18159"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "33"
-         endingLineNumber = "33"
+         startingLineNumber = "34"
+         endingLineNumber = "34"
          landmarkName = "PrinterResponse::PrinterResponse(const string&amp; mes,uint32_t id,uint8_t tp)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378321031.330776"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "98"
-         endingLineNumber = "98"
+         startingLineNumber = "100"
+         endingLineNumber = "100"
          landmarkName = "Printer::Printer(string conf)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378321031.330776"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "96"
-         endingLineNumber = "96"
+         startingLineNumber = "98"
+         endingLineNumber = "98"
          landmarkName = "Printer::Printer(string conf)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -255,11 +255,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378321031.330776"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "101"
-         endingLineNumber = "101"
+         startingLineNumber = "104"
+         endingLineNumber = "104"
          landmarkName = "Printer::Printer(string conf)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -268,11 +268,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378321031.330776"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "149"
-         endingLineNumber = "149"
+         startingLineNumber = "175"
+         endingLineNumber = "175"
          landmarkName = "Printer::addResponse(const std::string&amp; msg,uint8_t rtype)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -281,11 +281,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "170"
-         endingLineNumber = "170"
+         startingLineNumber = "211"
+         endingLineNumber = "211"
          landmarkName = "Printer::getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &amp;lastid)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -294,11 +294,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "208"
-         endingLineNumber = "208"
+         startingLineNumber = "249"
+         endingLineNumber = "249"
          landmarkName = "Printer::resendLine(size_t line)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -307,11 +307,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378321031.330776"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "124"
-         endingLineNumber = "124"
+         startingLineNumber = "136"
+         endingLineNumber = "136"
          landmarkName = "Printer::run()"
          landmarkType = "5">
       </FileBreakpoint>
@@ -320,11 +320,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "270"
-         endingLineNumber = "270"
+         startingLineNumber = "311"
+         endingLineNumber = "311"
          landmarkName = "Printer::trySendNextLine()"
          landmarkType = "5">
       </FileBreakpoint>
@@ -333,11 +333,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "338"
-         endingLineNumber = "338"
+         startingLineNumber = "379"
+         endingLineNumber = "379"
          landmarkName = "Printer::analyseResponse(string &amp;res)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -346,11 +346,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "347"
-         endingLineNumber = "347"
+         startingLineNumber = "388"
+         endingLineNumber = "388"
          landmarkName = "Printer::analyseResponse(string &amp;res)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -359,11 +359,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "271"
-         endingLineNumber = "271"
+         startingLineNumber = "312"
+         endingLineNumber = "312"
          landmarkName = "Printer::trySendNextLine()"
          landmarkType = "5">
       </FileBreakpoint>
@@ -372,11 +372,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "342"
-         endingLineNumber = "342"
+         startingLineNumber = "383"
+         endingLineNumber = "383"
          landmarkName = "Printer::analyseResponse(string &amp;res)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -385,11 +385,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "235"
-         endingLineNumber = "235"
+         startingLineNumber = "276"
+         endingLineNumber = "276"
          landmarkName = "Printer::trySendPacket(GCodeDataPacket *dp,shared_ptr&lt;GCode&gt; &amp;gc)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -398,11 +398,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/printer.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "304"
-         endingLineNumber = "304"
+         startingLineNumber = "345"
+         endingLineNumber = "345"
          landmarkName = "Printer::trySendNextLine()"
          landmarkType = "5">
       </FileBreakpoint>
@@ -435,11 +435,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "353"
-         endingLineNumber = "353"
+         startingLineNumber = "450"
+         endingLineNumber = "450"
          landmarkName = "HandlePagerequest(struct mg_connection *conn)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -448,11 +448,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "389"
-         endingLineNumber = "389"
+         startingLineNumber = "486"
+         endingLineNumber = "486"
          landmarkName = "TranslateFile(const std::string &amp;filename,const std::string &amp;lang,std::string&amp; result)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -474,11 +474,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "375"
-         endingLineNumber = "375"
+         startingLineNumber = "472"
+         endingLineNumber = "472"
          landmarkName = "HandlePagerequest(struct mg_connection *conn)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -487,11 +487,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "387"
-         endingLineNumber = "387"
+         startingLineNumber = "484"
+         endingLineNumber = "484"
          landmarkName = "TranslateFile(const std::string &amp;filename,const std::string &amp;lang,std::string&amp; result)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -500,11 +500,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378148808.317813"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "384"
-         endingLineNumber = "384"
+         startingLineNumber = "481"
+         endingLineNumber = "481"
          landmarkName = "TranslateFile(const std::string &amp;filename,const std::string &amp;lang,std::string&amp; result)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -539,11 +539,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378393451.542839"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "308"
-         endingLineNumber = "308"
+         startingLineNumber = "405"
+         endingLineNumber = "405"
          landmarkName = "FillTemplateRecursive(string&amp; text,string&amp; result,list&lt;Value&gt;&amp; vars,size_t start,size_t end)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -552,11 +552,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "168"
-         endingLineNumber = "168"
+         startingLineNumber = "170"
+         endingLineNumber = "170"
          landmarkName = "HandleWebrequest(struct mg_connection *conn)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -565,11 +565,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "169"
-         endingLineNumber = "169"
+         startingLineNumber = "171"
+         endingLineNumber = "171"
          landmarkName = "HandleWebrequest(struct mg_connection *conn)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -578,11 +578,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "194"
-         endingLineNumber = "194"
+         startingLineNumber = "198"
+         endingLineNumber = "198"
          landmarkName = "HandleWebrequest(struct mg_connection *conn)"
          landmarkType = "7">
       </FileBreakpoint>
@@ -591,12 +591,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "84"
-         endingLineNumber = "84"
-         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size)"
+         startingLineNumber = "86"
+         endingLineNumber = "86"
+         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size,bool append)"
          landmarkType = "7">
       </FileBreakpoint>
       <FileBreakpoint
@@ -604,12 +604,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "59"
-         endingLineNumber = "59"
-         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size)"
+         startingLineNumber = "61"
+         endingLineNumber = "61"
+         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size,bool append)"
          landmarkType = "7">
       </FileBreakpoint>
       <FileBreakpoint
@@ -617,12 +617,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "67"
-         endingLineNumber = "67"
-         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size)"
+         startingLineNumber = "69"
+         endingLineNumber = "69"
+         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size,bool append)"
          landmarkType = "7">
       </FileBreakpoint>
       <FileBreakpoint
@@ -630,12 +630,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378327196.259417"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "66"
+         endingLineNumber = "66"
+         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size,bool append)"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Repetier-Server/server/WebserverAPI.cpp"
+         timestampString = "378327196.259417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "64"
          endingLineNumber = "64"
-         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size)"
+         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size,bool append)"
          landmarkType = "7">
       </FileBreakpoint>
       <FileBreakpoint
@@ -643,26 +656,26 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
+         timestampString = "378383295.04958"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "62"
-         endingLineNumber = "62"
-         landmarkName = "handleFileUpload(struct mg_connection *conn,const string&amp; filename,string&amp; name,long &amp;size)"
-         landmarkType = "7">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Repetier-Server/server/WebserverAPI.cpp"
-         timestampString = "378121297.588543"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "204"
-         endingLineNumber = "204"
+         startingLineNumber = "293"
+         endingLineNumber = "293"
          landmarkName = "HandleWebrequest(struct mg_connection *conn)"
          landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Repetier-Server/server/Printjob.cpp"
+         timestampString = "378298262.509815"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "36"
+         endingLineNumber = "36"
+         landmarkName = "PrintjobManager::PrintjobManager(string dir)"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

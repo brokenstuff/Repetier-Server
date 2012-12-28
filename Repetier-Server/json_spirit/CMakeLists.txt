@@ -10,8 +10,8 @@ json_spirit_utils.h
 json_spirit_writer_options.h
 json_spirit_writer_template.h )
  
-FIND_PACKAGE(Boost 1.34 REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+#FIND_PACKAGE(Boost 1.50 REQUIRED)
+#INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
-ADD_LIBRARY(json_spirit STATIC ${JSON_SPIRIT_SRCS})
+#ADD_LIBRARY(json_spirit STATIC ${JSON_SPIRIT_SRCS})
 

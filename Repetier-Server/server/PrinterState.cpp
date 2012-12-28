@@ -344,6 +344,7 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
             if(isMarlin) eo*=2;
             ex.output = eo;
         }
+        printer->updateLastTempMutex();
     }
     if (extract(res,"B:",h))
     {
@@ -389,6 +390,33 @@ uint32_t PrinterState::decreaseLastline() {
     mutex::scoped_lock l(mutex);
     return --lastline;
 }
+std::string PrinterState::getMoveXCmd(double dx,double f) {
+    mutex::scoped_lock l(mutex);
+    char buf[100];
+    sprintf(buf,"G1 X%.2f F%f",relative ? dx : x+dx,f);
+    return string(buf);
+}
+std::string PrinterState::getMoveYCmd(double dy,double f) {
+    mutex::scoped_lock l(mutex);
+    char buf[100];
+    sprintf(buf,"G1 Y%.2f F%f",relative ? dy : x+dy,f);
+    return string(buf);
+    
+}
+std::string PrinterState::getMoveZCmd(double dz,double f) {
+    mutex::scoped_lock l(mutex);
+    char buf[100];
+    sprintf(buf,"G1 Z%.2f F%f",relative ? dz : z+dz,f);
+    return string(buf);
+    
+}
+std::string PrinterState::getMoveECmd(double de,double f) {
+    mutex::scoped_lock l(mutex);
+    char buf[100];
+    sprintf(buf,"G1 E%.2f F%f",relative || eRelative ? de : e+de,f);
+    return string(buf);    
+}
+
 void PrinterState::fillJSONObject(json_spirit::Object &obj) {
     using namespace json_spirit;
     mutex::scoped_lock l(mutex);

@@ -16,6 +16,7 @@
 
 
 #include "printer.h"
+#include "Printjob.h"
 #include "GCode.h"
 #include "PrinterSerial.h"
 #include "PrinterState.h"
@@ -65,6 +66,7 @@ Printer::Printer(string conf) {
         ok &= config.lookupValue("printer.homing.yhome", homey);
         ok &= config.lookupValue("printer.homing.zhome", homez);
         ok &= config.lookupValue("printer.extruder.count", extruderCount);
+        ok &= config.lookupValue("printer.extruder.tempUpdateEvery",updateTempEvery);
         ok &= config.lookupValue("active", active);
         ok &= config.lookupValue("printer.speed.xaxis", speedx);
         ok &= config.lookupValue("printer.speed.yaxis", speedy);
@@ -98,33 +100,52 @@ Printer::Printer(string conf) {
     cout << "Printer config read: " << name << endl;
     cout << "Port:" << device << endl;
 #endif
+    jobManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"jobs");
+    modelManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"models");
 }
 Printer::~Printer() {
     serial->close();
     delete state;
     delete serial;
+    delete modelManager;
+    delete jobManager;
 }
 void Printer::startThread() {
     assert(!thread);
     thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&Printer::run, this)));
     
 }
+void Printer::updateLastTempMutex() {
+    mutex::scoped_lock l(lastTempMutex);
+    lastTemp = boost::posix_time::microsec_clock::local_time();
+}
+
 void Printer::run() {
     int loop = 0;
     while (!stopRequested)
     {
         try {
             loop++;
+            boost::this_thread::sleep(boost::posix_time::milliseconds(10));
             //cout << name << " = " << loop << endl;
-            boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
-            if(!serial->isConnected())
+            if(!serial->isConnected()) {
+                boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
                 serial->tryConnect();
-            else {
-                char b[100];
-                sprintf(b,"M117 Loop %d",loop);
-                injectManualCommand(b);
-                if(manualCommands.size()<5)
-                    injectManualCommand("M105");
+            } else {
+                //char b[100];
+                //sprintf(b,"M117 Loop %d",loop);
+                //injectManualCommand(b);
+                {
+                    mutex::scoped_lock l(lastTempMutex);
+                    posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+                    time_duration td(now-lastTemp);
+                    
+                    if(manualCommands.size()<5 && updateTempEvery>0 && td.seconds()>=updateTempEvery) {
+                        injectManualCommand("M105");
+                        lastTemp = microsec_clock::local_time();
+                    }
+                }
+                jobManager->manageJobs(this); // refill job queue
                 //serial->writeString(b);
             }
             trySendNextLine();
@@ -142,6 +163,11 @@ void Printer::stopThread() {
 #ifdef DEBUG
     cout << "Thread for printer " << name << " finished" << endl;
 #endif
+}
+void Printer::connectionClosed() {
+    jobManager->undoCurrentJob();
+    mutex::scoped_lock l(sendMutex);
+    manualCommands.clear();
 }
 
 void Printer::addResponse(const std::string& msg,uint8_t rtype) {
@@ -163,6 +189,21 @@ void Printer::injectJobCommand(const std::string& cmd) {
     jobCommands.push_back(cmd);
     // No need to trigger job commands early. There will most probably follow more very soon
     // and the job should already run.
+}
+void Printer::move(double x,double y,double z,double e) {
+    if(x!=0)
+        injectManualCommand(state->getMoveXCmd(x, speedx*60.0));
+    if(y!=0)
+        injectManualCommand(state->getMoveYCmd(y, speedx*60.0));
+    if(z!=0)
+        injectManualCommand(state->getMoveZCmd(z, speedx*60.0));
+    if(e!=0)
+        injectManualCommand(state->getMoveECmd(e,60.0 * (e>0 ? speedeExtrude : speedeRetract)));
+}
+
+size_t Printer::jobCommandsStored() {
+    mutex::scoped_lock l(sendMutex);
+    return jobCommands.size();
 }
 
 boost::shared_ptr<list<boost::shared_ptr<PrinterResponse>>> Printer::getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid) {

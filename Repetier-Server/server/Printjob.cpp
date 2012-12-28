@@ -18,6 +18,7 @@
 #include "Printjob.h"
 #include <boost/filesystem.hpp>
 #include <vector>
+#include "printer.h"
 
 using namespace std;
 using namespace boost;
@@ -53,7 +54,7 @@ PrintjobManager::PrintjobManager(string dir) {
         sort(v.begin(), v.end());
         for (pvec::const_iterator it (v.begin()); it != v.end(); ++it)
         {
-            shared_ptr<Printjob> pj(new Printjob((*it).native()));
+            PrintjobPtr pj(new Printjob((*it).native(),false));
             if(!pj->isNotExistent()) {
                 files.push_back(pj);
             }
@@ -62,7 +63,7 @@ PrintjobManager::PrintjobManager(string dir) {
             size_t upos = sid.find('_');
             if(upos!=string::npos) {
                 sid = sid.substr(0,upos);
-                lastid = (size_t)atol(sid.c_str());
+                lastid = atoi(sid.c_str());
             }
         }
     } catch(const filesystem_error& ex)
@@ -122,12 +123,28 @@ void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
         j.push_back(Pair("id",job->getId()));
         j.push_back(Pair("name",job->getName()));
         j.push_back(Pair("length",(int)job->getLength()));
-        
+        switch(job->getState()) {
+            case Printjob::startUpload:
+                j.push_back(Pair("state","uploading"));
+                break;
+            case Printjob::stored:
+                j.push_back(Pair("state","stored"));
+                break;
+            case Printjob::running:
+                j.push_back(Pair("state","running"));
+                break;
+            case Printjob::finished:
+                j.push_back(Pair("state","finsihed"));
+                break;
+            case Printjob::doesNotExist:
+                j.push_back(Pair("state","error"));
+                break;
+        }
         a.push_back(j);
     }
     o.push_back(Pair(name,a));
 }
-boost::shared_ptr<Printjob> PrintjobManager::findById(int id) {
+PrintjobPtr PrintjobManager::findById(int id) {
     mutex::scoped_lock l(filesMutex);
     pjlist::iterator it = files.begin(),ie=files.end();
     for(;it!=ie;it++) {
@@ -136,15 +153,99 @@ boost::shared_ptr<Printjob> PrintjobManager::findById(int id) {
     }
     return shared_ptr<Printjob>();
 }
+PrintjobPtr PrintjobManager::createNewPrintjob(std::string name) {
+    mutex::scoped_lock l(filesMutex);
+    lastid++;
+    PrintjobPtr job(new Printjob(encodeName(lastid, name, "u", true),true));
+    files.push_back(job);
+    return job;
+}
+void PrintjobManager::finishPrintjobCreation(PrintjobPtr job,string namerep,size_t sz)
+{
+    mutex::scoped_lock l(filesMutex);
+    if(job->getName().length()>0)
+        namerep = job->getName();
+    if(namerep.length()==0) {
+        char buf[50];
+        sprintf(buf,"Job %d",job->getId());
+        namerep = static_cast<string>(buf);
+    }
+    string newname = encodeName(job->getId(),namerep,"g", true);
+    rename(job->getFilename(), newname);
+    job->setFilename(newname);
+    job->setLength(sz);
+    job->setStored();
+}
+void PrintjobManager::RemovePrintjob(PrintjobPtr job) {
+    mutex::scoped_lock l(filesMutex);
+    path p(job->getFilename());
+    if(exists(p) && is_regular_file(p))
+        remove(p);
+    files.remove(job);
+}
+void PrintjobManager::startJob(int id) {
+    mutex::scoped_lock l(filesMutex);
+    if(runningJob.get()) return; // Can't start if old job is running
+    runningJob = findById(id);
+    if(runningJob.get()) return; // unknown job
+    runningJob->setRunning();
+    jobin.open(runningJob->getFilename().c_str(),ifstream::in);
+}
+void PrintjobManager::killJob(int id) {
+    mutex::scoped_lock l(filesMutex);
+    if(!runningJob.get()) return; // Can't start if old job is running
+    if(jobin.is_open() && jobin.eof()) {
+        jobin.close();
+    }
+    files.remove(runningJob);
+    remove(path(runningJob->getFilename())); // Delete file from disk
+    runningJob.reset();
+}
+void PrintjobManager::undoCurrentJob() {
+    mutex::scoped_lock l(filesMutex);
+    if(!runningJob.get()) return; // no running job
+    if(jobin.is_open() && jobin.eof()) {
+        jobin.close();
+    }
+    runningJob->setStored();
+    files.remove(runningJob);
+    runningJob.reset();
+}
+void PrintjobManager::manageJobs(Printer *p) {
+    mutex::scoped_lock l(filesMutex);
+    if(!runningJob.get()) return; // unknown job
+    if(jobin.good()) {
+        string line;
+        size_t n = 100-p->jobCommandsStored();
+        if(n>10) n = 10;
+        char buf[100];
+        while(n && !jobin.eof()) {
+            jobin.getline(buf, 100); // Strips \n
+            size_t l = strlen(buf);
+            if(buf[l]=='\r')
+                buf[l] = 0;
+            p->injectJobCommand(static_cast<string>(buf));
+            n--;
+        }
+        runningJob->setPos(jobin.tellg());
+    }
+    if(jobin.is_open() && jobin.eof()) {
+        jobin.close();
+        files.remove(runningJob);
+        remove(path(runningJob->getFilename())); // Delete file from disk
+        runningJob.reset();
+    }
+}
 // ============= Printjob =============================
 
-Printjob::Printjob(string _file) {
+Printjob::Printjob(string _file,bool newjob) {
     file = _file;
     path p(file);
     pos = 0;
     state = stored;
     length = 0;
     id = PrintjobManager::decodeIdPart(file);
+    if(newjob) {state = startUpload; return;}
     try {
         if(exists(p) && is_regular_file(p))
             length = file_size(file);

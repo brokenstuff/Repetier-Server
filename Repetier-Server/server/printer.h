@@ -31,6 +31,8 @@
 
 class PrinterSerial;
 class PrinterState;
+class PrintjobManager;
+class Printjob;
 class GCode;
 class GCodeDataPacket;
 
@@ -58,7 +60,8 @@ public:
 
 class Printer {
     libconfig::Config config;
-    
+    PrintjobManager *jobManager;
+    PrintjobManager *modelManager;
     volatile bool stopRequested;
     boost::shared_ptr<boost::thread> thread;
     boost::mutex mutex;
@@ -67,6 +70,8 @@ class Printer {
     std::deque<boost::shared_ptr<PrinterResponse>> responses;
     PrinterSerial *serial;
     uint32_t lastResponseId;
+    boost::posix_time::ptime lastTemp; ///< Last temp read. Always access with lastTempMutex
+    boost::mutex lastTempMutex;
     void run();
     bool extract(const std::string& source,const std::string& ident,std::string &result);
     deque<std::string> manualCommands; ///< Buffer of manual commands to send.
@@ -85,6 +90,8 @@ class Printer {
     int linesSend;
     std::size_t bytesSend;
     bool paused;
+    int updateTempEvery;
+    
     /** Resend all lines starting with line. Removes all commands stored in
      history until the given line and moves them instead into the resendLines buffer.
      
@@ -129,6 +136,8 @@ public:
     Printer(std::string conf);
     ~Printer();
     
+    void updateLastTempMutex();
+
     /** The serial reader calls this for each line received. */
     void analyseResponse(std::string &resp);
     
@@ -148,10 +157,15 @@ public:
     void injectManualCommand(const std::string& cmd);
     /** Push a new command into the job queue. Thread safe. */
     void injectJobCommand(const std::string& cmd);
-    
+    /** Number of job commands stored */
+    size_t jobCommandsStored();
     void fillJSONObject(json_spirit::Object &obj);
+    void move(double x,double y,double z,double e);
     int getOnlineStatus();
     std::string getJobStatus();
+    void connectionClosed();
+    inline PrintjobManager *getJobManager() {return jobManager;}
+    inline PrintjobManager *getModelManager() {return modelManager;}
     // Public interthread communication methods
     void startThread();
     void stopThread();

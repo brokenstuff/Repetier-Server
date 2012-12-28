@@ -16,3 +16,21 @@ MacOS:
 
 Install macports from http://www.macports.org/install.php
 Install boost library: sudo port install boost
+
+./bjam toolset=darwin address-model=32_64 architecture=x86
+
+
+Compilation using CMake
+
+go to build directory
+
+Compile with Visual Studio 2008:
+cmake -G "Visual Studio 9 2008" ..
+cmake -G "Visual Studio 10" ..
+
+Compile with default system compiler:
+cmake ..
+
+If you need defines to find the boost library, add them with -D<Name>=<Value>
+
+After cmake finishes with succes your build system is ready.

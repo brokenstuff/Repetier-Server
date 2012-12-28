@@ -249,6 +249,7 @@ void PrinterSerial::doClose()
     port.close(ec);
     if(ec) setErrorStatus(true);
     open = false;
+    printer->connectionClosed();
 #ifdef DEBUG
     cout << "Connection closed:" << printer->name << endl;
 #endif

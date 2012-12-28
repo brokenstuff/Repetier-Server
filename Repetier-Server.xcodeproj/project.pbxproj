@@ -15,6 +15,11 @@
 		FDABA26A16861F44005522A4 /* json_spirit_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA26516861F44005522A4 /* json_spirit_writer.cpp */; };
 		FDABA26F1686FCC2005522A4 /* moFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA26D1686FCC2005522A4 /* moFileReader.cpp */; };
 		FDABA275168AE64F005522A4 /* Printjob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDABA273168AE64F005522A4 /* Printjob.cpp */; };
+		FDABA27D168D9B9E005522A4 /* libboost_exception.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA278168D9B9D005522A4 /* libboost_exception.a */; };
+		FDABA27E168D9B9F005522A4 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA279168D9B9D005522A4 /* libboost_filesystem.a */; settings = {ATTRIBUTES = (Required, ); }; };
+		FDABA27F168D9B9F005522A4 /* libboost_program_options.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA27A168D9B9D005522A4 /* libboost_program_options.a */; };
+		FDABA280168D9B9F005522A4 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA27B168D9B9E005522A4 /* libboost_system.a */; };
+		FDABA281168D9B9F005522A4 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA27C168D9B9E005522A4 /* libboost_thread.a */; };
 		FDED504B1673ACB3001F0450 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50491673ACB3001F0450 /* mongoose.c */; };
 		FDED505D1673BAD8001F0450 /* grammar.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504D1673BAD8001F0450 /* grammar.c */; };
 		FDED505E1673BAD8001F0450 /* libconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504F1673BAD8001F0450 /* libconfig.c */; };
@@ -23,11 +28,7 @@
 		FDED50621673BAD8001F0450 /* scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50581673BAD8001F0450 /* scanner.c */; };
 		FDED50631673BAD8001F0450 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED505A1673BAD8001F0450 /* strbuf.c */; };
 		FDED50671673BB26001F0450 /* printer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED50651673BB26001F0450 /* printer.cpp */; };
-		FDED50691673C304001F0450 /* libboost_program_options-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED50681673C304001F0450 /* libboost_program_options-mt.a */; };
-		FDED507116749027001F0450 /* libboost_filesystem-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED507016749027001F0450 /* libboost_filesystem-mt.a */; };
-		FDED5073167491A1001F0450 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED5072167491A1001F0450 /* libboost_system-mt.a */; };
 		FDED5076167494AC001F0450 /* global_config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED5074167494AC001F0450 /* global_config.cpp */; };
-		FDED50781674A921001F0450 /* libboost_thread-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDED50771674A921001F0450 /* libboost_thread-mt.a */; };
 		FDED507B1674F4F6001F0450 /* PrinterSerial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED50791674F4F6001F0450 /* PrinterSerial.cpp */; };
 		FDED507E167A5400001F0450 /* GCode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED507C167A5400001F0450 /* GCode.cpp */; };
 		FDED5081167CF025001F0450 /* PrinterState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED507F167CF025001F0450 /* PrinterState.cpp */; };
@@ -72,6 +73,11 @@
 		FDABA2721686FCF4005522A4 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		FDABA273168AE64F005522A4 /* Printjob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Printjob.cpp; sourceTree = "<group>"; };
 		FDABA274168AE64F005522A4 /* Printjob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Printjob.h; sourceTree = "<group>"; };
+		FDABA278168D9B9D005522A4 /* libboost_exception.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_exception.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_exception.a; sourceTree = "<group>"; };
+		FDABA279168D9B9D005522A4 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_filesystem.a; sourceTree = "<group>"; };
+		FDABA27A168D9B9D005522A4 /* libboost_program_options.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_program_options.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_program_options.a; sourceTree = "<group>"; };
+		FDABA27B168D9B9E005522A4 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_system.a; sourceTree = "<group>"; };
+		FDABA27C168D9B9E005522A4 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_thread.a; sourceTree = "<group>"; };
 		FDED50471673ACB3001F0450 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		FDED50481673ACB3001F0450 /* mongoose.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = mongoose.1; sourceTree = "<group>"; };
 		FDED50491673ACB3001F0450 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mongoose.c; sourceTree = "<group>"; };
@@ -93,15 +99,10 @@
 		FDED505C1673BAD8001F0450 /* wincompat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wincompat.h; sourceTree = "<group>"; };
 		FDED50651673BB26001F0450 /* printer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = printer.cpp; sourceTree = "<group>"; };
 		FDED50661673BB26001F0450 /* printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = printer.h; sourceTree = "<group>"; };
-		FDED50681673C304001F0450 /* libboost_program_options-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_program_options-mt.a"; path = "../../../../../../opt/local/lib/libboost_program_options-mt.a"; sourceTree = "<group>"; };
 		FDED506A1673C769001F0450 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		FDED506C1673C78F001F0450 /* libboost_program_options-mt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_program_options-mt.dylib"; path = "../../../../../../opt/local/lib/libboost_program_options-mt.dylib"; sourceTree = "<group>"; };
 		FDED506E1673C7C3001F0450 /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
-		FDED507016749027001F0450 /* libboost_filesystem-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_filesystem-mt.a"; path = "../../../../../../opt/local/lib/libboost_filesystem-mt.a"; sourceTree = "<group>"; };
-		FDED5072167491A1001F0450 /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "../../../../../../opt/local/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
 		FDED5074167494AC001F0450 /* global_config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = global_config.cpp; sourceTree = "<group>"; };
 		FDED5075167494AC001F0450 /* global_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = global_config.h; sourceTree = "<group>"; };
-		FDED50771674A921001F0450 /* libboost_thread-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-mt.a"; path = "../../../../../../opt/local/lib/libboost_thread-mt.a"; sourceTree = "<group>"; };
 		FDED50791674F4F6001F0450 /* PrinterSerial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrinterSerial.cpp; sourceTree = "<group>"; };
 		FDED507A1674F4F6001F0450 /* PrinterSerial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrinterSerial.h; sourceTree = "<group>"; };
 		FDED507C167A5400001F0450 /* GCode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GCode.cpp; sourceTree = "<group>"; };
@@ -115,10 +116,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FDED50781674A921001F0450 /* libboost_thread-mt.a in Frameworks */,
-				FDED5073167491A1001F0450 /* libboost_system-mt.a in Frameworks */,
-				FDED507116749027001F0450 /* libboost_filesystem-mt.a in Frameworks */,
-				FDED50691673C304001F0450 /* libboost_program_options-mt.a in Frameworks */,
+				FDABA27D168D9B9E005522A4 /* libboost_exception.a in Frameworks */,
+				FDABA27E168D9B9F005522A4 /* libboost_filesystem.a in Frameworks */,
+				FDABA27F168D9B9F005522A4 /* libboost_program_options.a in Frameworks */,
+				FDABA280168D9B9F005522A4 /* libboost_system.a in Frameworks */,
+				FDABA281168D9B9F005522A4 /* libboost_thread.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,13 +130,13 @@
 		FD57C177161B5607000C4A45 = {
 			isa = PBXGroup;
 			children = (
-				FDED50771674A921001F0450 /* libboost_thread-mt.a */,
-				FDED5072167491A1001F0450 /* libboost_system-mt.a */,
-				FDED507016749027001F0450 /* libboost_filesystem-mt.a */,
+				FDABA278168D9B9D005522A4 /* libboost_exception.a */,
+				FDABA279168D9B9D005522A4 /* libboost_filesystem.a */,
+				FDABA27A168D9B9D005522A4 /* libboost_program_options.a */,
+				FDABA27B168D9B9E005522A4 /* libboost_system.a */,
+				FDABA27C168D9B9E005522A4 /* libboost_thread.a */,
 				FDED506E1673C7C3001F0450 /* libc++.1.dylib */,
-				FDED506C1673C78F001F0450 /* libboost_program_options-mt.dylib */,
 				FDED506A1673C769001F0450 /* libc++.dylib */,
-				FDED50681673C304001F0450 /* libboost_program_options-mt.a */,
 				FD57C185161B5608000C4A45 /* Repetier-Server */,
 				FD57C183161B5608000C4A45 /* Products */,
 			);
@@ -377,14 +379,20 @@
 		FD57C18D161B5608000C4A45 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LIBRARY = "libstdc++";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 					HAVE_XLOCALE_H,
 				);
-				HEADER_SEARCH_PATHS = /opt/local/include;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				HEADER_SEARCH_PATHS = /Users/littwin/Documents/Projekte/libraries/boost_1_52_0;
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../libraries/boost_1_52_0/stage/lib\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -392,10 +400,16 @@
 		FD57C18E161B5608000C4A45 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LIBRARY = "libstdc++";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = HAVE_XLOCALE_H;
-				HEADER_SEARCH_PATHS = /opt/local/include;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				HEADER_SEARCH_PATHS = /Users/littwin/Documents/Projekte/libraries/boost_1_52_0;
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../libraries/boost_1_52_0/stage/lib\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
