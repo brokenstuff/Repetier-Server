@@ -76,6 +76,9 @@ using namespace boost;
 #define myopen(x,y) open(x,y)
 #define mywrite(x, y) write((x), (y))
 #endif
+#ifndef O_EXLOCK
+#define O_EXLOCK 0
+#endif
 
 namespace repetier {
     static const char *HTTP_500 = "HTTP/1.0 500 Server Error\r\n\r\n";
@@ -392,7 +395,7 @@ namespace repetier {
         ret.push_back(Pair("error",error));
     
         // Print result
-		mg_printf(conn,"%s",write(ret,json_spirit::Output_options::raw_utf8).c_str());
+		mg_printf(conn,"%s",write(ret,json_spirit::raw_utf8).c_str());
     }
     bool MG_getVar(const mg_request_info *info,const char *name, std::string &output)
     {
