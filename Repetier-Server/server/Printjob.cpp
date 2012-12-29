@@ -32,7 +32,7 @@ using namespace boost::filesystem;
 #endif
 
 typedef vector<path> pvec;             // store paths
-typedef list<shared_ptr<Printjob>> pjlist;
+typedef list<shared_ptr<Printjob> > pjlist;
 
 PrintjobManager::PrintjobManager(string dir) {
     char lc = dir[dir.length()-1];
@@ -123,7 +123,7 @@ int PrintjobManager::decodeIdPart(std::string file) {
 void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
     using namespace json_spirit;
     Array a;
-    list<shared_ptr<Printjob>>::iterator it = files.begin(),ie = files.end();
+    list<shared_ptr<Printjob> >::iterator it = files.begin(),ie = files.end();
     for(;it!=ie;it++) {
         Object j;
         Printjob *job = (*it).get();

@@ -361,11 +361,11 @@ namespace repetier {
                 filter = atoi(sfilter.c_str());
             if(MG_getVar(ri,"start",sstart))
                 start = (uint32_t)atol(sstart.c_str());
-            boost::shared_ptr<list<boost::shared_ptr<PrinterResponse>>> rlist = printer->getResponsesSince(start,filter, start);
+            boost::shared_ptr<list<boost::shared_ptr<PrinterResponse> > > rlist = printer->getResponsesSince(start,filter, start);
             Object lobj;
             lobj.push_back(Pair("lastid",(int)start));
             Array a;
-            list<boost::shared_ptr<PrinterResponse>>::iterator it = rlist->begin(),end=rlist->end();
+            list<boost::shared_ptr<PrinterResponse> >::iterator it = rlist->begin(),end=rlist->end();
             for(;it!=end;++it) {
                 PrinterResponse *resp = (*it).get();
                 Object o;
@@ -536,7 +536,7 @@ namespace repetier {
         return (void*)"";
     }
     void TranslateFile(const std::string &filename,const std::string &lang,std::string& result) {
-        static map<string,boost::shared_ptr<moFileLib::moFileReader>> rmap;
+        static map<string,boost::shared_ptr<moFileLib::moFileReader> > rmap;
         result.clear();
         
         // read mo file if not cached

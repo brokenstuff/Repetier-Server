@@ -209,9 +209,9 @@ size_t Printer::jobCommandsStored() {
     return jobCommands.size();
 }
 
-boost::shared_ptr<list<boost::shared_ptr<PrinterResponse>>> Printer::getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid) {
+boost::shared_ptr<list<boost::shared_ptr<PrinterResponse> > > Printer::getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid) {
     lastid = resId;
-    shared_ptr<list<shared_ptr<PrinterResponse>>> retList(new list<shared_ptr<PrinterResponse> >());
+    shared_ptr<list<shared_ptr<PrinterResponse> > > retList(new list<shared_ptr<PrinterResponse> >());
     mutex::scoped_lock l(responseMutex);
     deque<shared_ptr<PrinterResponse> >::iterator act = responses.begin();
     deque<shared_ptr<PrinterResponse> >::iterator e = responses.end();

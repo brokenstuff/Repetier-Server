@@ -69,7 +69,7 @@ class Printer {
     boost::mutex mutex;
     boost::mutex responseMutex;
     boost::mutex sendMutex;
-    std::deque<boost::shared_ptr<PrinterResponse>> responses;
+    std::deque<boost::shared_ptr<PrinterResponse> > responses;
     PrinterSerial *serial;
     uint32_t lastResponseId;
     boost::posix_time::ptime lastTemp; ///< Last temp read. Always access with lastTempMutex
@@ -153,7 +153,7 @@ public:
      @param filter filter selecting which response types should be returned.
      @param lastid last response id contained in list or resId if list is empty.
      */
-	boost::shared_ptr<std::list<boost::shared_ptr<PrinterResponse>>> getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid);
+	boost::shared_ptr<std::list<boost::shared_ptr<PrinterResponse> > > getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid);
     
     /** Push a new manual command into the command queue. Thread safe. */
     void injectManualCommand(const std::string& cmd);
