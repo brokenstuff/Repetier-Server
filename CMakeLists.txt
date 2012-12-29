@@ -37,5 +37,5 @@ INCLUDE_DIRECTORIES("Repetier-Server/server")
 
 #message("Files: ${RepetierServer_SOURCES}")
 #message("Boost libs: ${Boost_LIBRARIES}")
-add_executable("Repetier-Server" ${RepetierServer_SOURCES})
-target_link_libraries("Repetier-Server" ${Boost_LIBRARIES})
+add_executable("RepetierServer" ${RepetierServer_SOURCES})
+target_link_libraries("RepetierServer" ${Boost_LIBRARIES})
