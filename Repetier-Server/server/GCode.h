@@ -19,6 +19,8 @@
 #define __Repetier_Server__GCode__
 
 #include <iostream>
+#include <boost/cstdint.hpp>
+using namespace boost;
 
 class Printer;
 

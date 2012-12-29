@@ -12,8 +12,12 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+
  */
 
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#define _CRT_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE 
 
 #include "Printjob.h"
 #include <boost/filesystem.hpp>
@@ -23,6 +27,9 @@
 using namespace std;
 using namespace boost;
 using namespace boost::filesystem;
+#if defined(_WIN32)
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#endif
 
 typedef vector<path> pvec;             // store paths
 typedef list<shared_ptr<Printjob>> pjlist;
@@ -54,12 +61,12 @@ PrintjobManager::PrintjobManager(string dir) {
         sort(v.begin(), v.end());
         for (pvec::const_iterator it (v.begin()); it != v.end(); ++it)
         {
-            PrintjobPtr pj(new Printjob((*it).native(),false));
+            PrintjobPtr pj(new Printjob((*it).string(),false));
             if(!pj->isNotExistent()) {
                 files.push_back(pj);
             }
             // Extract id for last id;
-            string sid = it->filename().native();
+            string sid = it->filename().string();
             size_t upos = sid.find('_');
             if(upos!=string::npos) {
                 sid = sid.substr(0,upos);
@@ -68,7 +75,7 @@ PrintjobManager::PrintjobManager(string dir) {
         }
     } catch(const filesystem_error& ex)
     {
-        cerr << "error: Unable to create or access job directory " << dir << "." << endl;
+		cerr << "error: Unable to create or access job directory " << dir << ":" << ex.what() << endl;
         exit(-1);
     }
 }
@@ -98,7 +105,7 @@ std::string PrintjobManager::encodeName(int id,std::string name,std::string post
 
 std::string PrintjobManager::decodeNamePart(std::string file) {
     path p(file);
-    string name = p.filename().stem().native();
+    string name = p.filename().stem().string();
     size_t upos = name.find('_');
     if(upos!=string::npos)
         name = name.substr(upos+1);
@@ -106,7 +113,7 @@ std::string PrintjobManager::decodeNamePart(std::string file) {
 }
 int PrintjobManager::decodeIdPart(std::string file) {
     path p(file);
-    string name = p.filename().stem().native();
+    string name = p.filename().stem().string();
     size_t upos = name.find('_');
     if(upos!=string::npos)
         name = name.substr(0,upos);
@@ -248,9 +255,9 @@ Printjob::Printjob(string _file,bool newjob) {
     if(newjob) {state = startUpload; return;}
     try {
         if(exists(p) && is_regular_file(p))
-            length = file_size(file);
+            length = (size_t)file_size(file);
         else state = doesNotExist;
-    } catch(const filesystem_error& ex)
+    } catch(const filesystem_error& )
     {
         state = doesNotExist;
     }

@@ -14,6 +14,9 @@
  limitations under the License.
  */
 
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#define _CRT_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE 
 
 #include <stdio.h>
 #include "GCode.h"

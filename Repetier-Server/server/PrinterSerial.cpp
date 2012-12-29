@@ -14,12 +14,17 @@
  limitations under the License.
  */
 
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#define _CRT_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE 
 
 #include "PrinterSerial.h"
 #include "printer.h"
+#ifdef __APPLE__
 #include <sys/ioctl.h>
 #include <termios.h>
-#import <IOKit/serial/ioss.h>
+#include <IOKit/serial/ioss.h>
+#endif
 
 using namespace boost;
 using namespace std;
@@ -103,7 +108,7 @@ bool PrinterSerial::tryConnect() {
 #ifdef DEBUG
         cout << "Connection started:" << printer->name << endl;
 #endif
-    } catch (std::exception& e)
+    } catch (std::exception& )
     {
 #ifdef DEBUG
         // cerr << "Exception: " << e.what() << "\n";
@@ -187,7 +192,7 @@ void PrinterSerial::readEnd(const boost::system::error_code& error,
         }
     } else {
         int lstart = 0;
-        for(int i=0;i<bytes_transferred;i++) {
+        for(size_t i=0;i<bytes_transferred;i++) {
             char c = readBuffer[i];
             if(c=='\n' || c=='\r') {
                 readString.append(&readBuffer[lstart],i-lstart);

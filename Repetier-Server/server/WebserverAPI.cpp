@@ -19,10 +19,10 @@
 #include "global_config.h"
 #include "printer.h"
 #include "json_spirit.h"
-#include "map.h"
+#include <map>
 #include "moFileReader.h"
 #include <boost/bind.hpp>
-#include <fstream.h>
+#include <fstream>
 #include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 #include <stdio.h>
@@ -30,14 +30,73 @@
 #include <string.h>
 #include "PrinterState.h"
 #include "Printjob.h"
+#if defined(_WIN32)
+#include <io.h>
+#endif
 
 using namespace std;
 using namespace json_spirit;
 using namespace boost;
 
+#if defined(_WIN32) && !defined(__SYMBIAN32__) // Windows specific
+#pragma warning( disable : 4996 )
+// Visual Studio 6 does not know __func__ or __FUNCTION__
+// The rest of MS compilers use __FUNCTION__, not C99 __func__
+// Also use _strtoui64 on modern M$ compilers
+#if defined(_MSC_VER) && _MSC_VER < 1300
+#define STRX(x) #x
+#define STR(x) STRX(x)
+#define __func__ "line " STR(__LINE__)
+#define strtoull(x, y, z) strtoul(x, y, z)
+#define strtoll(x, y, z) strtol(x, y, z)
+#else
+#define __func__  __FUNCTION__
+#define strtoull(x, y, z) _strtoui64(x, y, z)
+#define strtoll(x, y, z) _strtoi64(x, y, z)
+#endif // _MSC_VER
+
+#define O_EXLOCK 0
+#define O_CLOEXEC 0
+#define O_CREAT _O_CREAT
+#define O_APPEND _O_APPEND
+#define O_TRUNC _O_TRUNC
+#define O_RDWR _O_RDWR
+#define snprintf _snprintf
+#define strnstr _strnstr
+#define popen(x, y) _popen(x, y)
+#define pclose(x) _pclose(x)
+#define myclose(x) _close(x)
+#define myopen(x,y) _open(x,y)
+#define fseeko(x, y, z) _lseeki64(_fileno(x), (y), (z))
+#define fdopen(x, y) _fdopen((x), (y))
+#define mywrite(x, y) _write((x), (y))
+//#define read(x, y, z) _read((x), (y), (unsigned) z)
+#else
+#define myclose(x) close(x)
+#define myopen(x,y) open(x,y)
+#define mywrite(x, y) write((x), (y))
+#endif
+
 namespace repetier {
     static const char *HTTP_500 = "HTTP/1.0 500 Server Error\r\n\r\n";
     
+	char *mystrnstr(const char *s,const char *needle,int len) {
+		int ln = (int)strlen(needle);
+		if(!ln) return (char*)s;
+		char *s2 = (char *)s;
+		bool ok = false;
+		for(int o=0;o<len-ln;o++) {
+			s2 = (char*)&s[o];
+			bool ok = true;
+			for(int j=0;j<ln && ok;j++) {
+				ok = s2[j]==needle[j];
+			}
+			if(ok) break;
+		}
+		if(!ok) return NULL;
+		return s2;
+	}
+
     // Modified verion from mongoose examples
     bool handleFileUpload(struct mg_connection *conn,const string& filename,string& name,long &size,bool append) {
         name.clear();
@@ -98,14 +157,14 @@ namespace repetier {
             mg_printf(conn, "%s%s", HTTP_500, "Can't get file name");
         } else if (cl <= 0) {
             mg_printf(conn, "%s%s", HTTP_500, "Empty file");
-        } else if ((fd = open(filename.c_str(), O_CREAT | (append ? O_APPEND : O_TRUNC) |
+        } else if ((fd = myopen(filename.c_str(), O_CREAT | (append ? O_APPEND : O_TRUNC) |
                               O_RDWR | /*O_WRONLY |*/ O_EXLOCK | O_CLOEXEC)) < 0) {
             // We're opening the file with exclusive lock held. This guarantee us that
             // there is no other thread can save into the same file simultaneously.
             mg_printf(conn, "%s%s", HTTP_500, "Cannot open file");
         } else if ((fp = fdopen(fd,(append ? "a+" : "w"))) == NULL) {
             mg_printf(conn, "%s%s", HTTP_500, "Cannot reopen file stream");
-            close(fd);
+            myclose(fd);
         } else {
             bool finished = false;
             name = file_name;
@@ -113,7 +172,7 @@ namespace repetier {
             // Success. Write data into the file.
             eop = post_data + post_data_len;
             n = p + cl > eop ? (int) (eop - p) : (int) cl;
-            char *p2 = strnstr(p,boundary,n);
+            char *p2 = mystrnstr(p,boundary,n);
             int startnew = 0;
             if(p2!=NULL) { // End boundary detected
                 finished = true;
@@ -127,10 +186,10 @@ namespace repetier {
             if(!finished)
                 memcpy(buf,&p[n],boundlen);
             while (!finished && written < cl &&
-                   (n = mg_read(conn, &buf[startnew], cl - written > (long long) sizeof(buf)-startnew ?
-                                sizeof(buf)-startnew : cl - written)) > 0) {
+                   (n = mg_read(conn, &buf[startnew],(size_t)( cl - written > (long long) sizeof(buf)-startnew ?
+                                sizeof(buf)-startnew : cl - written)) > 0)) {
                 n+=startnew;
-                p2 = strnstr(buf,boundary,n);
+                p2 = mystrnstr(buf,boundary,n);
                 int startnew = 0;
                 if(p2!=NULL) { // End boundary detected
                     finished = true;
@@ -146,7 +205,7 @@ namespace repetier {
                     memcpy(buf,&buf[n],boundlen);
             }
             (void) fclose(fp);
-            size = written;
+            size = (long)written;
             return true;
             //mg_printf(conn, "HTTP/1.0 200 OK\r\n\r\n"
             //        "Saved to [%s], written %llu bytes", path, cl);
@@ -333,7 +392,7 @@ namespace repetier {
         ret.push_back(Pair("error",error));
     
         // Print result
-        mg_printf(conn,"%s",write(ret,Output_options::raw_utf8).c_str());
+		mg_printf(conn,"%s",write(ret,json_spirit::Output_options::raw_utf8).c_str());
     }
     bool MG_getVar(const mg_request_info *info,const char *name, std::string &output)
     {
@@ -495,14 +554,14 @@ namespace repetier {
         } else r = rmap[lang].get();
         // Read file contents
         string contents;
-        ifstream in(filename.c_str(), ios::in | ios::binary);
-        if (in)
+		std::ifstream in(filename.c_str(), ios::in | ios::binary);
+		if (in.good())
         {
             in.seekg(0, std::ios::end);
             contents.resize(in.tellg());
             in.seekg(0, std::ios::beg);
-            in.read(&contents[0], contents.size());
-            in.close();
+			in.read(&contents[0], contents.size());
+			in.close();
         } else {
             result.clear();
             return;

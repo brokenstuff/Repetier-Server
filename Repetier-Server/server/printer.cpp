@@ -14,6 +14,9 @@
  limitations under the License.
  */
 
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#define _CRT_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE 
 
 #include "printer.h"
 #include "Printjob.h"
@@ -174,7 +177,7 @@ void Printer::addResponse(const std::string& msg,uint8_t rtype) {
     mutex::scoped_lock l(responseMutex);
     shared_ptr<PrinterResponse> newres(new PrinterResponse(msg,++lastResponseId,rtype));
     responses.push_back(newres);
-    if(responses.size()>gconfig->getBacklogSize())
+    if(responses.size()>(size_t)gconfig->getBacklogSize())
         responses.pop_front();
 }
 void Printer::injectManualCommand(const std::string& cmd) {

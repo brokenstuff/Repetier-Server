@@ -19,11 +19,13 @@
 #define __Repetier_Server__PrinterSerial__
 
 #include <iostream>
-#include <list.h>
+#include <list>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/shared_array.hpp>
+#include <boost/cstdint.hpp>
+using namespace boost;
 
 class Printer;
 

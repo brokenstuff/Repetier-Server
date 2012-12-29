@@ -20,12 +20,14 @@
 
 #include <iostream>
 #include "libconfig.h++"
-#include <deque.h>
-#include <list.h>
+#include <deque>
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "json_spirit_value.h"
+#include <boost/cstdint.hpp>
+using namespace boost;
 
 #define MAX_HISTORY_SIZE 50
 
@@ -74,11 +76,11 @@ class Printer {
     boost::mutex lastTempMutex;
     void run();
     bool extract(const std::string& source,const std::string& ident,std::string &result);
-    deque<std::string> manualCommands; ///< Buffer of manual commands to send.
-    deque<std::string> jobCommands; ///< Buffer of commands comming from a job. Not necessaryly the complete job! Job may refill the buffer if it gets empty.
-    deque<boost::shared_ptr<GCode> > history; ///< Buffer of the last commands send.
-    deque<boost::shared_ptr<GCode> > resendLines; ///< Lines for which a resend was requested.
-    deque<int> nackLines; ///< Length of unacknowledged lines send.
+	std::deque<std::string> manualCommands; ///< Buffer of manual commands to send.
+	std::deque<std::string> jobCommands; ///< Buffer of commands comming from a job. Not necessaryly the complete job! Job may refill the buffer if it gets empty.
+	std::deque<boost::shared_ptr<GCode> > history; ///< Buffer of the last commands send.
+	std::deque<boost::shared_ptr<GCode> > resendLines; ///< Lines for which a resend was requested.
+	std::deque<int> nackLines; ///< Length of unacknowledged lines send.
     // Communication handline
     bool readyForNextSend; ///< In pingpong mode indicates that ok was received for the last line.
     bool garbageCleared;
@@ -151,7 +153,7 @@ public:
      @param filter filter selecting which response types should be returned.
      @param lastid last response id contained in list or resId if list is empty.
      */
-    boost::shared_ptr<list<boost::shared_ptr<PrinterResponse>>> getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid);
+	boost::shared_ptr<std::list<boost::shared_ptr<PrinterResponse>>> getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid);
     
     /** Push a new manual command into the command queue. Thread safe. */
     void injectManualCommand(const std::string& cmd);

@@ -178,6 +178,8 @@
 #if defined(_MSC_VER) && ( defined(_EXPORT) || defined(MOFILE_IMPORT) )
 #   pragma warning (disable:4251)
 #endif /* _MSC_VER */
+#include <boost/cstdint.hpp>
+using namespace boost;
 
 
 /** \namespace moFileLib

@@ -23,7 +23,7 @@
 		FDED504B1673ACB3001F0450 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50491673ACB3001F0450 /* mongoose.c */; };
 		FDED505D1673BAD8001F0450 /* grammar.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504D1673BAD8001F0450 /* grammar.c */; };
 		FDED505E1673BAD8001F0450 /* libconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504F1673BAD8001F0450 /* libconfig.c */; };
-		FDED505F1673BAD8001F0450 /* libconfigcpp.c++ in Sources */ = {isa = PBXBuildFile; fileRef = FDED50531673BAD8001F0450 /* libconfigcpp.c++ */; };
+		FDED505F1673BAD8001F0450 /* libconfigcpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDED50531673BAD8001F0450 /* libconfigcpp.cpp */; };
 		FDED50611673BAD8001F0450 /* scanctx.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50561673BAD8001F0450 /* scanctx.c */; };
 		FDED50621673BAD8001F0450 /* scanner.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50581673BAD8001F0450 /* scanner.c */; };
 		FDED50631673BAD8001F0450 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED505A1673BAD8001F0450 /* strbuf.c */; };
@@ -88,7 +88,7 @@
 		FDED50501673BAD8001F0450 /* libconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libconfig.h; sourceTree = "<group>"; };
 		FDED50511673BAD8001F0450 /* libconfig.h++ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "libconfig.h++"; sourceTree = "<group>"; };
 		FDED50521673BAD8001F0450 /* libconfig.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = libconfig.hh; sourceTree = "<group>"; };
-		FDED50531673BAD8001F0450 /* libconfigcpp.c++ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "libconfigcpp.c++"; sourceTree = "<group>"; };
+		FDED50531673BAD8001F0450 /* libconfigcpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libconfigcpp.cpp; sourceTree = "<group>"; };
 		FDED50551673BAD8001F0450 /* parsectx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parsectx.h; sourceTree = "<group>"; };
 		FDED50561673BAD8001F0450 /* scanctx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scanctx.c; sourceTree = "<group>"; };
 		FDED50571673BAD8001F0450 /* scanctx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scanctx.h; sourceTree = "<group>"; };
@@ -216,7 +216,7 @@
 				FDED50501673BAD8001F0450 /* libconfig.h */,
 				FDED50511673BAD8001F0450 /* libconfig.h++ */,
 				FDED50521673BAD8001F0450 /* libconfig.hh */,
-				FDED50531673BAD8001F0450 /* libconfigcpp.c++ */,
+				FDED50531673BAD8001F0450 /* libconfigcpp.cpp */,
 				FDED50551673BAD8001F0450 /* parsectx.h */,
 				FDED50561673BAD8001F0450 /* scanctx.c */,
 				FDED50571673BAD8001F0450 /* scanctx.h */,
@@ -304,7 +304,7 @@
 				FDED504B1673ACB3001F0450 /* mongoose.c in Sources */,
 				FDED505D1673BAD8001F0450 /* grammar.c in Sources */,
 				FDED505E1673BAD8001F0450 /* libconfig.c in Sources */,
-				FDED505F1673BAD8001F0450 /* libconfigcpp.c++ in Sources */,
+				FDED505F1673BAD8001F0450 /* libconfigcpp.cpp in Sources */,
 				FDED50611673BAD8001F0450 /* scanctx.c in Sources */,
 				FDED50621673BAD8001F0450 /* scanner.c in Sources */,
 				FDED50631673BAD8001F0450 /* strbuf.c in Sources */,

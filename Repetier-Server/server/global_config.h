@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include "printer.h"
-#include <vector.h>
+#include <vector>
 
 /**
 This class contains in first instance the variables from repetier-server.con.

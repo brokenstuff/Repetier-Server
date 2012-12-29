@@ -49,7 +49,7 @@
 #define _delete(P) free((void *)(P))
 
 /* ------------------------------------------------------------------------- */
-
+#define LIBCONFIG_STATIC
 #ifndef LIBCONFIG_STATIC
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
 

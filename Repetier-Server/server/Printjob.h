@@ -24,6 +24,8 @@
 #include <boost/thread.hpp>
 #include "json_spirit_value.h"
 #include <fstream>
+#include <boost/cstdint.hpp>
+using namespace boost;
 
 class Printer;
 class Printjob {

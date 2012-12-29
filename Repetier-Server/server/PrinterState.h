@@ -21,11 +21,13 @@
 #include <iostream>
 #include <boost/thread.hpp>
 #include "json_spirit_value.h"
+#include <boost/cstdint.hpp>
+using namespace boost;
 
 struct PrinterTemp {
     uint64_t time;
-    float tempSet;
-    float tempRead;
+    double tempSet;
+    double tempRead;
     int8_t output;
 };
 class Printer;
@@ -44,10 +46,10 @@ class PrinterState {
     bool uploading;
     PrinterTemp bed;
     PrinterTemp* extruder;
-    float x, y, z, e,emax,f;
-    float lastX,lastY,lastZ,lastE;
-    float xOffset, yOffset, zOffset, eOffset;
-    float lastZPrint;
+    double x, y, z, e,emax,f;
+    double lastX,lastY,lastZ,lastE;
+    double xOffset, yOffset, zOffset, eOffset;
+    double lastZPrint;
     bool fanOn;
     int fanVoltage;
     bool powerOn;
@@ -56,13 +58,13 @@ class PrinterState {
     int debugLevel;
     uint32_t lastline;
     bool hasXHome, hasYHome, hasZHome;
-    float printerWidth, printerHeight, printerDepth;
+    double printerWidth, printerHeight, printerDepth;
     int tempMonitor;
     bool drawing;
     int layer;
     bool isG1Move;
     bool eChanged;
-    float printingTime;
+    double printingTime;
     bool sdcardMounted;
     
     std::string firmware;

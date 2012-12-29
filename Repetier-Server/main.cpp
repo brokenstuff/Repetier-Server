@@ -73,7 +73,7 @@ int main(int argc, const char * argv[])
     gconfig->readPrinterConfigs();
     gconfig->startPrinterThreads();
     struct mg_context *ctx;
-    const char *options[] = {"document_root", "/Users/littwin/Documents/Projekte/Repetier-Server/Repetier-Server/www/","listening_ports", gconfig->getPorts().c_str(), NULL};
+    const char *options[] = {"document_root", gconfig->getWebsiteRoot().c_str(),"listening_ports", gconfig->getPorts().c_str(), NULL};
     
     ctx = mg_start(&callback, NULL, options);
     //getchar();  // Wait until user hits "enter"

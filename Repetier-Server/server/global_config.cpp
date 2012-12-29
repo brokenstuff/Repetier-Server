@@ -23,7 +23,12 @@ using namespace boost::filesystem;
 GlobalConfig *gconfig;
 
 GlobalConfig::GlobalConfig(string filename) {
-    config.readFile(filename.c_str());
+	try {
+		config.readFile(filename.c_str());
+	} catch(libconfig::ParseException &pe) {
+		cerr << "error: " << pe.getError() << " line:" << pe.getLine() << " file:" << pe.getFile() << endl;
+		exit(-1);
+	}
     bool ok = true;
     ok &= config.lookupValue("printer_config_directory",printerConfigDir);
     ok &= config.lookupValue("data_storage_directory",storageDir);

@@ -27,6 +27,9 @@
 #include <exception>
 #include <string>
 
+#pragma warning( disable : 4290 )
+
+#define LIBCONFIGXX_STATIC
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 #if defined(LIBCONFIGXX_STATIC)
 #define LIBCONFIGXX_API

@@ -14,6 +14,9 @@
  limitations under the License.
  */
 
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#define _CRT_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE 
 
 #include "PrinterState.h"
 #include "printer.h"
@@ -21,6 +24,9 @@
 
 using namespace std;
 using namespace boost;
+#if defined(_WIN32)
+#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
+#endif
 
 PrinterState::PrinterState(Printer *p) {
     printer = p;
@@ -143,10 +149,10 @@ void PrinterState::analyze(GCode &code)
                         layer++;
                     }
                 }
-                float dx = abs(x - lastX);
-                float dy = abs(y - lastY);
-                float dz = abs(z - lastZ);
-                float de = abs(e - lastE);
+                double dx = abs(x - lastX);
+                double dy = abs(y - lastY);
+                double dz = abs(z - lastZ);
+                double de = abs(e - lastE);
                 if (dx + dy + dz > 0.001)
                 {
                     printingTime += sqrt(dx * dx + dy * dy + dz * dz) * 60.0f / f;
@@ -296,22 +302,22 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
     }
     if (extract(res,"X:",h))
     {
-        float v = atof(h.c_str());
+        double v = atof(h.c_str());
         x = v-xOffset;
     }
     if (extract(res,"Y:",h))
     {
-        float v = atof(h.c_str());
+        double v = atof(h.c_str());
         y = v-yOffset;
     }
     if (extract(res,"Z:",h))
     {
-        float v = atof(h.c_str());
+        double v = atof(h.c_str());
         z = v-zOffset;
     }
     if (extract(res,"E:",h))
     {
-        float v = atof(h.c_str());
+        double v = atof(h.c_str());
         e = v;
     }
     bool tempChange = false;
@@ -320,7 +326,7 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
         do {
             sprintf(b,"T%d:",ecnt);
             if(!extract(res,b,h)) break;
-            float t = atof(h.c_str());
+            double t = atof(h.c_str());
             PrinterTemp &ex = getExtruder(ecnt);
             ex.tempRead = t;
             sprintf(b,"@%d:",ecnt);

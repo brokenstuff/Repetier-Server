@@ -27,6 +27,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define LIBCONFIG_STATIC
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 #if defined(LIBCONFIG_STATIC)
 #define LIBCONFIG_API
