@@ -2,3 +2,6 @@
 .DS_Store
 build/**
 Repetier-Server.xcodeproj/**
+Repetier-Server.xcodeproj
+Repetier-Server.xcodeproj/*
+
