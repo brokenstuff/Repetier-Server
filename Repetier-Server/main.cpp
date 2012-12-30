@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <syslog.h>
+#include <signal.h>
 #endif
 
 namespace po = boost::program_options;
