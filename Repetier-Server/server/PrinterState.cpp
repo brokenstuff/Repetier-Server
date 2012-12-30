@@ -1,5 +1,6 @@
 /*
  Copyright 2012 Roland Littwin (repetier) repetierdev@gmail.com
+ Homepage: http://www.repetier.com
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -320,7 +321,6 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
         double v = atof(h.c_str());
         e = v;
     }
-    bool tempChange = false;
     if (extract(res,"T0",h)) {
         int ecnt = 0;
         do {
@@ -343,7 +343,6 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
         rtype = 2;
         PrinterTemp &ex = getExtruder(-1);
         ex.tempRead = atof(h.c_str());
-        tempChange = true;
         if (extract(res,"@:",h))
         {
             int eo = atoi(h.c_str());
@@ -355,7 +354,6 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
     if (extract(res,"B:",h))
     {
         bed.tempRead = atof(h.c_str());
-        tempChange = true;
     }
     if (extract(res,"SpeedMultiply:",h))  {
         rtype = 2;

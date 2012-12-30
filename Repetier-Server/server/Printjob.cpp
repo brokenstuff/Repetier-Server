@@ -1,5 +1,6 @@
 /*
  Copyright 2012 Roland Littwin (repetier) repetierdev@gmail.com
+ Homepage: http://www.repetier.com
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -151,14 +152,17 @@ void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
     }
     o.push_back(Pair(name,a));
 }
-PrintjobPtr PrintjobManager::findById(int id) {
-    mutex::scoped_lock l(filesMutex);
+PrintjobPtr PrintjobManager::findByIdInternal(int id) {
     pjlist::iterator it = files.begin(),ie=files.end();
     for(;it!=ie;it++) {
         if((*it)->getId()==id)
             return *it;
     }
     return shared_ptr<Printjob>();
+}
+PrintjobPtr PrintjobManager::findById(int id) {
+    mutex::scoped_lock l(filesMutex);
+    return findByIdInternal(id);
 }
 PrintjobPtr PrintjobManager::createNewPrintjob(std::string name) {
     mutex::scoped_lock l(filesMutex);
@@ -193,8 +197,8 @@ void PrintjobManager::RemovePrintjob(PrintjobPtr job) {
 void PrintjobManager::startJob(int id) {
     mutex::scoped_lock l(filesMutex);
     if(runningJob.get()) return; // Can't start if old job is running
-    runningJob = findById(id);
-    if(runningJob.get()) return; // unknown job
+    runningJob = findByIdInternal(id);
+    if(!runningJob.get()) return; // unknown job
     runningJob->setRunning();
     jobin.open(runningJob->getFilename().c_str(),ifstream::in);
 }

@@ -23,7 +23,6 @@
 <title>Repetier-Server</title>
 </head>
 <body>
-</div>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -32,12 +31,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Repetier-Server</a>
+          <a class="brand" href="http://www.repetier.com/server">Repetier-Server {{version}}</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li class="active"><a href="/index.php"><?php _("Home") ?></a></li>
+              <li><a href="/about.php"><?php _("About")?></a></li>
+              <li><a href="/documentation.php"><?php _("Documentation") ?></a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -45,6 +44,7 @@
     </div>
 
     <div class="container">
+    <div id="msgcontainer"></div>
 <div class="row">  
 <div class="span12">  
 <ul class="breadcrumb">  
@@ -71,32 +71,80 @@
 </div></div>
     </div> <!-- /container -->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/jquery/jquery.min.js"></script>
-    <script src="/bt/bootstrap.min.js"></script>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bt/bootstrap.min.js"></script>
+<script src="/jquery/bootbox.min.js"></script>
 
 <script type="text/javascript">
-
-function updatePrinterList() {
-$.getJSON('/printer/list', function(data) {
+function htmlescape(t) {
+	return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function removeMsg(lnk) {
+	$.getJSON(lnk,function(data) {updateMsg(data);});
+} 
+function updateMsg(data) {
+	if(typeof data.messages === 'undefined') return;
+	ids = new Array();
+	$.each(data.messages,function(key,val) {
+	  ids.push(""+val.id);
+		if($('#msg'+val.id).length==0) {
+		  s = '<div class="alert alert-block alert-info msg" id="msg'+val.id+'">';
+      s += '<a class="close" onclick="removeMsg(\''+val.link+'\')" href="#">X</a>';
+     	s += '<h4 class="alert-heading">Info</h4>';
+      s += htmlescape(val.msg);
+			s += '</div>';
+	    $('#msgcontainer').before(s);
+		}
+	});
+	$(".msg").each(function(idx,elem) {
+	   id = $(elem).prop('id').substr(3);
+	   if(ids.indexOf(id)<0) $(elem).remove(); 
+	});
+}
+function setActive(prt,state) {
+  if(!state) {
+	bootbox.dialog("<?php _("Do you really want to disconnect the printer?")?>", [{
+    "label" : "<?php _("Yes")?>",
+    "class" : "btn-danger",
+    "callback": function() {
+		$.getJSON('/printer/pconfig/'+prt+'?a=active&mode='+(state ? 1 : 0),
+	  	function(data) {updatePrinterList(data);});
+    }
+	}, {
+    "label" : "<?php _("No")?>","class":"btn"
+	}]);
+  } else {
+		$.getJSON('/printer/pconfig/'+prt+'?a=active&mode='+(state ? 1 : 0),
+	  	function(data) {updatePrinterList(data);});
+	}
+}
+function updatePrinterList(data) {
   s = "";
   $.each(data.data, function(key,val) {
     s+="<tr><td>"+val.name+"</td><td>";
-    if(val.online) s+= '<span class="label label-success">Online</span>';
-    else s+='<span class="label label-important">Offline</span>';
+    if(!val.active) s+= '<span class="label"><?php _("Deactivated") ?></span>';
+    else if(val.online) s+= '<span class="label label-success"><?php _("Online") ?></span>';
+    else s+='<span class="label label-important"><?php _("Offline") ?></span>';
     s+="</td><td>"+val.job+"</td><td>";
-    s+='<a href="printer.php?pn='+val.slug+'" class="btn"><i class="icon-signin"></i> <?php _("Manage") ?></a>';
+    s+='<a href="printer.php?pn='+val.slug+'" class="btn"><i class="icon-signin"></i> <?php _("Manage") ?></a> &nbsp; ';
+    if(val.active)
+      s+='<button onclick="setActive(\''+val.slug+'\',false)" class="btn btn-danger"><i class="icon-off"></i> <?php _("Deactivate") ?></button>';
+    else
+      s+='<button onclick="setActive(\''+val.slug+'\',true)" class="btn btn-success"><i class="icon-off"></i> <?php _("Activate") ?></button>';
     s+="</td></tr>";
   });
   $('#printerlist').html(s);  
-   setTimeout('updatePrinterList()', 10000);
-});
+  updateMsg(data);
 }
-
+function refreshPrinterList() {
+	$.getJSON('/printer/list', function(data) {
+		updatePrinterList(data);
+  	setTimeout('refreshPrinterList()', 10000);
+	});
+};
 $(document).ready(function() {
-   updatePrinterList();
+   refreshPrinterList();
  });
 </script>
 </body>

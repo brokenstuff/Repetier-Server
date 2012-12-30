@@ -33,12 +33,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="http://www.repetier.com/server">Repetier-Server</a>
+          <a class="brand" href="http://www.repetier.com/server">Repetier-Server {{version}}</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="/about.php">About</a></li>
-              <li><a href="/documentation.php">Documentation</a></li>
+              <li class="active"><a href="/index.php"><?php _("Home") ?></a></li>
+              <li><a href="/about.php"><?php _("About")?></a></li>
+              <li><a href="/documentation.php"><?php _("Documentation") ?></a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -91,6 +91,7 @@
 					<button class="btn" data-dismiss="modal"><?php _("Close") ?></button>  
 				</div>  
 			</div>
+<div id="msgcontainer"></div>
 
 <div class="row">  
 	<div class="span12">  
@@ -262,6 +263,29 @@ function checkError(ret) {
 	} 
 	return true;
 }
+function removeMsg(lnk) {
+	$.getJSON(lnk,function(data) {updateMsg(data);});
+} 
+function updateMsg(data) {
+	if(typeof data.messages === 'undefined') return;
+	ids = new Array();
+	$.each(data.messages,function(key,val) {
+	  ids.push(""+val.id);
+		if($('#msg'+val.id).length==0) {
+		  s = '<div class="alert alert-block alert-info msg" id="msg'+val.id+'">';
+      s += '<a class="close" onclick="removeMsg(\''+val.link+'\')" href="#">X</a>';
+     	s += '<h4 class="alert-heading">Info</h4>';
+      s += htmlescape(val.msg);
+			s += '</div>';
+	    $('#msgcontainer').before(s);
+		}
+	});
+	$(".msg").each(function(idx,elem) {
+	   id = $(elem).prop('id').substr(3);
+	   if(ids.indexOf(id)<0) $(elem).remove(); 
+	});
+}
+
 var lastlogid = 0;
 var jobrunning = false;
 var log = new Array();
@@ -318,8 +342,8 @@ function updateLog() {
 	}
   setTimeout('updateLog();', 1000);
 }
-function jobstatusText(st) {
-	if(st=='stored') return '<?php _("Waiting for print") ?>';
+function jobstatusText(st,job) {
+	if(st=='stored') return (job ? '<?php _("Waiting for print") ?>' : '<?php _("Stored") ?>');
 	if(st=='running') return '<?php _("Printing ...") ?>';
 	if(st=='uploading') return '<?php _("Uploading ...") ?>';
 	return st;
@@ -336,7 +360,7 @@ function startJob(id) {
     "label" : "<?php _("Yes")?>",
     "class" : "btn-success",
     "callback": function() {
-        $.getJSON('/printer/job/{{slug}}?a=start&id='+id),function(data) {updateJobs(data);}
+        $.getJSON('/printer/job/{{slug}}?a=start&id='+id,function(data) {updateJobs(data);});
     }
 	}, {
     "label" : "<?php _("No")?>","class":"btn"
@@ -347,7 +371,7 @@ function stopJob(id) {
     "label" : "<?php _("Yes")?>",
     "class" : "btn-danger",
     "callback": function() {
-        $.getJSON('/printer/job/{{slug}}?a=stop&id='+id),function(data) {updateJobs(data);}
+        $.getJSON('/printer/job/{{slug}}?a=stop&id='+id,function(data) {updateJobs(data);});
     }
 	}, {
     "label" : "<?php _("No")?>","class":"btn"
@@ -358,7 +382,7 @@ function delJob(id) {
     "label" : "<?php _("Yes")?>",
     "class" : "btn-danger",
     "callback": function() {
-        $.getJSON('/printer/job/{{slug}}?a=remove&id='+id),function(data) {updateJobs(data);}
+        $.getJSON('/printer/job/{{slug}}?a=remove&id='+id,function(data) {updateJobs(data);});
     }
 	}, {
     "label" : "<?php _("No")?>","class":"btn"
@@ -369,7 +393,7 @@ function delModel(id) {
     "label" : "<?php _("Yes")?>",
     "class" : "btn-danger",
     "callback": function() {
-        $.getJSON('/printer/model/{{slug}}?a=remove&id='+id),function(data) {updateModels(data);}
+        $.getJSON('/printer/model/{{slug}}?a=remove&id='+id,function(data) {updateModels(data);});
     }
 	}, {
     "label" : "<?php _("No")?>","class":"btn"
@@ -380,7 +404,7 @@ function copyModel(id) {
     "label" : "<?php _("Yes")?>",
     "class" : "btn-success",
     "callback": function() {
-        $.getJSON('/printer/model/{{slug}}?a=copy&id='+id),function(data) {updateJobs(data);}
+        $.getJSON('/printer/model/{{slug}}?a=copy&id='+id,function(data) {updateJobs(data);});
     }
 	}, {
     "label" : "<?php _("No")?>","class":"btn"
@@ -397,7 +421,7 @@ function updateJobs(data) {
 		s = '';
 		newjobrunning = false;
   	$.each(data.data, function(key,val) {
-  		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state)+'</td><td>';
+  		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state,true)+'</td><td>';
   		if(val.state=='running') {
   			s+='<button class="btn btn-small btn-danger" onclick="stopJob('+val.id+')"><i class="icon-stop"></i> <?php _("Stop") ?></button>';
   			newjobrunning = true;
@@ -409,6 +433,7 @@ function updateJobs(data) {
   		s+='</td></tr>';
   	});
   	$('#joblist').html(s);
+  	updateMsg(data);
   	jobrunning = newjobrunning;
 }
 function refreshModels() {
@@ -421,7 +446,7 @@ function updateModels(data) {
 	  if(!data.data)  return;
 		s = '';
   	$.each(data.data, function(key,val) {
-  		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state)+'</td><td>';
+  		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state,false)+'</td><td>';
  			s+='<button class="btn btn-small btn-success" onclick="copyModel('+val.id+')"><i class="icon-copy"></i> <?php _("Copy") ?></button> ';
  			s+='<button class="btn btn-small btn-danger" onclick="delModel('+val.id+')"><i class="icon-trash"></i> <?php _("Delete") ?></button>';
   		s+='</td></tr>';
@@ -457,9 +482,10 @@ $(document).ready(function() {
 		});
 		return false;
 	});
-	$('#startmodelupload').click(function() { // Upload new job
+	$('#startmodelupload').click(function() { // Upload new model
 		$('#startmodelupload').button('loading');
-		$('#formuploadmodel').ajaxSubmit(function() {	
+		$('#formuploadmodel').ajaxSubmit(function(data) {	
+		console.log(data);
 		  $('#startmodelupload').button('reset');
 	 	 $('#dialog-uploadmodel').modal('hide');
 		});

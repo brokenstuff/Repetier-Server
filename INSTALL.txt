@@ -1,4 +1,8 @@
-Linux / Raspberry Pi
+The server is written in C/C++ using the boost libraries for highest portability.
+It is tested under MacOS 10.8 / Raspberry PI / Windows VS 2008 but different OSes
+should work as well. For makefile creation the platform independent CMake is used.
+
+Linux / Raspberry Pi walkthrough
 
 Installing required software:
 
@@ -6,31 +10,76 @@ I assume a fresh Wheezy image on a raspberry pi. On other linux systems you migh
 need to install gcc, make and other development tools.
 
 sudo apt-get install cmake
-sudo apt-get install libboost-dev
+sudo apt-get install libboost-all-dev
 sudo apt-get install git
 
-Fetch the sources:
-
-
-MacOS:
-
-Install macports from http://www.macports.org/install.php
-Install boost library: sudo port install boost
-
-./bjam toolset=darwin address-model=32_64 architecture=x86
-
+Get latest version from Github for the first time:
+> git clone git://github.com/repetier/Repetier-Server.git
+for later updates you only need to issue
+> git pull
+inside the Repetier-Server directory to update to newest sources.
 
 Compilation using CMake
 
-go to build directory
+Inside the toplevel directory downloaded create a directory build
+> mkdir build
+  
+Go to build directory
+	cd build
+	
+Create make system for default system compiler:
+>	cmake ..
+
+Compile sources:
+> make
+
+After cmake finishes with succes your build system is ready. On a Linux system
+you now have the RepetierServer executable. On other systems you might have trouble
+finding the boost libraries. Edit the toplevel CMakeLists.txt and add the directories
+for your computer and retry.
+
+=== Configure Runtime Environment ===
+
+Copy executable to /usr/bin
+> sudo cp RepetierServer /usr/bin
+
+Copy a sample config file to /etc
+> sudo cp ../linux/repetier-server.conf /etc
+
+Create a environment where the server can store it's data and printer configs.
+> sudo mkdir /var/lib/Repetier-Server /var/lib/Repetier-Server/configs /var/lib/Repetier-Server/www /var/lib/Repetier-Server/storage /var/lib/Repetier-Server/languages
+
+Copy the content of www and languages to the created directories
+> sudo cp -r ../www/* /var/lib/Repetier-Server/www
+> sudo cp ../languages/* /var/lib/Repetier-Server/languages
+
+Create a start init script to run the server as daemon upon boot time.
+> sudo cp ../linux/init_Repetier-Server_debian /etc/init.d/Repetier-Server
+
+Activate start script:
+> sudo update-rc.d Repetier-Server defaults
+
+Now your start script is active on next reboot. To start/stop manually use
+> sudo /etc/init.d/Repetier-Server start
+> sudo /etc/init.d/Repetier-Server stop
+
+
+================== OS Dependent hints =====================
+
+=== Windows ===
 
 Compile with Visual Studio 2008:
-cmake -G "Visual Studio 9 2008" ..
-cmake -G "Visual Studio 10" ..
+> cmake -G "Visual Studio 9 2008" ..
+Compile with Visual Studio 2010:
+> cmake -G "Visual Studio 10" ..
 
-Compile with default system compiler:
-cmake ..
+=== MacOS ===
 
-If you need defines to find the boost library, add them with -D<Name>=<Value>
+How to get boost:
+Install macports from http://www.macports.org/install.php
+Install boost library: sudo port install boost
 
-After cmake finishes with succes your build system is ready.
+or compile boost yourself
+
+> ./bjam toolset=darwin address-model=32_64 architecture=x86
+

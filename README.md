@@ -20,9 +20,12 @@ the server will ask you to clear the printer bed before starting the next job.
 
 ## Status
 
-It is at the very beginning. It is not fully functional now and only compiles on a mac.
-Makefiles for Linux and Windows will follow. It is only added to github for revision
-control, not to be used in public.
+It is at the beginning. 
+Compiles under MacOSX, Linux and Windows.
+Daemon mode works in Linux and MacOSX
+Inserting/Printing jobs/models works.
+Sending commands works.
+Webinterface needs more functions, more tests are needed.
 
 ## Licence
 

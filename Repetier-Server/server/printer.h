@@ -1,5 +1,6 @@
 /*
  Copyright 2012 Roland Littwin (repetier) repetierdev@gmail.com
+ Homepage: http://www.repetier.com
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -164,10 +165,14 @@ public:
     void fillJSONObject(json_spirit::Object &obj);
     void move(double x,double y,double z,double e);
     int getOnlineStatus();
+    bool getActive();
+    void setActive(bool v);
     std::string getJobStatus();
     void connectionClosed();
     inline PrintjobManager *getJobManager() {return jobManager;}
     inline PrintjobManager *getModelManager() {return modelManager;}
+    /** Stop previous pause command */
+    void stopPause();
     // Public interthread communication methods
     void startThread();
     void stopThread();

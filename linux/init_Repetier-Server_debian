@@ -1,0 +1,84 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:        Repetier-Server
+# Required-Start:  $network $remote_fs $syslog
+# Required-Stop:   $network $remote_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop: 
+# Short-Description: Start Repetier-Server
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+. /lib/lsb/init-functions
+
+DAEMON=/usr/bin/RepetierServer
+PIDFILE=/var/run/RepetierServer.pid
+CONFIGFILE=/etc/repetier-server.conf
+SERVER_OPTS="-c $CONFIGFILE --daemon"
+
+test -x $DAEMON || exit 5
+
+
+LOCKFILE=/var/lock/repetierserver
+
+lock_repetierserver() {
+	if [ -x /usr/bin/lockfile-create ]; then
+		lockfile-create $LOCKFILE
+		lockfile-touch $LOCKFILE &
+		LOCKTOUCHPID="$!"
+	fi
+}
+
+unlock_repetierserver() {
+	if [ -x /usr/bin/lockfile-create ] ; then
+		kill $LOCKTOUCHPID
+		lockfile-remove $LOCKFILE
+	fi
+}
+
+RUNASUSER=root
+UGID=$(getent passwd $RUNASUSER | cut -f 3,4 -d:) || true
+
+
+case $1 in
+	start)
+		log_daemon_msg "Starting Repetier-Server" "rsd"
+		if [ -z "$UGID" ]; then
+			log_failure_msg "user \"$RUNASUSER\" does not exist"
+			exit 1
+		fi
+		lock_repetierserver
+  		start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --startas $DAEMON -- -p $PIDFILE $SERVER_OPTS
+		status=$?
+		unlock_repetierserver
+		log_end_msg $status
+  		;;
+	stop)
+		log_daemon_msg "Stopping Repetier-Server" "rsd"
+  		start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE
+		log_end_msg $?
+		rm -f $PIDFILE
+  		;;
+	restart|force-reload)
+		$0 stop && sleep 2 && $0 start
+  		;;
+	try-restart)
+		if $0 status >/dev/null; then
+			$0 restart
+		else
+			exit 0
+		fi
+		;;
+	reload)
+		exit 3
+		;;
+	status)
+		status_of_proc $DAEMON "Repetier-Server"
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart|try-restart|force-reload|status}"
+		exit 2
+		;;
+esac

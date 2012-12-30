@@ -1,5 +1,6 @@
 /*
  Copyright 2012 Roland Littwin (repetier) repetierdev@gmail.com
+ Homepage: http://www.repetier.com
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -66,14 +67,14 @@ using namespace boost;
 #define popen(x, y) _popen(x, y)
 #define pclose(x) _pclose(x)
 #define myclose(x) _close(x)
-#define myopen(x,y) _open(x,y)
+#define myopen(x,y,z) _open(x,y,z)
 #define fseeko(x, y, z) _lseeki64(_fileno(x), (y), (z))
 #define fdopen(x, y) _fdopen((x), (y))
 #define mywrite(x, y) _write((x), (y))
 //#define read(x, y, z) _read((x), (y), (unsigned) z)
 #else
 #define myclose(x) close(x)
-#define myopen(x,y) open(x,y)
+#define myopen(x,y,z) open(x,y,z)
 #define mywrite(x, y) write((x), (y))
 #endif
 #ifndef O_EXLOCK
@@ -161,7 +162,7 @@ namespace repetier {
         } else if (cl <= 0) {
             mg_printf(conn, "%s%s", HTTP_500, "Empty file");
         } else if ((fd = myopen(filename.c_str(), O_CREAT | (append ? O_APPEND : O_TRUNC) |
-                              O_RDWR | /*O_WRONLY |*/ O_EXLOCK | O_CLOEXEC)) < 0) {
+                              O_RDWR /*| O_WRONLY | O_EXLOCK | O_CLOEXEC*/,0666)) < 0) {
             // We're opening the file with exclusive lock held. This guarantee us that
             // there is no other thread can save into the same file simultaneously.
             mg_printf(conn, "%s%s", HTTP_500, "Cannot open file");
@@ -193,7 +194,7 @@ namespace repetier {
                                 sizeof(buf)-startnew : cl - written)) > 0)) {
                 n+=startnew;
                 p2 = mystrnstr(buf,boundary,n);
-                int startnew = 0;
+                startnew = 0;
                 if(p2!=NULL) { // End boundary detected
                     finished = true;
                     n = (int)(p2-buf);
@@ -215,7 +216,24 @@ namespace repetier {
         }
         return false;
     }
-
+    void listPrinter(Object &ret) {
+        Array parr;
+        std::vector<Printer*> *list = &gconfig->getPrinterList();
+        for(vector<Printer*>::iterator i=list->begin();i!=list->end();++i) {
+            Object pinfo;
+            Printer *p = *i;
+            pinfo.push_back(Pair("name",p->name));
+            pinfo.push_back(Pair("slug",p->slugName));
+            pinfo.push_back(Pair("online",(p->getOnlineStatus())));
+            pinfo.push_back(Pair("job",p->getJobStatus()));
+            pinfo.push_back(Pair("active",p->getActive()));
+            parr.push_back(pinfo);
+        }
+        ret.push_back(Pair("data",parr));
+        Array msg;
+        gconfig->fillJSONMessages(msg);
+        ret.push_back(Pair("messages",msg));
+    }
     void HandleWebrequest(struct mg_connection *conn) {
         mg_printf(conn, "HTTP/1.0 200 OK\r\n"
                   "Cache-Control:public, max-age=0\r\n"
@@ -237,26 +255,17 @@ namespace repetier {
         }
         Object ret;
         if(cmdgroup=="list") {
-            Array parr;
-            std::vector<Printer*> *list = &gconfig->getPrinterList();
-            for(vector<Printer*>::iterator i=list->begin();i!=list->end();++i) {
-                Object pinfo;
-                Printer *p = *i;
-                pinfo.push_back(Pair("name",p->name));
-                pinfo.push_back(Pair("slug",p->slugName));
-                pinfo.push_back(Pair("online",(p->getOnlineStatus())));
-                pinfo.push_back(Pair("job",p->getJobStatus()));
-                parr.push_back(pinfo);
-            }
-            ret.push_back(Pair("data",parr));
+            listPrinter(ret);
         } else if(printer==NULL) {
             error = "Unknown printer";
         } else if(cmdgroup=="job") {
             string a;
-            bool ok = true;
-            ok = MG_getVar(ri,"a",a);
+            MG_getVar(ri,"a",a);
             if(a=="list") {
                 printer->getJobManager()->fillSJONObject("data",ret);
+                Array msg;
+                gconfig->fillJSONMessages(msg);
+                ret.push_back(Pair("messages",msg));
             } else if(a=="upload") {
 #ifdef DEBUG
                 cout << "Upload job" << endl;
@@ -301,8 +310,7 @@ namespace repetier {
             }
         } else if(cmdgroup=="model") {
             string a;
-            bool ok = true;
-            ok = MG_getVar(ri,"a",a);
+            MG_getVar(ri,"a",a);
             if(a=="list") {
                 printer->getModelManager()->fillSJONObject("data",ret);
             } else if(a=="upload") {
@@ -310,7 +318,7 @@ namespace repetier {
                 cout << "Upload model" << endl;
 #endif
                 string name,jobname;
-                long size;
+                long size=0;
                 MG_getVar(ri,"name", jobname);
                 PrintjobPtr job = printer->getModelManager()->createNewPrintjob(jobname);
                 handleFileUpload(conn,job->getFilename(), name,size,false);
@@ -326,7 +334,7 @@ namespace repetier {
                     PrintjobPtr job = printer->getModelManager()->findById(id);
                     if(job.get())
                         printer->getModelManager()->RemovePrintjob(job);
-                }
+                }	
                 printer->getModelManager()->fillSJONObject("data",ret);
             } else if(a=="copy") {
                 string sid;
@@ -340,7 +348,7 @@ namespace repetier {
                             std::ifstream  src(model->getFilename().c_str());
                             std::ofstream  dst(job->getFilename().c_str());
                             dst << src.rdbuf();
-                        printer->getJobManager()->finishPrintjobCreation(job, model->getName(), model->getLength());
+                            printer->getJobManager()->finishPrintjobCreation(job, model->getName(), model->getLength());
                         } catch(const std::exception& ex)
                     {
                         cerr << "error: Unable to create job file " << job->getFilename() << ":" << ex.what() << endl;
@@ -349,8 +357,35 @@ namespace repetier {
                 }
                 printer->getJobManager()->fillSJONObject("data",ret);
             }
+        } else if(cmdgroup=="msg") {
+            string a;
+            string sid;
+            MG_getVar(ri,"a",a);
+            MG_getVar(ri,"id",sid);
+            int id = 0;
+            if(sid.length()>0) id = atoi(sid.c_str());
+            if(a=="unpause") {
+                printer->stopPause();
+            }
+            if(id) {
+                gconfig->removeMessage(id);
+                Array msg;
+                gconfig->fillJSONMessages(msg);
+                ret.push_back(Pair("messages",msg));
+            }
+        } else if(cmdgroup == "pconfig") {
+            string a;
+            MG_getVar(ri,"a",a);
+            if(a=="active") {
+                string mode;
+                if(MG_getVar(ri, "mode",mode)) {
+                    printer->setActive(mode=="1");
+                }
+                listPrinter(ret);
+            }
         } else if(printer->getOnlineStatus()==0) {
             error = "Printer offline";
+            // ============ ONLINE COMMANDS FROM HERE ==============
         } else if(cmdgroup=="send") {
             string cmd;
             if(MG_getVar(ri,"cmd", cmd)) {
@@ -520,7 +555,7 @@ namespace repetier {
             
         }
         string content;
-        TranslateFile(gconfig->getWebsiteRoot()+static_cast<string>(ri->uri),lang,content);
+        TranslateFile(gconfig->getWebsiteRoot()+uri,lang,content);
         // Step 2: Fill template parameter
         Object obj;
         string param;
@@ -528,6 +563,7 @@ namespace repetier {
             Printer *p = gconfig->findPrinterSlug(param);
             if(p) p->fillJSONObject(obj);
         }
+        obj.push_back(Pair("version",string(REPETIER_SERVER_VERSION)));
         // Step 3: Run template
         string content2;
         FillTemplate(content, content2, obj);

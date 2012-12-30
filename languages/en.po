@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Repetier-Server\n"
-"POT-Creation-Date: 2012-12-23 16:29+0100\n"
-"PO-Revision-Date: 2012-12-23 16:30+0100\n"
+"POT-Creation-Date: 2012-12-30 18:01+0100\n"
+"PO-Revision-Date: 2012-12-30 18:02+0100\n"
 "Last-Translator: repetier <repetierdev@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,22 +15,232 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: index.php:52 index.php:65 printer.php:52 printer.php:59
+#: about.php:39 documentation.php:39 index.php:37 printer.php:39
+msgid "Home"
+msgstr "Home"
+
+#: about.php:40 about.php:54 documentation.php:40 index.php:38 printer.php:40
+msgid "About"
+msgstr "About"
+
+#: about.php:41 documentation.php:41 index.php:39 printer.php:41
+msgid "Documentation"
+msgstr "Documentation"
+
+#: about.php:52 index.php:52 printer.php:100
 msgid "Printer overview"
 msgstr "Printer overview"
 
-#: index.php:69 printer.php:63
+#: index.php:62
 msgid "Printer"
 msgstr "Printer"
 
-#: index.php:70 printer.php:64
+#: index.php:63 index.php:127
 msgid "Online"
 msgstr "Online"
 
-#: index.php:71 printer.php:65
+#: index.php:64 printer.php:120 printer.php:137
 msgid "Job"
 msgstr "Job"
 
-#: index.php:96 printer.php:90
+#: index.php:65 printer.php:123 printer.php:140
+msgid "Action"
+msgstr "Action"
+
+#: index.php:107
+msgid "Do you really want to disconnect the printer?"
+msgstr "Do you really want to disconnect the printer?"
+
+#: index.php:108 printer.php:360 printer.php:371 printer.php:382
+#: printer.php:393 printer.php:404
+msgid "Yes"
+msgstr "Yes"
+
+#: index.php:115 printer.php:366 printer.php:377 printer.php:388
+#: printer.php:399 printer.php:410
+msgid "No"
+msgstr "No"
+
+#: index.php:126
+msgid "Deactivated"
+msgstr "Deactivated"
+
+#: index.php:128 printer.php:102
+msgid "Offline"
+msgstr "Offline"
+
+#: index.php:130
 msgid "Manage"
 msgstr "Manage"
+
+#: index.php:132
+msgid "Deactivate"
+msgstr "Deactivate"
+
+#: index.php:134
+msgid "Activate"
+msgstr "Activate"
+
+#: printer.php:53
+msgid "Upload Job"
+msgstr "Upload Job"
+
+#: printer.php:58
+msgid "Job Name"
+msgstr "Job Name"
+
+#: printer.php:60 printer.php:85
+msgid "G-Code File"
+msgstr "G-Code File"
+
+#: printer.php:64
+msgid "Start job after upload if possible"
+msgstr "Start job after upload if possible"
+
+#: printer.php:69 printer.php:90 printer.php:348
+msgid "Uploading ..."
+msgstr "Uploading ..."
+
+#: printer.php:69 printer.php:90
+msgid "Start upload"
+msgstr "Start upload"
+
+#: printer.php:70 printer.php:91
+msgid "Close"
+msgstr "Close"
+
+#: printer.php:78
+msgid "Upload Model"
+msgstr "Upload Model"
+
+#: printer.php:83
+msgid "Model Name"
+msgstr "Model Name"
+
+#: printer.php:109
+msgid "Jobs"
+msgstr "Jobs"
+
+#: printer.php:110
+msgid "Models"
+msgstr "Models"
+
+#: printer.php:111
+msgid "Control"
+msgstr "Control"
+
+#: printer.php:116
+msgid "Upload job"
+msgstr "Upload job"
+
+#: printer.php:121 printer.php:138
+msgid "Size"
+msgstr "Size"
+
+#: printer.php:122 printer.php:139
+msgid "Status"
+msgstr "Status"
+
+#: printer.php:133
+msgid "Upload model"
+msgstr "Upload model"
+
+#: printer.php:154
+msgid "Type your G-Code Command"
+msgstr "Type your G-Code Command"
+
+#: printer.php:155
+msgid "Send"
+msgstr "Send"
+
+#: printer.php:160
+msgid "Position"
+msgstr "Position"
+
+#: printer.php:165
+msgid "Move head"
+msgstr "Move head"
+
+#: printer.php:224
+msgid "Printer Log"
+msgstr "Printer Log"
+
+#: printer.php:225
+msgid "Show commands send<br/>to the printer."
+msgstr "Show commands send<br/>to the printer."
+
+#: printer.php:225
+msgid "Commands"
+msgstr "Commands"
+
+#: printer.php:226
+msgid "Show printer acknowledges and<br/>state change messages."
+msgstr "Show printer acknowledges and<br/>state change messages."
+
+#: printer.php:226
+msgid "ACK"
+msgstr "ACK"
+
+#: printer.php:227
+msgid ""
+"Stops the log update so you can read<br/> the log. After restart old logs "
+"are fetched<br/>from the server if still available."
+msgstr ""
+"Stops the log update so you can read<br/> the log. After restart old logs "
+"are fetched<br/>from the server if still available."
+
+#: printer.php:227
+msgid "Pause log Update"
+msgstr "Pause log Update"
+
+#: printer.php:329
+msgid "Off"
+msgstr "Off"
+
+#: printer.php:346
+msgid "Waiting for print"
+msgstr "Waiting for print"
+
+#: printer.php:346
+msgid "Stored"
+msgstr "Stored"
+
+#: printer.php:347
+msgid "Printing ..."
+msgstr "Printing ..."
+
+#: printer.php:359
+msgid "Do you really want to start this job?"
+msgstr "Do you really want to start this job?"
+
+#: printer.php:370
+msgid "Do you really want to stop this job?"
+msgstr "Do you really want to stop this job?"
+
+#: printer.php:381
+msgid "Do you really want to delete this job?"
+msgstr "Do you really want to delete this job?"
+
+#: printer.php:392
+msgid "Do you really want to delete this model?"
+msgstr "Do you really want to delete this model?"
+
+#: printer.php:403
+msgid "Do you really want to copy this model to the job queue?"
+msgstr "Do you really want to copy this model to the job queue?"
+
+#: printer.php:426
+msgid "Stop"
+msgstr "Stop"
+
+#: printer.php:430
+msgid "Start"
+msgstr "Start"
+
+#: printer.php:431 printer.php:451
+msgid "Delete"
+msgstr "Delete"
+
+#: printer.php:450
+msgid "Copy"
+msgstr "Copy"

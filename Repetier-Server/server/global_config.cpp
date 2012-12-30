@@ -1,5 +1,6 @@
 /*
  Copyright 2012 Roland Littwin (repetier) repetierdev@gmail.com
+ Homepage: http://www.repetier.com
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,9 +21,12 @@
 using namespace std;
 using namespace boost::filesystem;
 
+
 GlobalConfig *gconfig;
 
 GlobalConfig::GlobalConfig(string filename) {
+    daemon = false;
+    msgCounter = 0;
 	try {
 		config.readFile(filename.c_str());
 	} catch(libconfig::ParseException &pe) {
@@ -60,9 +64,7 @@ void GlobalConfig::readPrinterConfigs() {
         {
             cout << "Printer config: " << itr->path() << endl;
             Printer *p = new Printer(itr->path().string());
-            if(p->active) {
-                printers.push_back(p);
-            } else delete p;
+            printers.push_back(p);
         }
     }
 }
@@ -72,16 +74,57 @@ void GlobalConfig::startPrinterThreads() {
         (*pi)->startThread();
     }
 }
+
 void GlobalConfig::stopPrinterThreads() {
     vector<Printer*>::iterator pi;
     for(pi=printers.begin();pi!=printers.end();pi++) {
         (*pi)->stopThread();
     }
 }
+
 Printer *GlobalConfig::findPrinterSlug(const std::string& slug) {
     for(vector<Printer*>::iterator it=printers.begin();it!=printers.end();it++) {
         Printer *p = *it;
         if(p->slugName == slug) return p;
     }
     return NULL;
+}
+
+void GlobalConfig::fillJSONMessages(json_spirit::Array &arr) {
+    mutex::scoped_lock l(msgMutex);
+    list<RepetierMsgPtr>::iterator it = msgList.begin(),ie = msgList.end();
+    for(;it!=ie;++it) {
+        using namespace json_spirit;
+        Object obj;
+        obj.push_back(Pair("id",(*it)->mesgId));
+        obj.push_back(Pair("msg",(*it)->message));
+        obj.push_back(Pair("link",(*it)->finishLink));
+        arr.push_back(obj);
+    }
+}
+
+void GlobalConfig::createMessage(std::string &msg,std::string &link) {
+    mutex::scoped_lock l(msgMutex);
+    RepetierMsgPtr p(new RepetierMessage());
+    p->mesgId = ++msgCounter;
+    p->message = msg;
+    p->finishLink = link+"&id="+intToString(p->mesgId);
+    msgList.push_back(p);
+}
+
+void GlobalConfig::removeMessage(int id) {
+    mutex::scoped_lock l(msgMutex);
+    list<RepetierMsgPtr>::iterator it = msgList.begin(),ie = msgList.end();
+    for(;it!=ie;++it) {
+        if((*it)->mesgId == id) {
+            msgList.remove(*it);
+            break;
+        }
+    }
+}
+
+std::string intToString(int number) {
+    stringstream s;
+    s << number;
+    return s.str();
 }

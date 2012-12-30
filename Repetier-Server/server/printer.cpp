@@ -1,5 +1,6 @@
 /*
  Copyright 2012 Roland Littwin (repetier) repetierdev@gmail.com
+ Homepage: http://www.repetier.com
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -124,20 +125,20 @@ void Printer::updateLastTempMutex() {
 }
 
 void Printer::run() {
-    int loop = 0;
     while (!stopRequested)
     {
         try {
-            loop++;
             boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-            //cout << name << " = " << loop << endl;
+            if(!active) {
+                if(serial->isConnected())
+                    serial->close();
+                boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+                continue; // skip normal usage
+            }
             if(!serial->isConnected()) {
                 boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
                 serial->tryConnect();
             } else {
-                //char b[100];
-                //sprintf(b,"M117 Loop %d",loop);
-                //injectManualCommand(b);
                 {
                     mutex::scoped_lock l(lastTempMutex);
                     posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
@@ -149,11 +150,8 @@ void Printer::run() {
                     }
                 }
                 jobManager->manageJobs(this); // refill job queue
-                //serial->writeString(b);
             }
             trySendNextLine();
-        //boost::mutex::scoped_lock l(mutex);
-        //m_fibonacci_values.push_back(value);
         }
         catch( boost::thread_interrupted) {
             stopRequested = true;
@@ -272,7 +270,17 @@ void Printer::resendLine(size_t line)
     trySendNextLine();
 }
 void Printer::manageHostCommand(boost::shared_ptr<GCode> &cmd) {
-    
+    string c = cmd->hostCommandPart();
+    if(c=="@pause") {
+        string msg= "Printer "+name+" paused:"+cmd->hostParameter();
+        string answer = "/printer/msg/"+slugName+"?a=unpause";
+        gconfig->createMessage(msg,answer);
+        paused = true;
+    }
+}
+void Printer::stopPause() {
+    mutex::scoped_lock l(sendMutex);
+    paused = false;
 }
 bool Printer::trySendPacket(GCodeDataPacket *dp,shared_ptr<GCode> &gc) {
     if((pingpong && readyForNextSend) || (!pingpong && cacheSize>receiveCacheFill+dp->length)) {
@@ -376,7 +384,7 @@ void Printer::trySendNextLine() {
 }
 void Printer::analyseResponse(string &res) {
 #ifdef DEBUG
-    cout << "Response:" << res << endl;
+    //   cout << "Response:" << res << endl;
 #endif
     uint8_t rtype = 4;
     while(res.length()>0 && res[0]<32)
@@ -447,11 +455,18 @@ int Printer::getOnlineStatus() {
     if(serial->isConnected()) return 1;
     return 0;
 }
+bool Printer::getActive() {
+    return active;
+}
+void Printer::setActive(bool v) {
+    active = v;
+}
 std::string Printer::getJobStatus() {
     return string("none");
 }
 void Printer::fillJSONObject(json_spirit::Object &obj) {
     using namespace json_spirit;
+    obj.push_back(Pair("active",active));
     obj.push_back(Pair("paused",paused));
     obj.push_back(Pair("printerName",name));
     obj.push_back(Pair("slug",slugName));

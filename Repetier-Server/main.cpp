@@ -22,10 +22,21 @@
 #include "printer.h"
 #include "global_config.h"
 #include "WebserverAPI.h"
+#if defined(__APPLE__) || defined(__linux)
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <unistd.h>
+#include <syslog.h>
+#endif
 
 namespace po = boost::program_options;
 using namespace std;
 
+struct mg_context *ctx;
 
 static void *callback(enum mg_event event,
                       struct mg_connection *conn) {
@@ -40,6 +51,21 @@ static void *callback(enum mg_event event,
         return NULL; //repetier::HandlePagerequest(conn);;
     }
 }
+#if defined(__APPLE__) || defined(__linux)
+
+void Signal_Handler(int sig) /* signal handler function */
+{
+    switch(sig){
+        case SIGHUP:
+            break;
+        case SIGTERM:
+            mg_stop(ctx);
+            gconfig->stopPrinterThreads();
+            exit(0); // Terminate server
+            break;		
+    }	
+}
+#endif
 
 int main(int argc, const char * argv[])
 {
@@ -48,9 +74,14 @@ int main(int argc, const char * argv[])
     desc.add_options()
     ("help", "produce help message")
     ("config,c", po::value<string>(), "Configuration file")
+    ("daemon","Start as daemon")
     ;
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+    try {
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+    } catch(std::exception &ex) {
+        cerr << "error: Error parsing command line: " << ex.what() << endl;
+    }
     po::notify(vm);
     
     if (vm.count("help")) {
@@ -70,13 +101,54 @@ int main(int argc, const char * argv[])
         return 2;
     }
     gconfig = new GlobalConfig(confFile); // Read global configuration
+    
+    if(vm.count("daemon")) {
+        gconfig->daemon = true;
+#ifdef DEBUG
+        cout << "Running as daemon" << endl;
+#endif
+#if defined(__APPLE__) || defined(__linux)
+        pid_t pid, sid;
+        
+        //Fork the Parent Process
+        pid = fork();
+        
+        if (pid < 0) { exit(EXIT_FAILURE); }
+        
+        //We got a good pid, Close the Parent Process
+        if (pid > 0) { exit(EXIT_SUCCESS); }
+        
+        //Change File Mask
+        umask(0);
+        
+        //Create a new Signature Id for our child
+        sid = setsid();
+        if (sid < 0) { exit(EXIT_FAILURE); }
+        
+        //Change Directory
+        //If we cant find the directory we exit with failure.
+        if ((chdir("/")) < 0) { exit(EXIT_FAILURE); }
+        
+        //Close Standard File Descriptors
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+        signal(SIGHUP,Signal_Handler); /* hangup signal */
+        signal(SIGTERM,Signal_Handler); /* software termination signal from kill */
+#endif
+    }
+    
     gconfig->readPrinterConfigs();
     gconfig->startPrinterThreads();
-    struct mg_context *ctx;
     const char *options[] = {"document_root", gconfig->getWebsiteRoot().c_str(),"listening_ports", gconfig->getPorts().c_str(), NULL};
     
     ctx = mg_start(&callback, NULL, options);
     //getchar();  // Wait until user hits "enter"
+    if(gconfig->daemon) {
+        while(1) {
+            sleep(1);
+        }
+    }
     while(true) {
         if(getchar()=='x') break;
     }
