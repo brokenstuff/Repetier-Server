@@ -88,17 +88,15 @@ namespace repetier {
 		int ln = (int)strlen(needle);
 		if(!ln) return (char*)s;
 		char *s2 = (char *)s;
-		bool ok = false;
 		for(int o=0;o<len-ln;o++) {
 			s2 = (char*)&s[o];
 			bool ok = true;
 			for(int j=0;j<ln && ok;j++) {
 				ok = s2[j]==needle[j];
 			}
-			if(ok) break;
+			if(ok) return s2;
 		}
-		if(!ok) return NULL;
-		return s2;
+		return NULL;
 	}
 
     // Modified verion from mongoose examples
@@ -177,7 +175,7 @@ namespace repetier {
             eop = post_data + post_data_len;
             n = p + cl > eop ? (int) (eop - p) : (int) cl;
             char *p2 = mystrnstr(p,boundary,n);
-            int startnew = 0;
+            size_t startnew = 0;
             if(p2!=NULL) { // End boundary detected
                 finished = true;
                 n = (int)(p2-p);
@@ -190,8 +188,8 @@ namespace repetier {
             if(!finished)
                 memcpy(buf,&p[n],boundlen);
             while (!finished && written < cl &&
-                   (n = mg_read(conn, &buf[startnew],(size_t)( cl - written > (long long) sizeof(buf)-startnew ?
-                                sizeof(buf)-startnew : cl - written)) > 0)) {
+                   (n = mg_read(conn, &buf[startnew],(size_t)( cl - written > sizeof(buf)-startnew ?
+                                sizeof(buf)-startnew : cl - written))) > 0) {
                 n+=startnew;
                 p2 = mystrnstr(buf,boundary,n);
                 startnew = 0;

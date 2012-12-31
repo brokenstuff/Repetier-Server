@@ -476,18 +476,19 @@ return false;
 $(document).ready(function() {
 	$('#startjobupload').click(function() { // Upload new job
 		$('#startjobupload').button('loading');
-		$('#formuploadjob').ajaxSubmit(function() {	
+		$('#formuploadjob').ajaxSubmit(function(data) {
 		  $('#startjobupload').button('reset');
-	 	 $('#dialog-uploadjob').modal('hide');
+	 	 	$('#dialog-uploadjob').modal('hide');
+	 	 	updateJobs(data);
 		});
 		return false;
 	});
 	$('#startmodelupload').click(function() { // Upload new model
 		$('#startmodelupload').button('loading');
 		$('#formuploadmodel').ajaxSubmit(function(data) {	
-		console.log(data);
 		  $('#startmodelupload').button('reset');
-	 	 $('#dialog-uploadmodel').modal('hide');
+	 	 	$('#dialog-uploadmodel').modal('hide');
+	 	 	updateModels(data);
 		});
 		return false;
 	});

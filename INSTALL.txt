@@ -55,6 +55,7 @@ Copy the content of www and languages to the created directories
 
 Create a start init script to run the server as daemon upon boot time.
 > sudo cp ../linux/init_Repetier-Server_debian /etc/init.d/Repetier-Server
+> sudo chmod 755 /etc/init.d/Repetier-Server
 
 Activate start script:
 > sudo update-rc.d Repetier-Server defaults
