@@ -24,6 +24,7 @@
 #include <boost/filesystem.hpp>
 #include <vector>
 #include "printer.h"
+#include "global_config.h"
 
 using namespace std;
 using namespace boost;
@@ -122,6 +123,7 @@ int PrintjobManager::decodeIdPart(std::string file) {
     return atoi(name.c_str());
 }
 void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
+    mutex::scoped_lock l(filesMutex);
     using namespace json_spirit;
     Array a;
     list<shared_ptr<Printjob> >::iterator it = files.begin(),ie = files.end();
@@ -140,6 +142,7 @@ void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
                 break;
             case Printjob::running:
                 j.push_back(Pair("state","running"));
+                j.push_back(Pair("done",job->percentDone()));
                 break;
             case Printjob::finished:
                 j.push_back(Pair("state","finsihed"));
@@ -151,6 +154,17 @@ void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
         a.push_back(j);
     }
     o.push_back(Pair(name,a));
+}
+void PrintjobManager::getJobStatus(json_spirit::Object &obj) {
+    mutex::scoped_lock l(filesMutex);
+    using namespace json_spirit;
+    Printjob *job = runningJob.get();
+    if(job==NULL) {
+        obj.push_back(Pair("job","none"));
+    } else {
+        obj.push_back(Pair("job",job->getName()));
+        obj.push_back(Pair("done",job->percentDone()));
+    }
 }
 PrintjobPtr PrintjobManager::findByIdInternal(int id) {
     pjlist::iterator it = files.begin(),ie=files.end();
@@ -200,6 +214,7 @@ void PrintjobManager::startJob(int id) {
     runningJob = findByIdInternal(id);
     if(!runningJob.get()) return; // unknown job
     runningJob->setRunning();
+    runningJob->start();
     jobin.open(runningJob->getFilename().c_str(),ifstream::in);
 }
 void PrintjobManager::killJob(int id) {
@@ -236,13 +251,15 @@ void PrintjobManager::manageJobs(Printer *p) {
             if(buf[l]=='\r')
                 buf[l] = 0;
             p->injectJobCommand(static_cast<string>(buf));
+            runningJob->incrementLinesSend();
             n--;
         }
         runningJob->setPos(jobin.tellg());
     }
-    if(jobin.is_open() && jobin.eof()) {
+    if(jobin.is_open() && !jobin.good()) {
         jobin.close();
         files.remove(runningJob);
+        runningJob->stop(p);
         remove(path(runningJob->getFilename())); // Delete file from disk
         runningJob.reset();
     }
@@ -270,4 +287,18 @@ Printjob::Printjob(string _file,bool newjob) {
 
 std::string Printjob::getName() {
     return PrintjobManager::decodeNamePart(file);
+}
+
+void Printjob::start() {
+    linesSend = 0;
+    time = boost::posix_time::microsec_clock::local_time();
+}
+void Printjob::stop(Printer *p) {
+    posix_time::ptime now  = boost::posix_time::microsec_clock::local_time();
+    posix_time::time_duration td(now-time);
+    char b[100];
+    sprintf(b,"%d:%02d:%02d",td.hours(),td.minutes(),td.seconds());
+    string msg = "Print of "+getName()+" on printer "+p->name+ " finished. Send "+intToString(linesSend)+" lines. Printing time: "+b;
+    string url = "/printer/msg/"+p->slugName+"?a=jobfinsihed";
+    gconfig->createMessage(msg, url);
 }

@@ -126,7 +126,10 @@ function updatePrinterList(data) {
     if(!val.active) s+= '<span class="label"><?php _("Deactivated") ?></span>';
     else if(val.online) s+= '<span class="label label-success"><?php _("Online") ?></span>';
     else s+='<span class="label label-important"><?php _("Offline") ?></span>';
-    s+="</td><td>"+val.job+"</td><td>";
+    s+="</td><td>";
+    if(val.job=="none") s+= "<?php _("No job running")?>";
+    else s+=val.job+" ... "+val.done.toFixed(1)+"%";
+    s+="</td><td>";
     s+='<a href="printer.php?pn='+val.slug+'" class="btn"><i class="icon-signin"></i> <?php _("Manage") ?></a> &nbsp; ';
     if(val.active)
       s+='<button onclick="setActive(\''+val.slug+'\',false)" class="btn btn-danger"><i class="icon-off"></i> <?php _("Deactivate") ?></button>';

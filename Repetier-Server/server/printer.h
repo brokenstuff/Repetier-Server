@@ -167,7 +167,7 @@ public:
     int getOnlineStatus();
     bool getActive();
     void setActive(bool v);
-    std::string getJobStatus();
+    void getJobStatus(json_spirit::Object &obj);
     void connectionClosed();
     inline PrintjobManager *getJobManager() {return jobManager;}
     inline PrintjobManager *getModelManager() {return modelManager;}

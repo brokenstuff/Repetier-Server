@@ -26,6 +26,7 @@
 #include "json_spirit_value.h"
 #include <fstream>
 #include <boost/cstdint.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 using namespace boost;
 
 class Printer;
@@ -46,13 +47,18 @@ public:
     inline PrintjobState getState() {return state;}
     inline void setLength(size_t l) {length = l;}
     inline void setPos(size_t p) {pos = p;}
+    inline double percentDone() {return 100.0*pos/(double)length;}
+    inline void incrementLinesSend() {linesSend++;}
+    void start();
+    void stop(Printer *p);
 private:
     int id;
     std::string file;
     size_t length; ///< Length of the print file
     size_t pos; ///< Send until this position
     PrintjobState state;
-
+    int linesSend;
+    boost::posix_time::ptime time;
 };
 typedef boost::shared_ptr<Printjob> PrintjobPtr;
 
@@ -94,5 +100,6 @@ public:
      undisrupted print. It will always queue up to 100 commands but no more
      then 10 commands for a call. */
     void manageJobs(Printer *p);
+    void getJobStatus(json_spirit::Object &obj);
 };
 #endif /* defined(__Repetier_Server__Printjob__) */

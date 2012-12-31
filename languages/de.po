@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Repetier-Server\n"
-"POT-Creation-Date: 2012-12-30 18:00+0100\n"
-"PO-Revision-Date: 2012-12-30 18:00+0100\n"
+"POT-Creation-Date: 2012-12-31 16:29+0100\n"
+"PO-Revision-Date: 2012-12-31 16:29+0100\n"
 "Last-Translator: repetier <repetierdev@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,11 +23,12 @@ msgstr "Start"
 msgid "About"
 msgstr "Über"
 
-#: about.php:41 documentation.php:41 index.php:39 printer.php:41
+#: about.php:41 documentation.php:41 documentation.php:54 index.php:39
+#: printer.php:41
 msgid "Documentation"
 msgstr "Anleitung"
 
-#: about.php:52 index.php:52 printer.php:100
+#: about.php:52 documentation.php:52 index.php:52 printer.php:100
 msgid "Printer overview"
 msgstr "Druckerübersicht"
 
@@ -70,14 +71,18 @@ msgid "Offline"
 msgstr "Ausgeschaltet"
 
 #: index.php:130
+msgid "No job running"
+msgstr "Keine laufenden Aufträge"
+
+#: index.php:133
 msgid "Manage"
 msgstr "Verwalten"
 
-#: index.php:132
+#: index.php:135
 msgid "Deactivate"
 msgstr "Deaktivieren"
 
-#: index.php:134
+#: index.php:137
 msgid "Activate"
 msgstr "Aktivieren"
 
@@ -230,19 +235,19 @@ msgstr "Wollen Sie wirklich dieses Modell löschen?"
 msgid "Do you really want to copy this model to the job queue?"
 msgstr "Wollen Sie wirklich dieses Model in die Druckerwarteschlange einfügen?"
 
-#: printer.php:426
+#: printer.php:427
 msgid "Stop"
 msgstr "Stop"
 
-#: printer.php:430
+#: printer.php:431
 msgid "Start"
 msgstr "Start"
 
-#: printer.php:431 printer.php:451
+#: printer.php:432 printer.php:455
 msgid "Delete"
 msgstr "Löschen"
 
-#: printer.php:450
+#: printer.php:454
 msgid "Copy"
 msgstr "Kopieren"
 

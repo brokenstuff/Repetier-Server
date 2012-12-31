@@ -461,8 +461,8 @@ bool Printer::getActive() {
 void Printer::setActive(bool v) {
     active = v;
 }
-std::string Printer::getJobStatus() {
-    return string("none");
+void Printer::getJobStatus(json_spirit::Object &obj) {
+    jobManager->getJobStatus(obj);
 }
 void Printer::fillJSONObject(json_spirit::Object &obj) {
     using namespace json_spirit;

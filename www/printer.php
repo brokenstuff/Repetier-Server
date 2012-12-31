@@ -161,42 +161,42 @@
         <div class="span2" id="posx">X: </div>
         <div class="span2" id="posy">Y: </div>
         <div class="span2" id="posz">Z: </div>
-      	<button type="button" class="btn btn-primary span1 inputonline" onclick="sendCmd('G28 X0 Y0 Z0')" data-toggle="collapse" data-target="#movepos"><i class="icon-home"></i></button> 
+      	<button type="button" class="btn btn-primary span1 inputonline notprinting" onclick="sendCmd('G28 X0 Y0 Z0')" data-toggle="collapse" data-target="#movepos"><i class="icon-home"></i></button> 
       	<button type="button" class="btn btn-primary span3" data-toggle="collapse" data-target="#movepos"><i class="icon-move"></i> <?php _("Move head") ?></button> 
       </div>
 			<div id="movepos" class="collapse">
 				<div class="row" style="margin-top:8px">
-					<button class="btn span1 btn-success inputonline" onclick="sendCmd('G28 X0')"><i class="icon-home"></i> X</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(-50,0,0,0)"><i class="icon-arrow-left"></i> -50</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(-10,0,0,0)"><i class="icon-arrow-left"></i> -10</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(-1,0,0,0)"><i class="icon-arrow-left"></i> -1</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(-0.1,0,0,0)"><i class="icon-arrow-left"></i> -0.1</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(0.1,0,0,0)"><i class="icon-arrow-right"></i> 0.1</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(1,0,0,0)"><i class="icon-arrow-right"></i> 1</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(10,0,0,0)"><i class="icon-arrow-right"></i> 10</button>
-					<button class="btn span1 btn-success inputonline" onclick="sendMove(50,0,0,0)"><i class="icon-arrow-right"></i> 50</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendCmd('G28 X0')"><i class="icon-home"></i> X</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-50,0,0,0)"><i class="icon-arrow-left"></i> -50</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-10,0,0,0)"><i class="icon-arrow-left"></i> -10</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-1,0,0,0)"><i class="icon-arrow-left"></i> -1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-0.1,0,0,0)"><i class="icon-arrow-left"></i> -0.1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(0.1,0,0,0)"><i class="icon-arrow-right"></i> 0.1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(1,0,0,0)"><i class="icon-arrow-right"></i> 1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(10,0,0,0)"><i class="icon-arrow-right"></i> 10</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(50,0,0,0)"><i class="icon-arrow-right"></i> 50</button>
 				</div>
 				<div class="row" style="margin-top:8px">
-					<button class="btn span1 btn-info inputonline" onclick="sendCmd('G28 Y0')"><i class="icon-home"></i> Y</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,-50,0,0)"><i class="icon-arrow-down"></i> -50</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,-10,0,0)"><i class="icon-arrow-down"></i> -10</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,-1,0,0)"><i class="icon-arrow-down"></i> -1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,-0.1,0,0)"><i class="icon-arrow-down"></i> -0.1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0.1,0,0)"><i class="icon-arrow-up"></i> 0.1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,1,0,0)"><i class="icon-arrow-up"></i> 1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,10,0,0)"><i class="icon-arrow-up"></i> 10</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,50,0,0)"><i class="icon-arrow-up"></i> 50</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendCmd('G28 Y0')"><i class="icon-home"></i> Y</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-50,0,0)"><i class="icon-arrow-down"></i> -50</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-10,0,0)"><i class="icon-arrow-down"></i> -10</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-1,0,0)"><i class="icon-arrow-down"></i> -1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-0.1,0,0)"><i class="icon-arrow-down"></i> -0.1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0.1,0,0)"><i class="icon-arrow-up"></i> 0.1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,1,0,0)"><i class="icon-arrow-up"></i> 1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,10,0,0)"><i class="icon-arrow-up"></i> 10</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,50,0,0)"><i class="icon-arrow-up"></i> 50</button>
 				</div>
 				<div class="row" style="margin-top:8px">
-					<button class="btn span1 btn-info inputonline" onclick="sendCmd('G28 Z0')"><i class="icon-home"></i> Z</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,-10,0)"><i class="icon-arrow-down"></i> -10</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,-1,0)"><i class="icon-arrow-down"></i> -1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,-0.1,0)"><i class="icon-arrow-down"></i> -0.1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,-0.01,0)"><i class="icon-arrow-down"></i>-0.01</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,0.01,0)"><i class="icon-arrow-up"></i> 0.01</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,0.1,0)"><i class="icon-arrow-up"></i> 0.1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,1,0)"><i class="icon-arrow-up"></i> 1</button>
-					<button class="btn span1 btn-info inputonline" onclick="sendMove(0,0,10,0)"><i class="icon-arrow-up"></i> 10</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendCmd('G28 Z0')"><i class="icon-home"></i> Z</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-10,0)"><i class="icon-arrow-down"></i> -10</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-1,0)"><i class="icon-arrow-down"></i> -1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-0.1,0)"><i class="icon-arrow-down"></i> -0.1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-0.01,0)"><i class="icon-arrow-down"></i>-0.01</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,0.01,0)"><i class="icon-arrow-up"></i> 0.01</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,0.1,0)"><i class="icon-arrow-up"></i> 0.1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,1,0)"><i class="icon-arrow-up"></i> 1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,10,0)"><i class="icon-arrow-up"></i> 10</button>
 				</div>
 			</div>
 			<div style="margin-top:10px"></div>
@@ -414,14 +414,15 @@ function refreshJobs() {
 	$.getJSON('/printer/job/{{slug}}?a=list', function(data) {
 		updateJobs(data);
 	});
-	setTimeout('refreshJobs();',9864);
+	setTimeout('refreshJobs();',(jobrunning ? 4567 : 9864));
 }
 function updateJobs(data) {
 	  if(!data.data)  return;
 		s = '';
 		newjobrunning = false;
   	$.each(data.data, function(key,val) {
-  		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state,true)+'</td><td>';
+  		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state,true)+
+  		 (val.state=='running'?' '+val.done.toFixed(1)+"%":"")+'</td><td>';
   		if(val.state=='running') {
   			s+='<button class="btn btn-small btn-danger" onclick="stopJob('+val.id+')"><i class="icon-stop"></i> <?php _("Stop") ?></button>';
   			newjobrunning = true;
@@ -434,7 +435,10 @@ function updateJobs(data) {
   	});
   	$('#joblist').html(s);
   	updateMsg(data);
-  	jobrunning = newjobrunning;
+  	if(jobrunning!=newjobrunning) {
+  		jobrunning = newjobrunning;
+  		updateJobs(data);
+  	}
 }
 function refreshModels() {
 	$.getJSON('/printer/model/{{slug}}?a=list', function(data) {

@@ -223,7 +223,7 @@ namespace repetier {
             pinfo.push_back(Pair("name",p->name));
             pinfo.push_back(Pair("slug",p->slugName));
             pinfo.push_back(Pair("online",(p->getOnlineStatus())));
-            pinfo.push_back(Pair("job",p->getJobStatus()));
+            p->getJobStatus(pinfo);
             pinfo.push_back(Pair("active",p->getActive()));
             parr.push_back(pinfo);
         }
