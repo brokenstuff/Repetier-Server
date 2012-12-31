@@ -1,7 +1,13 @@
-
 .DS_Store
+
 build/**
-Repetier-Server.xcodeproj/**
+
 Repetier-Server.xcodeproj
+
 Repetier-Server.xcodeproj/*
 
+Repetier-Server.xcodeproj/xcuserdata/littwin.xcuserdatad/xcdebugger/Breakpoints.xcbkptlist
+
+*.xcuserstate
+
+Repetier-Server.xcodeproj/project.xcworkspace/xcuserdata/littwin.xcuserdatad/UserInterfaceState.xcuserstate

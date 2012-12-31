@@ -16,6 +16,7 @@
 
 
 #include <iostream>
+#include <fstream>
 #include "mongoose.h"
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
@@ -76,6 +77,7 @@ int main(int argc, const char * argv[])
     ("help", "produce help message")
     ("config,c", po::value<string>(), "Configuration file")
     ("daemon","Start as daemon")
+    ("pidfile,p",po::value<string>(),"PID file")
     ;
     po::variables_map vm;
     try {
@@ -136,6 +138,15 @@ int main(int argc, const char * argv[])
         close(STDERR_FILENO);
         signal(SIGHUP,Signal_Handler); /* hangup signal */
         signal(SIGTERM,Signal_Handler); /* software termination signal from kill */
+        if(vm.count("pidfile")) {
+            try {
+                pid = getpid();
+                ofstream out(vm["pidfile"].as<string>().c_str());
+                out << pid;
+            } catch(std::exception &ex) {
+
+            }
+        }
 #endif
     }
     
