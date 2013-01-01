@@ -26,6 +26,11 @@
 #include <termios.h>
 #include <IOKit/serial/ioss.h>
 #endif
+#ifdef __linux
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <linux/serial.h>
+#endif
 
 using namespace boost;
 using namespace std;
@@ -33,26 +38,88 @@ using namespace std;
 void PrinterSerialPort::set_baudrate(int baud) {
     boost::asio::serial_port_base::baud_rate baudrate = boost::asio::serial_port_base::baud_rate(baud);
     try {
-        set_option(baudrate);
-    } catch(std::exception e) {
 #ifdef __APPLE__
         
         //  boost::asio::detail::reactive_serial_port_service::implementation_type& impl = get_implementation();
         termios ios;
-        int handle = (int)native_handle();
+        asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
+        int handle = get_service().native_handle(rs);
+        //int handle =  (int)native_handle();
         ::tcgetattr(handle, &ios);
         ::cfsetspeed(&ios, baud);
         speed_t newSpeed = baud;
         ioctl(handle, IOSSIOSPEED, &newSpeed);
-        ::tcsetattr(native_handle(), TCSANOW, &ios);
-        
-
+        ::tcsetattr(handle, TCSANOW, &ios);
 #else
+        try {
+            set_option(baudrate);
+        } catch(std::exception e) {
+#ifdef __linux
+            termios ios;
+            asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
+            int handle = get_service().native_handle(rs);
+/*
+#define    BOTHER 0010000
+            
+            struct termios2 ios2;
+            ioctl(handle, TCGETS2, &ios2);
+            ios2.c_ospeed = ios2.c_ispeed = 543210;
+            ios2.c_cflag &= ~CBAUD;
+            ios2.c_cflag |= BOTHER;
+            ioctl(handle, TCSETS2, &ios2);
+            
+            ::tcgetattr(handle, &ios);
+            ::cfsetispeed(&ios, baud);
+            ::cfsetospeed(&ios, baud);
+            speed_t newSpeed = baud;
+            //ioctl(handle, IOSSIOSPEED, &newSpeed);
+            ::tcsetattr(handle, TCSANOW, &ios);*/
+
+            ::tcgetattr(handle, &ios);
+            ::cfsetispeed(&ios, B38400);
+            ::cfsetospeed(&ios, B38400);
+            ::tcflush(handle, TCIFLUSH);
+            ::tcsetattr(handle, TCSANOW, &ios);
+
+            struct serial_struct ss;
+            ioctl(handle, TIOCGSERIAL, &ss);
+            ss.flags = (ss.flags & ~ASYNC_SPD_MASK) | ASYNC_SPD_CUST;
+            ss.custom_divisor = (ss.baud_base + (baud / 2)) / baud;
+            //cout << "bbase " << ss.baud_base << " div " << ss.custom_divisor;
+            long closestSpeed = ss.baud_base / ss.custom_divisor;
+            //cout << " Closest speed " << closestSpeed << endl;
+            ss.reserved_char[0] = 0;
+            if (closestSpeed < baud * 98 / 100 || closestSpeed > baud * 102 / 100) {
+                cout << "error: couldn't set desired baud rate " << baud << endl;
+                throw e;
+            }
+            
+            ioctl(handle, TIOCSSERIAL, &ss);
+            
+#else
+            cerr << "Setting baudrate " << baudrate.value() << " failed" << endl;
+            throw e;
+#endif
+        }
+#endif
+    } catch(std::exception e) {
         cerr << "Setting baudrate " << baudrate.value() << " failed" << endl;
         throw e;
-#endif
     }
     
+}
+void PrinterSerialPort::debugTermios() {
+#ifdef __APPLE__
+#ifdef DEBUGTERM
+    termios ios;
+    //  int handle = (int)native_handle();
+    asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
+    int handle = get_service().native_handle(rs);
+    ::tcgetattr(handle, &ios);
+    cout << "Termios speed: " << ios.c_ispeed << " flags:" << ios.c_cflag << "," << ios.c_iflag << ","
+    << ios.c_lflag << "," << ios.c_oflag << "," << ios.c_cc << "," << ios.c_ospeed << endl;
+#endif
+#endif
 }
 
 PrinterSerial::PrinterSerial(Printer &prt):io(),port(io) {
@@ -64,6 +131,7 @@ PrinterSerial::PrinterSerial(Printer &prt):io(),port(io) {
     characterSize = asio::serial_port_base::character_size(8);
     readString = "";
 }
+
 PrinterSerial::~PrinterSerial()
 {
     if(isOpen())
@@ -83,23 +151,21 @@ bool PrinterSerial::isConnected() {
 // Tries to connect to printer
 bool PrinterSerial::tryConnect() {
     try {
-        if(isOpen()) close();
+        if(port.is_open()) port.close();
         setErrorStatus(true);//If an exception is thrown, error_ remains true
         baudrate = asio::serial_port_base::baud_rate(printer->baudrate);
         port.open(printer->device);
-        port.set_baudrate(printer->baudrate);
- /*       try {
-            port.set_option(baudrate);
-        } catch(...) {
-            cerr << "Setting baudrate " << baudrate.value() << " failed" << endl;
-            speed_t newSpeed = printer->baudrate;
-            ::cfsetispeed(&port.get_implementation(), printer->baudrate);
-            ioctl(port.native_handle(), IOSSIOSPEED, &newSpeed);
-        }*/
+        port.debugTermios();
         port.set_option(parity);
+        port.debugTermios();
         port.set_option(characterSize);
+        port.debugTermios();
         port.set_option(flowControl);
+        port.debugTermios();
         port.set_option(stopBits);
+        port.debugTermios();
+        port.set_baudrate(printer->baudrate);
+        port.debugTermios();
         //This gives some work to the io_service before it is started
         io.post(boost::bind(&PrinterSerial::doRead, this));
         thread t(boost::bind(&asio::io_service::run, &io));
@@ -109,10 +175,10 @@ bool PrinterSerial::tryConnect() {
 #ifdef DEBUG
         cout << "Connection started:" << printer->name << endl;
 #endif
-    } catch (std::exception& )
+    } catch (std::exception& e)
     {
 #ifdef DEBUG
-        // cerr << "Exception: " << e.what() << "\n";
+        cerr << "Exception: " << e.what() << "\n";
 #endif
         return false;
     }

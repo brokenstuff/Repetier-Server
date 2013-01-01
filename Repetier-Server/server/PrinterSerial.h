@@ -36,6 +36,7 @@ class PrinterSerialPort:public boost::asio::serial_port {
 public:
     inline PrinterSerialPort(boost::asio::io_service &io):boost::asio::serial_port(io) {}
     void set_baudrate(int baud);
+    void debugTermios();
 };
 /** Handles the connection with one printer.
  */

@@ -420,9 +420,9 @@ namespace repetier {
             string sx,sy,sz,se;
             double x=0,y=0,z=0,e=0;
             if(MG_getVar(ri,"x",sx)) x = atof(sx.c_str());
-            if(MG_getVar(ri,"y",sx)) y = atof(sy.c_str());
-            if(MG_getVar(ri,"z",sx)) z = atof(sz.c_str());
-            if(MG_getVar(ri,"e",sx)) e = atof(se.c_str());
+            if(MG_getVar(ri,"y",sy)) y = atof(sy.c_str());
+            if(MG_getVar(ri,"z",sz)) z = atof(sz.c_str());
+            if(MG_getVar(ri,"e",se)) e = atof(se.c_str());
             printer->move(x, y, z, e);
         }
         ret.push_back(Pair("error",error));

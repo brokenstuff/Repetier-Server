@@ -397,27 +397,27 @@ uint32_t PrinterState::decreaseLastline() {
 std::string PrinterState::getMoveXCmd(double dx,double f) {
     mutex::scoped_lock l(mutex);
     char buf[100];
-    sprintf(buf,"G1 X%.2f F%f",relative ? dx : x+dx,f);
+    sprintf(buf,"G1 X%.2f F%.0f",relative ? dx : x+dx,f);
     return string(buf);
 }
 std::string PrinterState::getMoveYCmd(double dy,double f) {
     mutex::scoped_lock l(mutex);
     char buf[100];
-    sprintf(buf,"G1 Y%.2f F%f",relative ? dy : x+dy,f);
+    sprintf(buf,"G1 Y%.2f F%.0f",relative ? dy : y+dy,f);
     return string(buf);
     
 }
 std::string PrinterState::getMoveZCmd(double dz,double f) {
     mutex::scoped_lock l(mutex);
     char buf[100];
-    sprintf(buf,"G1 Z%.2f F%f",relative ? dz : z+dz,f);
+    sprintf(buf,"G1 Z%.2f F%.0f",relative ? dz : z+dz,f);
     return string(buf);
     
 }
 std::string PrinterState::getMoveECmd(double de,double f) {
     mutex::scoped_lock l(mutex);
     char buf[100];
-    sprintf(buf,"G1 E%.2f F%f",relative || eRelative ? de : e+de,f);
+    sprintf(buf,"G1 E%.2f F%.0f",relative || eRelative ? de : e+de,f);
     return string(buf);    
 }
 
@@ -434,7 +434,7 @@ void PrinterState::fillJSONObject(json_spirit::Object &obj) {
     obj.push_back(Pair("debugLevel",debugLevel));
     obj.push_back(Pair("hasXHome",hasXHome));
     obj.push_back(Pair("hasYHome",hasYHome));
-    obj.push_back(Pair("hatZHome",hasZHome));
+    obj.push_back(Pair("hasZHome",hasZHome));
     obj.push_back(Pair("layer",layer));
     obj.push_back(Pair("sdcardMounted",sdcardMounted));
     obj.push_back(Pair("bedTempSet",bed.tempSet));

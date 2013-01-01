@@ -179,6 +179,7 @@ void Printer::addResponse(const std::string& msg,uint8_t rtype) {
         responses.pop_front();
 }
 void Printer::injectManualCommand(const std::string& cmd) {
+    if(cmd.length()==0) return; // Don't waste time with empty lines
     {
         mutex::scoped_lock l(sendMutex);
         manualCommands.push_back(cmd);
