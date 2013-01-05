@@ -122,11 +122,11 @@ function setActive(prt,state) {
 function updatePrinterList(data) {
   s = "";
   $.each(data.data, function(key,val) {
-    s+="<tr><td>"+val.name+"</td><td>";
+    s+='<tr><td style="line-height:30px">'+val.name+'</td><td style="line-height:30px">';
     if(!val.active) s+= '<span class="label"><?php _("Deactivated") ?></span>';
     else if(val.online) s+= '<span class="label label-success"><?php _("Online") ?></span>';
     else s+='<span class="label label-important"><?php _("Offline") ?></span>';
-    s+="</td><td>";
+    s+='</td><td style="line-height:30px">';
     if(val.job=="none") s+= "<?php _("No job running")?>";
     else s+=val.job+" ... "+val.done.toFixed(1)+"%";
     s+="</td><td>";

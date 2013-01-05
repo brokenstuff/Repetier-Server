@@ -200,6 +200,14 @@
 				</div>
 			</div>
 			<div style="margin-top:10px"></div>
+			<div class="row">
+			<span class="span2" style="line-height:40px"><?php _("Speed:")?> <span id="speedval">100</span>%</span>
+		  <form id="formspeed" class="navbar-form pull-left span2"><div class="input-append"><input id="newspeed" type="text" style="width:40px" class="inputonline"/> <button id="sendspeed" class="btn "><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
+			<span class="span2" style="line-height:40px"><?php _("Flow:")?> <span id="flowval">100</span>%</span>
+  		<form id="formflow" class="navbar-form pull-left span2"><div class="input-append"><input id="newflow" type="text" style="width:40px" class="inputonline"/> <button id="sendflow" class="btn "><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
+			<span class="span2" style="line-height:40px"><?php _("Fan:")?> <span id="fanval"></span></span>
+  		<form id="formfan" class="navbar-form pull-left span2"><div class="input-append"><input id="newfan" type="text" style="width:40px" class="inputonline"/> <button id="sendfan" class="btn "><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
+			</div>
 {{#extruder}}
 			<div class="row">
 				<div class="span2"><?php _("Extruder")?> {{extrudernum}}</div>
@@ -213,7 +221,7 @@
 				<div class="span2">
 				  <span id="ext{{extruderid}}_temp">???</span>°C / <span id="ext{{extruderid}}_set">???°C</span> 
 				</div>
-				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> Change</button>
+				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change") ?></button>
 			</div>
 {{/extruder}}
 			<div class="row">
@@ -228,9 +236,9 @@
 				<div class="span2">
 				  <span id="bed_temp">???</span>°C / <span id="bed_set">???°C</span> 
 				</div>
-				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> Change</button>
+				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change")?></button>
 			</div>
-		</div> {{! End control panel }}
+		</div> {{! End control panel }}		
 </div></div>
 
 {{! ================ Log =============== }}
@@ -363,7 +371,10 @@ function updateLog() {
   	   else $(pre+"progy").css("width",(state.bedTempRead<70? "0%" : "63.333%"));
   	   if(state.bedTempRead>260) $(pre+"progr").css("width",(state.bedTempRead-260)*26.666/40+"%");
   	   else $(pre+"progr").css("width","0%");
-  	
+			 $('#speedval').html(state.speedMultiply);  	
+			 $('#flowval').html(state.flowMultiply);
+			 if(state.fanVoltage==0) $('#fanval').html('<?php _("Off")?>');
+			 else $('#fanval').html((state.fanVoltage/2.55).toFixed(0)+"%");
   	}
 	 });
 	}
@@ -497,11 +508,36 @@ function sendMove(x,y,z,e) {
   return false;
 }
 function sendEnteredCmd(e) {
-try {
-	e.stopPropagation();
-	sendCmd($('#command').val());$('#command').val("");
-}  catch(err) {}
-return false;
+	try {
+		e.stopPropagation();
+		sendCmd($('#command').val());$('#command').val("");
+	}  catch(err) {}
+	return false;
+}
+function isInt(val) {return val.length >0 && /^[0-9]+$/.test(val);}
+function sendSpeed(e) {
+	try {
+		e.stopPropagation();
+		v = $('#newspeed').val();$('#newspeed').val("");
+		if(isInt(v))	sendCmd("M220 S"+v);
+	}  catch(err) {}
+	return false;
+}
+function sendFlow(e) {
+	try {
+		e.stopPropagation();
+		v = $('#newflow').val();$('#newflow').val("");
+		if(isInt(v))	sendCmd("M221 S"+v);
+	}  catch(err) {}
+	return false;
+}
+function sendFan(e) {
+	try {
+		e.stopPropagation();
+		v = $('#newfan').val();$('#newfan').val("");
+		if(isInt(v))	sendCmd("M106 S"+(v*2.55).toFixed(0));
+	}  catch(err) {}
+	return false;
 }
 
 $(document).ready(function() {
@@ -529,6 +565,12 @@ $(document).ready(function() {
 	$('#logack').tooltip({html:true});
 	$('#sendcmd').click(sendEnteredCmd);
 	$('#formcmd').submit(sendEnteredCmd);
+	$('#sendspeed').click(sendSpeed);
+	$('#formspeed').submit(sendSpeed);
+	$('#sendflow').click(sendFlow);
+	$('#formflow').submit(sendFlow);
+	$('#sendfan').click(sendFan);
+	$('#formsfan').submit(sendFan);
 	$('.arrow, [class^=arrow-]').bootstrapArrows();
 	refreshJobs();
 	refreshModels();

@@ -513,7 +513,7 @@ namespace repetier {
                 pos2+=name.length()+3;
                 posclose = epos+ename.length()-2; // Continue after block
                 Value *v = findVariable(vars,name);
-                if(v->type()==array_type) {
+                if(v!=NULL && v->type()==array_type) {
                     Array &a = v->get_array();
                     vector<Value>::iterator it = a.begin(),iend = a.end();
                     for(;it!=iend;++it) {
