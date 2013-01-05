@@ -420,6 +420,18 @@ std::string PrinterState::getMoveECmd(double de,double f) {
     sprintf(buf,"G1 E%.2f F%.0f",relative || eRelative ? de : e+de,f);
     return string(buf);    
 }
+void PrinterState::setIsathome() {
+    mutex::scoped_lock l(mutex);
+    hasXHome = true;
+    hasYHome = true;
+    hasZHome = true;
+    x = printer->homex;
+    xOffset = 0;
+    y = printer->homey;
+    yOffset = 0;
+    z = printer->homez;
+    zOffset = 0;
+}
 
 void PrinterState::fillJSONObject(json_spirit::Object &obj) {
     using namespace json_spirit;

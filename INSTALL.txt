@@ -67,6 +67,14 @@ Now your start script is active on next reboot. To start/stop manually use
 
 ================== OS Dependent hints =====================
 
+=== Linux ====
+
+The device name /dev/ttyUSBxx may change depending on the order the printer is enabled.
+Use instead the /dev(serial/by-id name like this for a device:
+/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A800f4AP-if00-port0
+At least if you always use the save ports/hub ports. Of create a mapping to a individual
+name with udevadm.
+
 === Windows ===
 
 Compile with Visual Studio 2008:
@@ -84,3 +92,7 @@ or compile boost yourself
 
 > ./bjam toolset=darwin address-model=32_64 architecture=x86
 
+============== CMake hints ===================
+
+Make a debug build:
+cmake "-DCMAKE_BUILD_TYPE:STRING=Debug" ..

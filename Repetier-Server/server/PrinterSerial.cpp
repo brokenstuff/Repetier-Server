@@ -31,12 +31,12 @@
 #include <termios.h>
 #include <linux/serial.h>
 #endif
+#include "RLog.h"
 
 using namespace boost;
 using namespace std;
 
 void PrinterSerialPort::set_baudrate(int baud) {
-    boost::asio::serial_port_base::baud_rate baudrate = boost::asio::serial_port_base::baud_rate(baud);
     try {
 #ifdef __APPLE__
         
@@ -52,6 +52,7 @@ void PrinterSerialPort::set_baudrate(int baud) {
         ::tcsetattr(handle, TCSANOW, &ios);
 #else
         try {
+            boost::asio::serial_port_base::baud_rate baudrate = boost::asio::serial_port_base::baud_rate(baud);
             set_option(baudrate);
         } catch(std::exception e) {
 #ifdef __linux
@@ -90,23 +91,37 @@ void PrinterSerialPort::set_baudrate(int baud) {
             //cout << " Closest speed " << closestSpeed << endl;
             ss.reserved_char[0] = 0;
             if (closestSpeed < baud * 98 / 100 || closestSpeed > baud * 102 / 100) {
-                cout << "error: couldn't set desired baud rate " << baud << endl;
+                RLog::log("error: couldn't set desired baud rate @",baud);
                 throw e;
             }
             
             ioctl(handle, TIOCSSERIAL, &ss);
             
 #else
-            cerr << "Setting baudrate " << baudrate.value() << " failed" << endl;
+            RLog::log("Setting baudrate @ failed",baud);
             throw e;
 #endif
         }
 #endif
     } catch(std::exception e) {
-        cerr << "Setting baudrate " << baudrate.value() << " failed" << endl;
+        RLog::log("Setting baudrate @ failed",baud,true);
         throw e;
     }
     
+}
+void PrinterSerialPort::setDTR(bool on) {
+#if defined(_WIN32) && !defined(__SYMBIAN32__) // Windows specific
+#else
+    asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
+    int handle = get_service().native_handle(rs);
+    int status;
+    ioctl(handle, TIOCMGET, &status);
+    if(on)
+        status |= TIOCM_DTR;
+    else
+        status &= ~TIOCM_DTR;
+    ioctl(handle, TIOCMSET, &status);
+#endif
 }
 void PrinterSerialPort::debugTermios() {
 #ifdef __APPLE__
@@ -172,9 +187,8 @@ bool PrinterSerial::tryConnect() {
         backgroundThread.swap(t);
         setErrorStatus(false);//If we get here, no error
         open=true; //Port is now open
-#ifdef DEBUG
-        cout << "Connection started:" << printer->name << endl;
-#endif
+        RLog::log("Connection started:",printer->name);
+        resetPrinter();
     } catch (std::exception& e)
     {
 #ifdef DEBUG
@@ -322,12 +336,16 @@ void PrinterSerial::doClose()
     if(ec) setErrorStatus(true);
     open = false;
     printer->connectionClosed();
-#ifdef DEBUG
-    cout << "Connection closed:" << printer->name << endl;
-#endif
+    RLog::log("Connection closed: @",printer->name);
 }
 
 // Send reset to the printer by toggling DTR line
 void PrinterSerial::resetPrinter() {
-    
+	RLog::log("Reset printer @",printer->name);
+    port.setDTR(false);
+    boost::this_thread::sleep(boost::posix_time::milliseconds(200));
+    port.setDTR(true);
+    boost::this_thread::sleep(boost::posix_time::milliseconds(200));
+    port.setDTR(false);
+    boost::this_thread::sleep(boost::posix_time::milliseconds(1000));    
 }

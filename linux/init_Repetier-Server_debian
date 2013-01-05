@@ -39,18 +39,17 @@ unlock_repetierserver() {
 }
 
 RUNASUSER=root
-UGID=$(getent passwd $RUNASUSER | cut -f 3,4 -d:) || true
-
+UID=$(getent passwd $RUNASUSER | cut -f 3 -d:) || true
 
 case $1 in
 	start)
 		log_daemon_msg "Starting Repetier-Server" "rsd"
-		if [ -z "$UGID" ]; then
+		if [ -z "$UID" ]; then
 			log_failure_msg "user \"$RUNASUSER\" does not exist"
 			exit 1
 		fi
 		lock_repetierserver
-  		start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --startas $DAEMON -- -p $PIDFILE $SERVER_OPTS
+  		start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --startas $DAEMON -- -p $PIDFILE -u $UID $SERVER_OPTS
 		status=$?
 		unlock_repetierserver
 		log_end_msg $status

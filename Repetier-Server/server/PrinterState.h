@@ -98,6 +98,7 @@ public:
      @returns Increased line number. */
     uint32_t increaseLastline();
     uint32_t decreaseLastline();
+    void setIsathome();
     uint32_t getLastline() {boost::mutex::scoped_lock l(mutex);return lastline;}
     void fillJSONObject(json_spirit::Object &obj);
     std::string getMoveXCmd(double dx,double f);

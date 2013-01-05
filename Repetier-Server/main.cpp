@@ -78,6 +78,7 @@ int main(int argc, const char * argv[])
     ("config,c", po::value<string>(), "Configuration file")
     ("daemon","Start as daemon")
     ("pidfile,p",po::value<string>(),"PID file")
+    ("userid,u",po::value<string>(),"User id for daemon")
     ;
     po::variables_map vm;
     try {
@@ -111,6 +112,12 @@ int main(int argc, const char * argv[])
         cout << "Running as daemon" << endl;
 #endif
 #if defined(__APPLE__) || defined(__linux)
+        if(vm.count("userid")) {
+            string suid = vm["pidfile"].as<string>();
+            int uid = 0;
+            sscanf(suid.c_str(),"%i",&uid);
+            setuid(uid);
+        }
         pid_t pid, sid;
         
         //Fork the Parent Process

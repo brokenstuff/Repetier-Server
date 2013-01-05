@@ -20,6 +20,7 @@
 		FDABA27F168D9B9F005522A4 /* libboost_program_options.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA27A168D9B9D005522A4 /* libboost_program_options.a */; };
 		FDABA280168D9B9F005522A4 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA27B168D9B9E005522A4 /* libboost_system.a */; };
 		FDABA281168D9B9F005522A4 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDABA27C168D9B9E005522A4 /* libboost_thread.a */; };
+		FDAC19511695F1A600479AA4 /* RLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDAC194F1695F1A600479AA4 /* RLog.cpp */; };
 		FDED504B1673ACB3001F0450 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED50491673ACB3001F0450 /* mongoose.c */; };
 		FDED505D1673BAD8001F0450 /* grammar.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504D1673BAD8001F0450 /* grammar.c */; };
 		FDED505E1673BAD8001F0450 /* libconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = FDED504F1673BAD8001F0450 /* libconfig.c */; };
@@ -78,6 +79,8 @@
 		FDABA27A168D9B9D005522A4 /* libboost_program_options.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_program_options.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_program_options.a; sourceTree = "<group>"; };
 		FDABA27B168D9B9E005522A4 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_system.a; sourceTree = "<group>"; };
 		FDABA27C168D9B9E005522A4 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = ../../libraries/boost_1_52_0/stage/lib/libboost_thread.a; sourceTree = "<group>"; };
+		FDAC194F1695F1A600479AA4 /* RLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RLog.cpp; sourceTree = "<group>"; };
+		FDAC19501695F1A600479AA4 /* RLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLog.h; sourceTree = "<group>"; };
 		FDED50471673ACB3001F0450 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		FDED50481673ACB3001F0450 /* mongoose.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = mongoose.1; sourceTree = "<group>"; };
 		FDED50491673ACB3001F0450 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mongoose.c; sourceTree = "<group>"; };
@@ -246,6 +249,8 @@
 				FDABA25616860D09005522A4 /* WebserverAPI.h */,
 				FDABA273168AE64F005522A4 /* Printjob.cpp */,
 				FDABA274168AE64F005522A4 /* Printjob.h */,
+				FDAC194F1695F1A600479AA4 /* RLog.cpp */,
+				FDAC19501695F1A600479AA4 /* RLog.h */,
 			);
 			path = server;
 			sourceTree = "<group>";
@@ -319,6 +324,7 @@
 				FDABA26A16861F44005522A4 /* json_spirit_writer.cpp in Sources */,
 				FDABA26F1686FCC2005522A4 /* moFileReader.cpp in Sources */,
 				FDABA275168AE64F005522A4 /* Printjob.cpp in Sources */,
+				FDAC19511695F1A600479AA4 /* RLog.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

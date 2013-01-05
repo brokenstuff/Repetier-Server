@@ -27,6 +27,7 @@
 #include "global_config.h"
 #include <boost/filesystem.hpp>
 #include "json_spirit.h"
+#include "RLog.h"
 
 using namespace std;
 using namespace boost::filesystem;
@@ -79,7 +80,7 @@ Printer::Printer(string conf) {
         ok &= config.lookupValue("printer.speed.eaxisRetract", speedeRetract);
         
         if(!ok) {
-            cerr << "Printer configuration " << conf << " not complete" << endl;
+            RLog::log("Printer configuration @ not complete",conf,true);
             exit(4);
         }
         lastResponseId = 0;
@@ -92,16 +93,16 @@ Printer::Printer(string conf) {
         paused = false;
     }
     catch(libconfig::ParseException& pe) {
-        cerr << "Error parsing printer configuration " << conf << endl;
-        cerr << pe.getError() << " line " << pe.getLine() << endl;
+        RLog::log("Error parsing printer configuration @",conf);
+        RLog::log(static_cast<string>(pe.getError())+" line @",pe.getLine());
         exit(4);
     }
     catch(...) {
-        cerr << "Error reading printer configuration " << conf << endl;
+        RLog::log("Error reading printer configuration @",conf);
         exit(4);
     }
 #ifdef DEBUG
-    cout << "Printer config read: " << name << endl;
+    cout << "Printer configuration read: " << name << endl;
     cout << "Port:" << device << endl;
 #endif
     jobManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"jobs");
@@ -183,6 +184,7 @@ void Printer::injectManualCommand(const std::string& cmd) {
     {
         mutex::scoped_lock l(sendMutex);
         manualCommands.push_back(cmd);
+        RLog::log(cmd+" injected",(int)manualCommands.size());
     } // need parantheses to prevent deadlock with trySendNextLine
     trySendNextLine(); // Check if we need to send the command immediately
 }
@@ -277,6 +279,10 @@ void Printer::manageHostCommand(boost::shared_ptr<GCode> &cmd) {
         string answer = "/printer/msg/"+slugName+"?a=unpause";
         gconfig->createMessage(msg,answer);
         paused = true;
+    } else if(c=="@isathome") {
+        state->setIsathome();
+    } else if(c=="@kill") {
+        serial->resetPrinter();
     }
 }
 void Printer::stopPause() {
@@ -397,14 +403,21 @@ void Printer::analyseResponse(string &res) {
     if (fpos==0 ||
         (garbageCleared==false && fpos!=string::npos))
     {
-        state->reset();
-        // [job killJob]; // continuing the old job makes no sense, better save the plastic
-        history.clear();
-        readyForNextSend = true;
-        nackLines.clear();
-        receiveCacheFill = 0;
-        garbageCleared = true;
-    }
+        {
+            mutex::scoped_lock l(sendMutex);
+            state->reset();
+            // [job killJob]; // continuing the old job makes no sense, better save the plastic
+            history.clear();
+            readyForNextSend = true;
+            nackLines.clear();
+            receiveCacheFill = 0;
+            garbageCleared = true;
+            manualCommands.clear();
+            jobManager->undoCurrentJob();
+        }
+        injectManualCommand("M110 N0");
+        injectManualCommand("M115");
+   }
     if (extract(res,"Resend:",h))
     {
         size_t line = atoi(h.c_str());
