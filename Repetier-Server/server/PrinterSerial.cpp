@@ -111,6 +111,11 @@ void PrinterSerialPort::set_baudrate(int baud) {
 }
 void PrinterSerialPort::setDTR(bool on) {
 #if defined(_WIN32) && !defined(__SYMBIAN32__) // Windows specific
+    boost::asio::serial_port::native_type handle = m_port.native();
+    if(on)
+        EscapeCommFunction( handle, SETDTR );
+    else
+        EscapeCommFunction( handle, CLRDTR );
 #else
     asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
     int handle = get_service().native_handle(rs);

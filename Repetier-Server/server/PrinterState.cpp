@@ -74,7 +74,7 @@ const PrinterTemp& PrinterState::getExtruder(int extruderId) const {
     return extruder[extruderId];
 }
 PrinterTemp& PrinterState::getExtruder(int extruderId) {
-    if(extruder<0) extruderId = activeExtruder;
+    if(extruderId<0) extruderId = activeExtruder;
     if(extruderId>=printer->extruderCount) extruderId = 0;
     return extruder[extruderId];
 }
@@ -321,7 +321,7 @@ void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
         double v = atof(h.c_str());
         e = v;
     }
-    if (extract(res,"T0",h)) {
+    if (extract(res,"T0:",h)) {
         int ecnt = 0;
         do {
             sprintf(b,"T%d:",ecnt);

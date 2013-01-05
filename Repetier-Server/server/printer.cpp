@@ -141,10 +141,12 @@ void Printer::run() {
                 serial->tryConnect();
             } else {
                 {
-                    mutex::scoped_lock l(lastTempMutex);
-                    posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
-                    time_duration td(now-lastTemp);
-                    
+                    time_duration td;
+                    {
+                        mutex::scoped_lock l(lastTempMutex);
+                        posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+                        td = now-lastTemp;
+                    } // Must close mutex to prevent deadlock!
                     if(manualCommands.size()<5 && updateTempEvery>0 && td.seconds()>=updateTempEvery) {
                         injectManualCommand("M105");
                         lastTemp = microsec_clock::local_time();
@@ -180,11 +182,15 @@ void Printer::addResponse(const std::string& msg,uint8_t rtype) {
         responses.pop_front();
 }
 void Printer::injectManualCommand(const std::string& cmd) {
+    if(cmd=="@kill") {
+        serial->resetPrinter();
+        return;
+    }
     if(cmd.length()==0) return; // Don't waste time with empty lines
     {
         mutex::scoped_lock l(sendMutex);
         manualCommands.push_back(cmd);
-        RLog::log(cmd+" injected",(int)manualCommands.size());
+        //RLog::log(cmd+" injected",(int)manualCommands.size());
     } // need parantheses to prevent deadlock with trySendNextLine
     trySendNextLine(); // Check if we need to send the command immediately
 }

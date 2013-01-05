@@ -202,8 +202,8 @@
 			<div style="margin-top:10px"></div>
 {{#extruder}}
 			<div class="row">
-				<div class="span1">Extruder {{extrudernum}}</div>
-				<div class="span7">
+				<div class="span2"><?php _("Extruder")?> {{extrudernum}}</div>
+				<div class="span6">
 					<div class="progress">
 				  	<div id="ext{{extruderid}}_progg" class="bar bar-success" style="width: 0%;"></div>
 				  	<div id="ext{{extruderid}}_progy" class="bar bar-warning" style="width: 0%;"></div>
@@ -216,6 +216,20 @@
 				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> Change</button>
 			</div>
 {{/extruder}}
+			<div class="row">
+				<div class="span2">Heated bed</div>
+				<div class="span6">
+					<div class="progress">
+				  	<div id="bed_progg" class="bar bar-success" style="width: 0%;"></div>
+				  	<div id="bed_progy" class="bar bar-warning" style="width: 0%;"></div>
+				  	<div id="bed_progr" class="bar bar-danger" style="width: 0%;"></div>
+					</div>
+				</div>
+				<div class="span2">
+				  <span id="bed_temp">???</span>°C / <span id="bed_set">???°C</span> 
+				</div>
+				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> Change</button>
+			</div>
 		</div> {{! End control panel }}
 </div></div>
 
@@ -337,6 +351,19 @@ function updateLog() {
   	   else $(pre+"progr").css("width","0%");
   	   i++;
   	});
+  	// Heated bed temp
+  	   pre = '#bed_';
+  	   $(pre+"temp").html(state.bedTempRead.toFixed(2));
+  	   if(state.bedTempSet<20) $(pre+"set").html("<?php _("Off")?>");
+  	   else $(pre+"set").html(state.bedTempSet.toFixed(2)+"°C");
+  	   // 0-80 green (53.33%), 80-110 orange (20.0%), 110-150 red (26.66%)
+  	   if(state.bedTempRead<70) $(pre+"progg").css("width",state.bedTempRead*53.333/80+"%");
+  	   else $(pre+"progg").css("width","23.333%");
+  	   if(state.bedTempRead>70 && state.bedTempRead<260) $(pre+"progy").css("width",(state.bedTempRead-70)*20.0/30+"%");
+  	   else $(pre+"progy").css("width",(state.bedTempRead<70? "0%" : "63.333%"));
+  	   if(state.bedTempRead>260) $(pre+"progr").css("width",(state.bedTempRead-260)*26.666/40+"%");
+  	   else $(pre+"progr").css("width","0%");
+  	
   	}
 	 });
 	}

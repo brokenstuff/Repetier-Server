@@ -33,6 +33,8 @@ Create make system for default system compiler:
 Compile sources:
 > make
 
+If you are running this command on a pi it will take a while (up to 30 min).
+
 After cmake finishes with succes your build system is ready. On a Linux system
 you now have the RepetierServer executable. On other systems you might have trouble
 finding the boost libraries. Edit the toplevel CMakeLists.txt and add the directories
