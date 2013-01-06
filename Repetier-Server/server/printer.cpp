@@ -236,46 +236,46 @@ void Printer::close() {
 }
 void Printer::resendLine(size_t line)
 {
-    mutex::scoped_lock l(sendMutex);
-    ignoreNextOk = okAfterResend;
-    resendError++;
-    errorsReceived++;
-    if(!pingpong && errorsReceived==3 && cacheSize>63) {
-        cacheSize = 63;
-    }
-    if (pingpong)
-        readyForNextSend = true;
-    else  {
-        nackLines.clear();
-        receiveCacheFill = 0;
-    }
+    {
+        mutex::scoped_lock l(sendMutex);
+        ignoreNextOk = okAfterResend;
+        resendError++;
+        errorsReceived++;
+        if(!pingpong && errorsReceived==3 && cacheSize>63) {
+            cacheSize = 63;
+        }
+        if (pingpong)
+            readyForNextSend = true;
+        else  {
+            nackLines.clear();
+            receiveCacheFill = 0;
+        }
     
-    if (resendError > 5)
-    {
-        //[rhlog addError:@"Receiving only error messages. Stopped communication."];
-        close();
-        return; // give up, something is terribly wrong
-    }
-    line &=65535;
-    resendLines.clear();
-    bool addLines = false;
-    for(deque<shared_ptr<GCode> >::iterator it=history.begin();it!=history.end();++it)
-    {
-        GCode &gc = **it;
-        if (gc.hasN() && (gc.getN() & 65535) == line)
-            addLines = true;
-        if(addLines) resendLines.push_back(*it);
-    }
-    if (binaryProtocol != 0)
-    {
-        boost::this_thread::sleep(boost::posix_time::milliseconds(320000/baudrate));
-        uint8_t  buf[32];
-        for (int i = 0; i < 32; i++) buf[i] = 0;
-        serial->writeBytes(buf,32);
-        boost::this_thread::sleep(boost::posix_time::milliseconds(320000/baudrate));
-    } else {
-        boost::this_thread::sleep(boost::posix_time::milliseconds(cacheSize*10000/baudrate)); // Wait for buffer to empty
-    }
+        if (resendError > 8) {
+            string msg = "Receiving only error messages. Reset communication.";
+            string url = "/printer/msg/"+slugName+"?a=close";
+            gconfig->createMessage(msg, url);
+            serial->resetPrinter();
+        }
+        line &=65535;
+        resendLines.clear();
+        bool addLines = false;
+        for(deque<shared_ptr<GCode> >::iterator it=history.begin();it!=history.end();++it) {
+            GCode &gc = **it;
+            if (gc.hasN() && (gc.getN() & 65535) == line)
+                addLines = true;
+            if(addLines) resendLines.push_back(*it);
+        }
+        if (binaryProtocol != 0) {
+            boost::this_thread::sleep(boost::posix_time::milliseconds(320000/baudrate));
+            uint8_t  buf[32];
+            for (int i = 0; i < 32; i++) buf[i] = 0;
+            serial->writeBytes(buf,32);
+            boost::this_thread::sleep(boost::posix_time::milliseconds(320000/baudrate));
+        } else {
+            boost::this_thread::sleep(boost::posix_time::milliseconds(cacheSize*10000/baudrate)); // Wait for buffer to empty
+        }
+    } // unlock mutex or we get deadlock!
     trySendNextLine();
 }
 void Printer::manageHostCommand(boost::shared_ptr<GCode> &cmd) {

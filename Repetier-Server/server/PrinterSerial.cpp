@@ -192,12 +192,12 @@ bool PrinterSerial::tryConnect() {
         backgroundThread.swap(t);
         setErrorStatus(false);//If we get here, no error
         open=true; //Port is now open
-        RLog::log("Connection started:",printer->name);
+        RLog::log("Connection started:@",printer->name);
         resetPrinter();
     } catch (std::exception& e)
     {
 #ifdef DEBUG
-        cerr << "Exception: " << e.what() << "\n";
+        //  cerr << "Exception: " << e.what() << "\n";
 #endif
         return false;
     }

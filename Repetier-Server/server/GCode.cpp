@@ -130,7 +130,7 @@ GCodeDataPacket* GCode::getBinary()
     if (hasZ()) {*(float *)&data[datalen] = z;datalen+=4;};
     if (hasE()) {*(float *)&data[datalen] = e;datalen+=4;};
     if (hasF()) {*(float *)&data[datalen] = f;datalen+=4;};
-    if (hasT()) {*(uint8_t *)&data[datalen] = t;datalen+=4;};
+    if (hasT()) {*(uint8_t *)&data[datalen] = t;datalen+=1;};
     if (hasS()) {*(int32_t *)&data[datalen] = s;datalen+=4;};
     if (hasP()) {*(int32_t *)&data[datalen] = p;datalen+=4;};;
     if(v2) {

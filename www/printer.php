@@ -91,6 +91,45 @@
 					<button class="btn" data-dismiss="modal"><?php _("Close") ?></button>  
 				</div>  
 			</div>
+			{{! ============== Extruder ============== }}
+			{{#extruder}}
+						<div id="dialog-extruder{{extrudernum}}" class="modal hide fade in" style="display: none;width:350px ">
+				<div class="modal-header">  
+					<a class="close" data-dismiss="modal">×</a>  
+					<h3><?php _("Extruder")?> {{extrudernum}}</h3>  
+				</div>  
+				<div class="modal-body">  
+					<form id="formextrduer{{extrudernum}}" onsubmit="return false;">
+					<div><?php _("Temperature setting:")?> <span id="ext{{extruderid}}_temp2">???</span>°C / <span id="ext{{extruderid}}_set2">???°C</span></div>
+					<h5><?php _("Set extruder temperature") ?></h5>
+					<div class="input-append"><input id="ext{{extruderid}}newtemp" type="text" style="width:40px" class="inputonline"/> <button id="ext{{extruderid}}settemp" class="btn "><i class="icon-breaker"></i> <?php _("Set temperature")?></button><button id="ext{{extruderid}}off" class="btn "><i class="icon-off"></i> <?php _("Turn off")?></button></div>
+					<h5><?php _("Extrude") ?></h5>
+					<div class="input-append"><input id="ext{{extruderid}}extrude" type="text" style="width:40px" class="inputonline"/> <button id="ext{{extruderid}}sendExtrude" class="btn "><i class="icon-breaker"></i> <?php _("Extrude")?></button></div>
+					<h5><?php _("Retract") ?></h5>
+					<div class="input-append"><input id="ext{{extruderid}}retract" type="text" style="width:40px" class="inputonline"/> <button id="ext{{extruderid}}sendRetract" class="btn "><i class="icon-breaker"></i> <?php _("Retract")?></button></div>
+					</form>            
+				</div>  
+				<div class="modal-footer">  
+					<button class="btn" data-dismiss="modal"><?php _("Close") ?></button>  
+				</div>  
+			</div>
+			{{/extruder}}
+			{{! ============== Heated bed ============== }}
+						<div id="dialog-bed" class="modal hide fade in" style="display: none; ">
+				<div class="modal-header">  
+					<a class="close" data-dismiss="modal">×</a>  
+					<h3><?php _("Heated bed")?> </h3>  
+				</div>  
+				<div class="modal-body">  
+					<form id="formsetbed" onsubmit="return false">
+					<h5><?php _("Set bed temperature") ?></h5>
+					<div class="input-append"><input id="bednewtemp" type="text" style="width:40px" class="inputonline"/> <button id="sendbedtemp" class="btn "><i class="icon-breaker"></i> <?php _("Set temperature")?></button><button id="sendbedtempoff" class="btn "><i class="icon-off"></i> <?php _("Turn off")?></button></div>
+					</form>            
+				</div>  
+				<div class="modal-footer">  
+					<button class="btn" data-dismiss="modal"><?php _("Close") ?></button>  
+				</div>  
+			</div>
 <div id="msgcontainer"></div>
 
 <div class="row">  
@@ -221,7 +260,7 @@
 				<div class="span2">
 				  <span id="ext{{extruderid}}_temp">???</span>°C / <span id="ext{{extruderid}}_set">???°C</span> 
 				</div>
-				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change") ?></button>
+				<span class="span2"><a href="#dialog-extruder{{extrudernum}}" data-toggle="modal" class="btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change") ?></a></span>
 			</div>
 {{/extruder}}
 			<div class="row">
@@ -236,7 +275,7 @@
 				<div class="span2">
 				  <span id="bed_temp">???</span>°C / <span id="bed_set">???°C</span> 
 				</div>
-				<button class="span2 btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change")?></button>
+				<span class="span2"><a href="#dialog-bed" data-toggle="modal" class="btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change") ?></a></span>
 			</div>
 		</div> {{! End control panel }}		
 </div></div>
@@ -350,6 +389,9 @@ function updateLog() {
   	   $(pre+"temp").html(val.tempRead.toFixed(2));
   	   if(val.tempSet<20) $(pre+"set").html("<?php _("Off")?>");
   	   else $(pre+"set").html(val.tempSet.toFixed(2)+"°C");
+  	   $(pre+"temp2").html(val.tempRead.toFixed(2));
+  	   if(val.tempSet<20) $(pre+"set2").html("<?php _("Off")?>");
+  	   else $(pre+"set2").html(val.tempSet.toFixed(2)+"°C");
   	   // 0-70 green (23.33%), 70-260 orange (63.333%), 260-300 red (13.33%)
   	   if(val.tempRead<70) $(pre+"progg").css("width",val.tempRead*23.333/70+"%");
   	   else $(pre+"progg").css("width","23.333%");
@@ -539,7 +581,10 @@ function sendFan(e) {
 	}  catch(err) {}
 	return false;
 }
-
+function isFloat(val) {
+	if(val.match(/^\d+$/) || val.match(/^\d+\.\d+$/)) return true;
+	return false;
+}
 $(document).ready(function() {
 	$('#startjobupload').click(function() { // Upload new job
 		$('#startjobupload').button('loading');
@@ -558,6 +603,33 @@ $(document).ready(function() {
 	 	 	updateModels(data);
 		});
 		return false;
+	});
+	{{#extruder}}
+	$('#ext{{extruderid}}settemp').click(function() {
+		v = $('#ext{{extruderid}}newtemp').val();
+		if(isInt(v))	sendCmd("M104 S"+v+" T{{extruderid}}");
+	});
+	$('#ext{{extruderid}}sendExtrude').click(function() {
+		v = $('#ext{{extruderid}}extrude').val();
+		if(isFloat(v))	sendMove(0,0,0,v);
+	});
+	$('#ext{{extruderid}}sendRetract').click(function() {
+		v = $('#ext{{extruderid}}retract').val();
+		if(isFloat(v))	sendMove(0,0,0,-v);
+	});
+	$('#ext{{extruderid}}off').click(function() {
+		sendCmd("M104 S0 T{{extruderid}}");
+		$('#dialog-extruder{{extrudernum}}').modal('hide');
+	});
+	{{/extruder}}
+	$('#sendbedtemp').click(function() {
+		v = $('#bednewtemp').val();
+		if(isInt(v))	sendCmd("M140 S"+v);
+		$('#dialog-bed').modal('hide');
+	});
+	$('#sendbedtempoff').click(function() {
+		sendCmd("M140 S0");
+		$('#dialog-bed').modal('hide');
 	});
 	updateLog();
 	$('#logpause').tooltip({html:true});

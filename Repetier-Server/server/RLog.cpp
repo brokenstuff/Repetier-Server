@@ -41,7 +41,8 @@ void RLog::log(const std::string &line,bool err) {
 void RLog::log(const std::string &line,int val,bool err) {
     string res;
     size_t p = line.find('@');
-    res = line.substr(0,p)+intToString(val)+line.substr(p+1);
+    if(p==string::npos) p = line.length();
+    res = line.substr(0,p)+intToString(val)+line.substr(min(p+1,line.length()));
     log(res,err);
 }
 void RLog::log(const std::string &line,double val,bool err) {
@@ -49,12 +50,14 @@ void RLog::log(const std::string &line,double val,bool err) {
     size_t p = line.find('@');
     char buf[40];
     sprintf(buf,"%f",val);
-    res = line.substr(0,p)+static_cast<string>(buf)+line.substr(p+1);
+    if(p==string::npos) p = line.length();
+    res = line.substr(0,p)+static_cast<string>(buf)+line.substr(min(p+1,line.length()));
     log(res,err);
 }
 void RLog::log(const std::string &line,const std::string& val,bool err) {
     string res;
     size_t p = line.find('@');
-    res = line.substr(0,p)+val+line.substr(p+1);
+    if(p==string::npos) p = line.length();
+    res = line.substr(0,p)+val+line.substr(min(p+1,line.length()));
     log(res,err);
 }
