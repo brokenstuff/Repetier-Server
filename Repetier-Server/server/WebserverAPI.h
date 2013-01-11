@@ -31,6 +31,7 @@ namespace repetier {
      */
     extern void TranslateFile(const std::string &filename,const std::string &lang,std::string& result);
     extern bool MG_getVar(const mg_request_info *info,const char *name, std::string &output);
+    extern bool MG_getPostVar(char *buf,int buflen,const mg_request_info *info,const char *name, std::string &output);
 }
 
 #endif /* defined(__Repetier_Server__WebserverAPI__) */

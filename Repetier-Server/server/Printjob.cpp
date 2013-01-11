@@ -36,7 +36,9 @@ using namespace boost::filesystem;
 typedef vector<path> pvec;             // store paths
 typedef list<shared_ptr<Printjob> > pjlist;
 
-PrintjobManager::PrintjobManager(string dir) {
+PrintjobManager::PrintjobManager(string dir,Printer *_prt,bool _scripts) {
+    scripts = _scripts;
+    printer = _prt;
     char lc = dir[dir.length()-1];
     if(lc=='/' || lc=='\\')
        dir = dir.substr(0,dir.length()-1);
@@ -61,18 +63,47 @@ PrintjobManager::PrintjobManager(string dir) {
         pvec v;
         copy(directory_iterator(p), directory_iterator(), back_inserter(v));
         sort(v.begin(), v.end());
-        for (pvec::const_iterator it (v.begin()); it != v.end(); ++it)
-        {
-            PrintjobPtr pj(new Printjob((*it).string(),false));
-            if(!pj->isNotExistent()) {
+        if(scripts) {
+            bool hasStart = false,hasEnd = false,hasPause=false,hasKill=false;
+            bool hasScript1=false,hasScript2=false,hasScript3=false,hasScript4=false,hasScript5;
+            for (pvec::const_iterator it (v.begin()); it != v.end(); ++it)
+            {
+                PrintjobPtr pj(new Printjob((*it).string(),false));
                 files.push_back(pj);
+                string name = it->filename().string();
+                if(name=="Start.g") hasStart = true;
+                if(name=="End.g") hasEnd = true;
+                if(name=="Pause.g") hasPause = true;
+                if(name=="Kill.g") hasKill = true;
+                if(name=="Script 1.g") hasScript1 = true;
+                if(name=="Script 2.g") hasScript2 = true;
+                if(name=="Script 3.g") hasScript3 = true;
+                if(name=="Script 4.g") hasScript4 = true;
+                if(name=="Script 5.g") hasScript5 = true;
             }
-            // Extract id for last id;
-            string sid = it->filename().string();
-            size_t upos = sid.find('_');
-            if(upos!=string::npos) {
-                sid = sid.substr(0,upos);
-                lastid = atoi(sid.c_str());
+            if(!hasStart) {files.push_back(PrintjobPtr(new Printjob(directory+"/Start.g",true,true)));}
+            if(!hasEnd) {files.push_back(PrintjobPtr(new Printjob(directory+"/End.g",true,true)));}
+            if(!hasPause) {files.push_back(PrintjobPtr(new Printjob(directory+"/Pause.g",true,true)));}
+            if(!hasKill) {files.push_back(PrintjobPtr(new Printjob(directory+"/Kill.g",true,true)));}
+            if(!hasScript1) {files.push_back(PrintjobPtr(new Printjob(directory+"/Script 1.g",true,true)));}
+            if(!hasScript2) {files.push_back(PrintjobPtr(new Printjob(directory+"/Script 2.g",true,true)));}
+            if(!hasScript3) {files.push_back(PrintjobPtr(new Printjob(directory+"/Script 3.g",true,true)));}
+            if(!hasScript4) {files.push_back(PrintjobPtr(new Printjob(directory+"/Script 4.g",true,true)));}
+            if(!hasScript5) {files.push_back(PrintjobPtr(new Printjob(directory+"/Script 5.g",true,true)));}
+        } else {
+            for (pvec::const_iterator it (v.begin()); it != v.end(); ++it)
+            {
+                PrintjobPtr pj(new Printjob((*it).string(),false));
+                if(!pj->isNotExistent()) {
+                    files.push_back(pj);
+                }
+                // Extract id for last id;
+                string sid = it->filename().string();
+                size_t upos = sid.find('_');
+                if(upos!=string::npos) {
+                    sid = sid.substr(0,upos);
+                    lastid = atoi(sid.c_str());
+                }
             }
         }
     } catch(const filesystem_error& ex)
@@ -174,6 +205,15 @@ PrintjobPtr PrintjobManager::findByIdInternal(int id) {
     }
     return shared_ptr<Printjob>();
 }
+PrintjobPtr PrintjobManager::findByName(string name) {
+    mutex::scoped_lock l(filesMutex);
+    pjlist::iterator it = files.begin(),ie=files.end();
+    for(;it!=ie;it++) {
+        if((*it)->getName()==name)
+            return *it;
+    }
+    return shared_ptr<Printjob>();
+}
 PrintjobPtr PrintjobManager::findById(int id) {
     mutex::scoped_lock l(filesMutex);
     return findByIdInternal(id);
@@ -226,6 +266,7 @@ void PrintjobManager::killJob(int id) {
     files.remove(runningJob);
     remove(path(runningJob->getFilename())); // Delete file from disk
     runningJob.reset();
+    printer->getScriptManager()->pushCompleteJob("End");
 }
 void PrintjobManager::undoCurrentJob() {
     mutex::scoped_lock l(filesMutex);
@@ -237,20 +278,20 @@ void PrintjobManager::undoCurrentJob() {
     files.remove(runningJob);
     runningJob.reset();
 }
-void PrintjobManager::manageJobs(Printer *p) {
+void PrintjobManager::manageJobs() {
     mutex::scoped_lock l(filesMutex);
     if(!runningJob.get()) return; // unknown job
     if(jobin.good()) {
         string line;
-        size_t n = 100-p->jobCommandsStored();
+        size_t n = 100-printer->jobCommandsStored();
         if(n>10) n = 10;
-        char buf[100];
+        char buf[200];
         while(n && !jobin.eof()) {
-            jobin.getline(buf, 100); // Strips \n
+            jobin.getline(buf, 200); // Strips \n
             size_t l = strlen(buf);
             if(buf[l]=='\r')
                 buf[l] = 0;
-            p->injectJobCommand(static_cast<string>(buf));
+            printer->injectJobCommand(static_cast<string>(buf));
             runningJob->incrementLinesSend();
             n--;
         }
@@ -259,21 +300,95 @@ void PrintjobManager::manageJobs(Printer *p) {
     if(jobin.is_open() && !jobin.good()) {
         jobin.close();
         files.remove(runningJob);
-        runningJob->stop(p);
+        runningJob->stop(printer);
         remove(path(runningJob->getFilename())); // Delete file from disk
         runningJob.reset();
+        l.unlock();
+        printer->scriptManager->pushCompleteJobNoBlock("End");
     }
+}
+void PrintjobManager::pushCompleteJob(std::string name,bool beginning) {
+    PrintjobPtr pj = findByName(name);
+    if(!pj.get()) return;
+    mutex::scoped_lock l(filesMutex);
+    ifstream in;
+    mutex::scoped_lock l2(printer->sendMutex);
+    std::deque<std::string> &list = ((*pj).getName()=="Pause" ? printer->manualCommands : printer->jobCommands);
+    try {
+        in.open(pj->getFilename().c_str(),ifstream::in);
+        char buf[200];
+        size_t line = 0;
+        
+        while(!in.eof()) {
+            in.getline(buf, 200); // Strips \n
+            size_t l = strlen(buf);
+            if(buf[l]=='\r')
+                buf[l] = 0;
+            string cmd(buf);
+            if(!printer->shouldInjectCommand(cmd)) continue;
+            line++;
+            if(beginning) {
+                list.push_front(cmd);
+            } else {
+                list.push_back(cmd);
+            }
+        }
+        if(beginning) { // Reverse lines at beginning
+            reverse(printer->jobCommands.begin(),printer->jobCommands.begin()+line);
+        }
+        in.close();
+    } catch(std::exception) {}
+}
+void PrintjobManager::pushCompleteJobNoBlock(std::string name,bool beginning) {
+    PrintjobPtr pj = findByName(name);
+    if(!pj.get()) return;
+    mutex::scoped_lock l(filesMutex);
+    ifstream in;
+    std::deque<std::string> &list = ((*pj).getName()=="Pause" ? printer->manualCommands : printer->jobCommands);
+    try {
+        in.open(pj->getFilename().c_str(),ifstream::in);
+        char buf[200];
+        size_t line = 0;
+        
+        while(!in.eof()) {
+            in.getline(buf, 200); // Strips \n
+            size_t l = strlen(buf);
+            if(buf[l]=='\r')
+                buf[l] = 0;
+            string cmd(buf);
+            if(!printer->shouldInjectCommand(cmd)) continue;
+            line++;
+            if(beginning) {
+                list.push_front(cmd);
+            } else {
+                list.push_back(cmd);
+            }
+        }
+        if(beginning) { // Reverse lines at beginning
+            reverse(printer->jobCommands.begin(),printer->jobCommands.begin()+line);
+        }
+        in.close();
+    } catch(std::exception) {}
 }
 // ============= Printjob =============================
 
-Printjob::Printjob(string _file,bool newjob) {
+Printjob::Printjob(string _file,bool newjob,bool _script) {
     file = _file;
+    script = _script;
     path p(file);
     pos = 0;
     state = stored;
     length = 0;
-    id = PrintjobManager::decodeIdPart(file);
-    if(newjob) {state = startUpload; return;}
+    if(script) id=0;
+    else id = PrintjobManager::decodeIdPart(file);
+    if(script && newjob) {
+        fstream f;
+        f.open( file.c_str(), ios::out );
+        f << flush;
+        f.close();
+        return;
+    }
+    else if(newjob) {state = startUpload; return;}
     try {
         if(exists(p) && is_regular_file(p))
             length = (size_t)file_size(file);

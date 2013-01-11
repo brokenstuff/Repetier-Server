@@ -32,8 +32,6 @@ Webinterface needs more functions, more tests are needed.
 My part of the work is distributed under the Apache V2 licence.
 The sources contain software from 3rd parties with different licences.
 
-TODO: Add list of 3rd party software
-
 ### moFileReader - A simple .mo-File-Reader
 Copyright (C) 2009 Domenico Gentner (scorcher24@gmail.com)
 All rights reserved.    
@@ -219,6 +217,15 @@ Show all models: /printer/model/<slugname>?a=list
 Upload model: /printer/model/<slugname>?a=upload&name=<name>&autostart=<0|1>&file=<file data as forum-multipart document>
 Delete model:/printer/model/<slugname>?a=remove&id=<jobid>
 Start model: /printer/model/<slugname>?a=copy&id=<jobid>
+
+### Special files
+
+There are special files that are run on special times like start/end of a job or pause.
+These are habled by the script subsystem:
+
+List scripts: /printer/scripts/<slugname>?a=list
+Load script: /printer/scripts/<slugname>?a=load&f=<filename>
+Save Script: /printer/scripts/<slugname>?a=save&f=<filename>
 
 
 ### Managing the server

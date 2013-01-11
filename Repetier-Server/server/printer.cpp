@@ -17,7 +17,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
 #define _CRT_SECURE_NO_DEPRECATE 
-#define _SCL_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE
 
 #include "printer.h"
 #include "Printjob.h"
@@ -105,8 +105,9 @@ Printer::Printer(string conf) {
     cout << "Printer configuration read: " << name << endl;
     cout << "Port:" << device << endl;
 #endif
-    jobManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"jobs");
-    modelManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"models");
+    jobManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"jobs",this);
+    modelManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"models",this);
+    scriptManager = new PrintjobManager(gconfig->getStorageDirectory()+slugName+"/"+"scripts",this,true);
 }
 Printer::~Printer() {
     serial->close();
@@ -114,6 +115,7 @@ Printer::~Printer() {
     delete serial;
     delete modelManager;
     delete jobManager;
+    delete scriptManager;
 }
 void Printer::startThread() {
     assert(!thread);
@@ -152,7 +154,7 @@ void Printer::run() {
                         lastTemp = microsec_clock::local_time();
                     }
                 }
-                jobManager->manageJobs(this); // refill job queue
+                jobManager->manageJobs(); // refill job queue
             }
             trySendNextLine();
         }
@@ -181,20 +183,26 @@ void Printer::addResponse(const std::string& msg,uint8_t rtype) {
     if(responses.size()>(size_t)gconfig->getBacklogSize())
         responses.pop_front();
 }
-void Printer::injectManualCommand(const std::string& cmd) {
+bool Printer::shouldInjectCommand(const std::string& cmd) {
     if(cmd=="@kill") {
         serial->resetPrinter();
-        return;
+        return false;
     }
-    if(cmd.length()==0) return; // Don't waste time with empty lines
+    if(cmd.length()<2) return false; // Don't waste time with empty lines
+    size_t p = cmd.find(';');
+    if(p<2) return false;
+    return true;
+}
+void Printer::injectManualCommand(const std::string& cmd) {
+    if(!shouldInjectCommand(cmd)) return;
     {
         mutex::scoped_lock l(sendMutex);
         manualCommands.push_back(cmd);
-        //RLog::log(cmd+" injected",(int)manualCommands.size());
     } // need parantheses to prevent deadlock with trySendNextLine
     trySendNextLine(); // Check if we need to send the command immediately
 }
 void Printer::injectJobCommand(const std::string& cmd) {
+    if(!shouldInjectCommand(cmd)) return;
     mutex::scoped_lock l(sendMutex);
     jobCommands.push_back(cmd);
     // No need to trigger job commands early. There will most probably follow more very soon
@@ -204,9 +212,9 @@ void Printer::move(double x,double y,double z,double e) {
     if(x!=0)
         injectManualCommand(state->getMoveXCmd(x, speedx*60.0));
     if(y!=0)
-        injectManualCommand(state->getMoveYCmd(y, speedx*60.0));
+        injectManualCommand(state->getMoveYCmd(y, speedy*60.0));
     if(z!=0)
-        injectManualCommand(state->getMoveZCmd(z, speedx*60.0));
+        injectManualCommand(state->getMoveZCmd(z, speedz*60.0));
     if(e!=0)
         injectManualCommand(state->getMoveECmd(e,60.0 * (e>0 ? speedeExtrude : speedeRetract)));
 }
@@ -278,6 +286,7 @@ void Printer::resendLine(size_t line)
     } // unlock mutex or we get deadlock!
     trySendNextLine();
 }
+// manageHOstCmmands is called with sendMutex locked!
 void Printer::manageHostCommand(boost::shared_ptr<GCode> &cmd) {
     string c = cmd->hostCommandPart();
     if(c=="@pause") {
@@ -285,6 +294,8 @@ void Printer::manageHostCommand(boost::shared_ptr<GCode> &cmd) {
         string answer = "/printer/msg/"+slugName+"?a=unpause";
         gconfig->createMessage(msg,answer);
         paused = true;
+        state->storePause();
+        scriptManager->pushCompleteJobNoBlock("Pause",true);
     } else if(c=="@isathome") {
         state->setIsathome();
     } else if(c=="@kill") {
@@ -292,6 +303,7 @@ void Printer::manageHostCommand(boost::shared_ptr<GCode> &cmd) {
     }
 }
 void Printer::stopPause() {
+    state->injectUnpause();
     mutex::scoped_lock l(sendMutex);
     paused = false;
 }

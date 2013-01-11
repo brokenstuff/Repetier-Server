@@ -23,6 +23,7 @@
 #include "printer.h"
 #include "global_config.h"
 #include "WebserverAPI.h"
+#include "RLog.h"
 #if defined(__APPLE__) || defined(__linux)
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -116,6 +117,7 @@ int main(int argc, const char * argv[])
             string suid = vm["pidfile"].as<string>();
             int uid = 0;
             sscanf(suid.c_str(),"%i",&uid);
+            RLog::log("Switching permissions to user id @",uid);
             setuid(uid);
         }
         pid_t pid, sid;

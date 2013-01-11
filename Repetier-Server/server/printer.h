@@ -62,9 +62,11 @@ public:
 };
 
 class Printer {
+    friend class PrintjobManager;
     libconfig::Config config;
     PrintjobManager *jobManager;
     PrintjobManager *modelManager;
+    PrintjobManager *scriptManager;
     volatile bool stopRequested;
     boost::shared_ptr<boost::thread> thread;
     boost::mutex mutex;
@@ -155,7 +157,8 @@ public:
      @param lastid last response id contained in list or resId if list is empty.
      */
 	boost::shared_ptr<std::list<boost::shared_ptr<PrinterResponse> > > getResponsesSince(uint32_t resId,uint8_t filter,uint32_t &lastid);
-    
+
+    bool shouldInjectCommand(const std::string& cmd);
     /** Push a new manual command into the command queue. Thread safe. */
     void injectManualCommand(const std::string& cmd);
     /** Push a new command into the job queue. Thread safe. */
@@ -171,6 +174,7 @@ public:
     void connectionClosed();
     inline PrintjobManager *getJobManager() {return jobManager;}
     inline PrintjobManager *getModelManager() {return modelManager;}
+    inline PrintjobManager *getScriptManager() {return scriptManager;}
     /** Stop previous pause command */
     void stopPause();
     // Public interthread communication methods

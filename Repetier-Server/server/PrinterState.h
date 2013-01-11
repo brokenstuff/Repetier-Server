@@ -79,6 +79,9 @@ class PrinterState {
     int speedMultiply;
     int flowMultiply;
     PrinterTemp& getExtruder(int extruderId);
+    
+    double pauseX,pauseY,pauseZ,pauseE,pauseF;
+    bool pauseRelative;
 public:
     
     PrinterState(Printer *p);
@@ -105,5 +108,7 @@ public:
     std::string getMoveYCmd(double dy,double f);
     std::string getMoveZCmd(double dz,double f);
     std::string getMoveECmd(double de,double f);
+    void storePause();
+    void injectUnpause();
 };
 #endif /* defined(__Repetier_Server__PrinterState__) */

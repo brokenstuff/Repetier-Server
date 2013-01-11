@@ -34,7 +34,7 @@ class Printjob {
 public:
     enum PrintjobState {startUpload,stored,running,finished,doesNotExist};
     
-    Printjob(std::string _file,bool newjob);
+    Printjob(std::string _file,bool newjob,bool _script=false);
     
     inline bool isNotExistent() {return state==doesNotExist;}
     std::string getName();
@@ -52,6 +52,7 @@ public:
     void start();
     void stop(Printer *p);
 private:
+    bool script;
     int id;
     std::string file;
     size_t length; ///< Length of the print file
@@ -78,14 +79,17 @@ class PrintjobManager {
     PrintjobPtr runningJob;
     std::ifstream jobin;
     PrintjobPtr findByIdInternal(int id);
+    bool scripts;
+    Printer *printer;
 public:
-    PrintjobManager(std::string dir);
+    PrintjobManager(std::string dir,Printer *p,bool _scripts=false);
     void cleanupUnfinsihed();
     std::string encodeName(int id,std::string name,std::string postfix,bool withDir);
     static std::string decodeNamePart(std::string file);
     static int decodeIdPart(std::string file);
     void fillSJONObject(std::string name,json_spirit::Object &o);
     PrintjobPtr findById(int id);
+    PrintjobPtr findByName(std::string name);
     PrintjobPtr createNewPrintjob(std::string name);
     void finishPrintjobCreation(PrintjobPtr job,std::string namerep,size_t sz);
     /** Physically removes job from disk */
@@ -99,7 +103,14 @@ public:
      frequently and makes sure, the job queue is filled enough for a
      undisrupted print. It will always queue up to 100 commands but no more
      then 10 commands for a call. */
-    void manageJobs(Printer *p);
+    void manageJobs();
     void getJobStatus(json_spirit::Object &obj);
+    /** Pushes the complete content of a job to the job queue
+     @param name Name of the printjob
+     @param p Printer for output
+     @param beginning Send it to the beginning of the job queue or the end.
+     */
+    void pushCompleteJob(std::string name,bool beginning = false);
+    void pushCompleteJobNoBlock(std::string name,bool beginning = false);
 };
 #endif /* defined(__Repetier_Server__Printjob__) */

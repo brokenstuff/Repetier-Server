@@ -1,0 +1,16 @@
+Make your own translation
+==========================
+
+Making your own translation is as easy as it could be. Go to
+
+http://www.poedit.net/
+
+and fetch the PO-editor for your os. Let is scan the www folder for translation and
+translate all it found. Save the file with the 2 letter digits for your country into
+the languages folder, restart the server and you are done. If your browser language
+is not detected correctly you might want to change the default language in 
+repetier-server.conf to your favourite language.
+
+Other user would be glad, if you send me the new translation to include. With sending me
+the translation to repetierdev@gmail.com you consent to include it for free into the
+software. You can add your credits into the po file if you want to.

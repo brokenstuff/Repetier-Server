@@ -19,7 +19,7 @@
 #ifndef __Repetier_Server__global_config__
 #define __Repetier_Server__global_config__
 
-#define REPETIER_SERVER_VERSION "0.10"
+#define REPETIER_SERVER_VERSION "0.20"
 
 #include <iostream>
 #include "printer.h"

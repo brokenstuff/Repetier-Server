@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Repetier-Server\n"
-"POT-Creation-Date: 2013-01-06 12:07+0100\n"
-"PO-Revision-Date: 2013-01-06 12:07+0100\n"
+"POT-Creation-Date: 2013-01-10 19:49+0100\n"
+"PO-Revision-Date: 2013-01-10 19:49+0100\n"
 "Last-Translator: repetier <repetierdev@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,22 +15,45 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: about.php:39 documentation.php:39 index.php:37 printer.php:39
+#: about.php:39 configure.php:39 documentation.php:39 index.php:37
+#: printer.php:39
 msgid "Home"
 msgstr "Start"
 
-#: about.php:40 about.php:54 documentation.php:40 index.php:38 printer.php:40
+#: about.php:40 about.php:54 configure.php:40 documentation.php:40
+#: index.php:38 printer.php:40
 msgid "About"
 msgstr "Über"
 
-#: about.php:41 documentation.php:41 documentation.php:54 index.php:39
-#: printer.php:41
+#: about.php:41 configure.php:41 documentation.php:41 documentation.php:54
+#: index.php:39 printer.php:41
 msgid "Documentation"
 msgstr "Anleitung"
 
-#: about.php:52 documentation.php:52 index.php:52 printer.php:139
+#: about.php:52 configure.php:52 documentation.php:52 index.php:52
+#: printer.php:139
 msgid "Printer overview"
 msgstr "Druckerübersicht"
+
+#: configure.php:54 index.php:134
+msgid "Configure"
+msgstr "Konfigurieren"
+
+#: configure.php:60
+msgid "Edit script "
+msgstr "Script bearbeiten"
+
+#: configure.php:63
+msgid "Select script to edit"
+msgstr "Wähle zu bearbeitendes Script"
+
+#: configure.php:69
+msgid "Current script:"
+msgstr "Aktuelles Script:"
+
+#: configure.php:75
+msgid "Save"
+msgstr "Speichern"
 
 #: index.php:62
 msgid "Printer"
@@ -52,13 +75,13 @@ msgstr "Aktion "
 msgid "Do you really want to disconnect the printer?"
 msgstr "Wollen Sie wirklich den Drucker trennen?"
 
-#: index.php:108 printer.php:437 printer.php:448 printer.php:459
-#: printer.php:470 printer.php:481
+#: index.php:108 printer.php:440 printer.php:451 printer.php:462
+#: printer.php:473 printer.php:484
 msgid "Yes"
 msgstr "Ja"
 
-#: index.php:115 printer.php:443 printer.php:454 printer.php:465
-#: printer.php:476 printer.php:487
+#: index.php:115 printer.php:446 printer.php:457 printer.php:468
+#: printer.php:479 printer.php:490
 msgid "No"
 msgstr "Nein"
 
@@ -75,14 +98,14 @@ msgid "No job running"
 msgstr "Keine laufenden Aufträge"
 
 #: index.php:133
-msgid "Manage"
-msgstr "Verwalten"
+msgid "Use"
+msgstr "Verwende"
 
-#: index.php:135
+#: index.php:136
 msgid "Deactivate"
 msgstr "Deaktivieren"
 
-#: index.php:137
+#: index.php:138
 msgid "Activate"
 msgstr "Aktivieren"
 
@@ -102,7 +125,7 @@ msgstr "G-Code Datei"
 msgid "Start job after upload if possible"
 msgstr "Starte Auftrag nach dem hochladen, wenn möglich."
 
-#: printer.php:69 printer.php:90 printer.php:425
+#: printer.php:69 printer.php:90 printer.php:428
 msgid "Uploading ..."
 msgstr "Lade Datei hoch ..."
 
@@ -252,57 +275,60 @@ msgstr ""
 msgid "Pause log Update"
 msgstr "Pausiere Log Update"
 
-#: printer.php:390 printer.php:404 printer.php:415
+#: printer.php:390 printer.php:393 printer.php:407 printer.php:418
 msgid "Off"
 msgstr "Aus"
 
-#: printer.php:423
+#: printer.php:426
 msgid "Waiting for print"
 msgstr "Wartet auf Druck"
 
-#: printer.php:423
+#: printer.php:426
 msgid "Stored"
 msgstr "Gespeichert"
 
-#: printer.php:424
+#: printer.php:427
 msgid "Printing ..."
 msgstr "Drucke ..."
 
-#: printer.php:436
+#: printer.php:439
 msgid "Do you really want to start this job?"
 msgstr "Wollen Sie wirklich diesen Auftrag starten?"
 
-#: printer.php:447
+#: printer.php:450
 msgid "Do you really want to stop this job?"
 msgstr "Wollen Sie wirklich dieses Modell stoppen?"
 
-#: printer.php:458
+#: printer.php:461
 msgid "Do you really want to delete this job?"
 msgstr "Wollen Sie wirklich diesen Auftrag löschen?"
 
-#: printer.php:469
+#: printer.php:472
 msgid "Do you really want to delete this model?"
 msgstr "Wollen Sie wirklich dieses Modell löschen?"
 
-#: printer.php:480
+#: printer.php:483
 msgid "Do you really want to copy this model to the job queue?"
 msgstr "Wollen Sie wirklich dieses Model in die Druckerwarteschlange einfügen?"
 
-#: printer.php:504
+#: printer.php:507
 msgid "Stop"
 msgstr "Stop"
 
-#: printer.php:508
+#: printer.php:511
 msgid "Start"
 msgstr "Start"
 
-#: printer.php:509 printer.php:532
+#: printer.php:512 printer.php:535
 msgid "Delete"
 msgstr "Löschen"
 
-#: printer.php:531
+#: printer.php:534
 msgid "Copy"
 msgstr "Kopieren"
+
+#~ msgid "Manage"
+#~ msgstr "Verwalten"
 
 #~ msgid "Do you really want to<br/>kill this job?"
 #~ msgstr "Wollen Sie wirklich diesen</br>Auftrag beenden?"

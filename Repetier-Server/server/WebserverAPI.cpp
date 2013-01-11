@@ -31,6 +31,7 @@
 #include <string.h>
 #include "PrinterState.h"
 #include "Printjob.h"
+#include "RLog.h"
 #if defined(_WIN32)
 #include <io.h>
 #endif
@@ -103,8 +104,9 @@ namespace repetier {
     bool handleFileUpload(struct mg_connection *conn,const string& filename,string& name,long &size,bool append) {
         name.clear();
         const char *cl_header;
-        char post_data[16 * 1024], path[999], file_name[1024], mime_type[100],boundary[100],
+        char post_data[16 * 1024],  file_name[1024], mime_type[100],boundary[100],
         buf[BUFSIZ*2], *eop, *s, *p;
+        // char path[999];
         FILE *fp;
         long long int cl, written;
         int fd, n, post_data_len;
@@ -145,15 +147,15 @@ namespace repetier {
         // Finished parsing headers. Now "p" points to the first byte of data.
         // Calculate file size
         cl -= p - post_data;      // Subtract headers size
-        cl -= strlen(post_data);  // Subtract the boundary marker at the end
-        cl -= 6;                  // Subtract "\r\n" before and after boundary
+                                  // cl -= strlen(post_data);  // Subtract the boundary marker at the end
+                                  //   cl -= 6;                  // Subtract "\r\n" before and after boundary
         
         // Construct destination file name. Write to /tmp, do not allow
         // paths that contain slashes.
-        if ((s = strrchr(file_name, '/')) == NULL) {
+        /*if ((s = strrchr(file_name, '/')) == NULL) {
             s = file_name;
         }
-        snprintf(path, sizeof(path), "/tmp/%s", s);
+        snprintf(path, sizeof(path), "/tmp/%s", s);*/
         
         if (file_name[0] == '\0') {
             mg_printf(conn, "%s%s", HTTP_500, "Can't get file name");
@@ -209,8 +211,6 @@ namespace repetier {
             (void) fclose(fp);
             size = (long)written;
             return true;
-            //mg_printf(conn, "HTTP/1.0 200 OK\r\n\r\n"
-            //        "Saved to [%s], written %llu bytes", path, cl);
         }
         return false;
     }
@@ -292,8 +292,10 @@ namespace repetier {
                 if(MG_getVar(ri,"id",sid)) {
                     int id = atoi(sid.c_str());
                     PrintjobPtr job = printer->getJobManager()->findById(id);
-                    if(job.get())
+                    if(job.get()) {
+                        printer->getScriptManager()->pushCompleteJob("Start");
                         printer->getJobManager()->startJob(id);
+                    }
                 }
                 printer->getJobManager()->fillSJONObject("data",ret);
             } else if(a=="kill") {
@@ -301,8 +303,10 @@ namespace repetier {
                 if(MG_getVar(ri,"id",sid)) {
                     int id = atoi(sid.c_str());
                     PrintjobPtr job = printer->getJobManager()->findById(id);
-                    if(job.get())
+                    if(job.get()) {
                         printer->getJobManager()->killJob(id);
+                        printer->getScriptManager()->pushCompleteJob("Kill");
+                    }
                 }
                 printer->getJobManager()->fillSJONObject("data",ret);                
             }
@@ -354,6 +358,55 @@ namespace repetier {
                     }
                 }
                 printer->getJobManager()->fillSJONObject("data",ret);
+            }
+        } else if(cmdgroup=="script") {
+            string a;
+            MG_getVar(ri,"a",a);
+            if(a=="list") {
+                printer->getScriptManager()->fillSJONObject("data",ret);
+            } if(a=="") {
+                const int MAX_VAR_LEN = 256*1024;
+                char buffer[MAX_VAR_LEN+1];
+                int post_data_len = mg_read(conn, buffer, MAX_VAR_LEN);
+                MG_getPostVar(buffer,post_data_len,ri,"a",a);
+                if(a=="save") {
+                    string name,jobname;
+                    MG_getPostVar(buffer,post_data_len,ri,"f", jobname);
+                    PrintjobPtr job = printer->getScriptManager()->findByName(jobname);
+                    string text;
+                    MG_getPostVar(buffer,post_data_len,ri,"text", text);
+                    try {
+                        ofstream out;
+                        out.open(job->getFilename().c_str());
+                        out << text;
+                        out.close();
+                    } catch(std::exception &ex) {
+                        RLog::log("Error writing script: @",ex.what());
+                    }
+                } else if(a=="load") {
+                    string name;
+                    if(MG_getPostVar(buffer,post_data_len,ri,"f",name)) {
+                    PrintjobPtr job = printer->getScriptManager()->findByName(name);
+                    if(job.get()) {
+                        try {
+                            ifstream in;
+                            in.open(job->getFilename().c_str());
+                            char buf[200];
+                            while(!in.eof()) {
+                                in.getline(buf, 200); // Strips \n
+                                size_t l = strlen(buf);
+                                if(buf[l]=='\r')
+                                    buf[l] = 0;
+                                    mg_printf(conn,"%s\n",buf);
+                                }
+                                in.close();
+                            } catch(std::exception &ex) {
+                                RLog::log("Error reading script: @",ex.what());
+                            }
+                        }
+                    }
+                    return;
+                }
             }
         } else if(cmdgroup=="msg") {
             string a;
@@ -442,6 +495,18 @@ namespace repetier {
             return true;
         }
         return false;
+    }
+    bool MG_getPostVar(char *buf,int buflen,const mg_request_info *info,const char *name, std::string &output) {
+        output.clear();
+        char *buffer = new char[buflen+1];
+        int len = mg_get_var(buf,buflen, name, buffer, buflen - 1);
+        if (len >= 0) {
+            output.append(buffer, len);
+            delete[] buffer;
+            return true;
+        }
+        delete[] buffer;
+        return false;        
     }
     string JSONValueAsString(const Value &v) {
         switch(v.type()) {

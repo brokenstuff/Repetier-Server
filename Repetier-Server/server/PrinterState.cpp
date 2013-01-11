@@ -466,3 +466,27 @@ void PrinterState::fillJSONObject(json_spirit::Object &obj) {
     }
     obj.push_back(Pair("extruder",ea));
 }
+void PrinterState::storePause() {
+    pauseX = x-xOffset;
+    pauseY = y-yOffset;
+    pauseZ = z-zOffset;
+    pauseE = e-eOffset;
+    pauseF = f;
+    pauseRelative = relative;
+}
+void PrinterState::injectUnpause() {
+    char buf[200];
+    printer->injectManualCommand("G90");
+    sprintf(buf,"G1 X%.2f Y%.2f F%.0f",pauseX,pauseY,printer->speedx*60.0);
+    printer->injectManualCommand(buf);
+    sprintf(buf,"G1 Z%.2f F%.0f",pauseZ,printer->speedz*60.0);
+    printer->injectManualCommand(buf);
+    sprintf(buf,"G92 E%.4f",pauseE);
+    printer->injectManualCommand(buf);
+    if (relative != pauseRelative)
+    {
+        printer->injectManualCommand(pauseRelative ? "G91" : "G90");
+    }
+    sprintf(buf,"G1 F%.0f",pauseF); // Reset old speed
+    printer->injectManualCommand(buf);
+}
