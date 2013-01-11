@@ -113,13 +113,6 @@ int main(int argc, const char * argv[])
         cout << "Running as daemon" << endl;
 #endif
 #if defined(__APPLE__) || defined(__linux)
-        if(vm.count("userid")) {
-            string suid = vm["pidfile"].as<string>();
-            int uid = 0;
-            sscanf(suid.c_str(),"%i",&uid);
-            RLog::log("Switching permissions to user id @",uid);
-            setuid(uid);
-        }
         pid_t pid, sid;
         
         //Fork the Parent Process
@@ -153,8 +146,15 @@ int main(int argc, const char * argv[])
                 ofstream out(vm["pidfile"].as<string>().c_str());
                 out << pid;
             } catch(std::exception &ex) {
-
+                
             }
+        }
+        if(vm.count("userid")) {
+            string suid = vm["userid"].as<string>();
+            int uid = 0;
+            sscanf(suid.c_str(),"%i",&uid);
+            RLog::log("Switching permissions to user id @",uid);
+            setuid(uid);
         }
 #endif
     }
